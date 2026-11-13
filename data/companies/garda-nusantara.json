@@ -1,0 +1,18 @@
+{
+  "id": "piksel-nusantara",
+  "name": "Piksel Nusantara",
+  "logo": "🧩",
+  "industry": "Teknologi",
+  "size": "Menengah",
+  "location": "Yogyakarta · Remote",
+  "culture": "Kolaboratif, otonom, dan cepat belajar. Prioritas bisa berubah saat produk berkembang.",
+  "salary": [8500000, 22000000],
+  "roles": ["programmer", "uiux-designer", "data-analyst"],
+  "clients": ["Gawai Pintar", "Toko Rona", "JelajahIn"],
+  "boss": "Mas Reza — visioner dan kadang cepat berubah prioritas",
+  "coworkers": ["Lina — product designer", "Joko — data lead", "Bimo — engineer"],
+  "benefits": ["Dana kursus", "Laptop support", "Bonus proyek"],
+  "pros": ["Otonomi tinggi", "Produk sering nyata", "Belajar lintas fungsi"],
+  "cons": ["Prioritas bisa berubah cepat", "Peran kadang melebar"],
+  "review": "Tim kecil, tapi ruang belajar dan pengaruh pada produk terasa besar."
+}

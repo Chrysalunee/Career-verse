@@ -1,0 +1,38 @@
+{
+  "id": "uiux-designer",
+  "name": "UI/UX Designer",
+  "icon": "🎨",
+  "salaryRange": [7000000, 20000000],
+  "summary": "Merancang pengalaman produk yang intuitif, aman, dan menyenangkan untuk pengguna.",
+  "hardSkills": ["Wireframe", "User flow", "Usability testing", "Prototype", "Design system"],
+  "softSkills": ["Empati", "Komunikasi", "Penelitian", "Iterasi"],
+  "careerLadder": ["Intern", "Junior Designer", "Designer", "Senior", "Lead"],
+  "tools": ["Figma", "FigJam", "Notion", "Maze"],
+  "terms": ["Wireframe", "Prototype", "Usability", "User flow"],
+  "kpis": ["Usability", "Kejelasan alur", "Kepuasan user"],
+  "tasks": [
+    {
+      "title": "Menyusun alur onboarding",
+      "difficulty": 2,
+      "prompt": "Undangan baru untuk produk e-commerce perlu onboarding yang cepat. Apa yang paling cocok?",
+      "options": [
+        { "label": "Fokus pada 3 langkah utama, kartu visual jelas, dan kontrol yang sedikit demi Mengurangi hambatan.", "score": 95, "feedback": "Onboarding yang sederhana menurunkan beban kognitif." },
+        { "label": "Tampilkan semua fitur sekaligus di layar pertama", "score": 20, "feedback": "Terlalu banyak pilihan justru menghambat pahamnya pengguna." },
+        { "label": "Gunakan teks panjang tanpa prioritas visual", "score": 15, "feedback": "Pengguna butuh orientasi yang cepat dan jelas." }
+      ]
+    },
+    {
+      "title": "Uji usability",
+      "difficulty": 3,
+      "prompt": "Pengguna gagal menyelesaikan checkout. Apa yang paling masuk akal?",
+      "options": [
+        { "label": "Lihat langkah checkout, label form, serta hambatan bisnis sebelum menambahkan fitur baru.", "score": 94, "feedback": "Masalah usability sering muncul dari alur, notifikasi, atau kejelasan informasi." },
+        { "label": "Tambah banyak tombol agar tampak lengkap", "score": 25, "feedback": "Fitur yang terlalu banyak bisa membingungkan." },
+        { "label": "Menaikkan warna agar lebih mencolok", "score": 22, "feedback": "Tampilan bukan solusi utama jika alur pengisian gagal." }
+      ]
+    }
+  ],
+  "events": ["Produk terhambat karena user kesulitan saat checkout.", "Stakeholder menuntut perubahan visual di menit terakhir.", "Testing usability menunjukkan masalah di alur onboarding."],
+  "realWorld": "UI/UX designer tidak hanya membuat interface tampak bagus; mereka merancang pengalaman yang masuk akal, cepat dipahami, dan dapat membantu pengguna mencapai tujuan dengan nyaman.",
+  "educationDisclaimer": false
+}

@@ -1,0 +1,90 @@
+# Karier Nyata — Career-verse
+
+Game simulasi karier berbasis web, HTML/CSS/JS murni, tanpa framework. Fokus pada pengalaman kerja yang terasa nyata: memilih profesi, melamar ke perusahaan, mengerjakan tugas harian, berkolaborasi dengan tim/brand, dan meraih promosi seiring pengalaman.
+
+## Fitur utama
+
+- Pilihan profesi dan perusahaan yang berbeda trade-off
+- Lamaran + wawancara singkat dengan pilihan jawaban
+- Siklus kerja harian: tugas -> mini-game -> evaluasi -> info dunia nyata
+- Stat: energi, stres, reputasi, relasi tim, skill, kemampuan, uang, promosi
+- Event kerja acak dan keputusan dengan dampak jangka panjang
+- Timeline karier dan pencapaian
+- Save lokal, import/export, serta mode offline yang aman karena semua data bersifat statis
+- Desain responsif, aksesibilitas dasar, dan bahasa Indonesia/Inggris pada UI
+
+## Jalankan game
+
+Karena browser membatasi fetch JSON dari `file://`, jalankan server lokal terlebih dahulu:
+
+```bash
+python3 -m http.server 8000
+```
+
+Lalu buka:
+
+http://localhost:8000
+
+## Struktur folder
+
+- `index.html`
+- `css/styles.css`
+- `js/engine.js`
+- `js/app.js`
+- `js/ui.js`
+- `data/professions/*.json`
+- `data/companies/*.json`
+- `data/brands/brands.json`
+- `tests/engine.test.js`
+- `README.md`
+
+## Menambah profesi baru
+
+Tambahkan file JSON baru dalam `data/professions/` lalu daftarkan ID-nya di `js/app.js` pada `professionIds`.
+
+Contoh struktur:
+
+```json
+{
+  "id": "data-analyst",
+  "name": "Data Analyst",
+  "icon": "📊",
+  "salaryRange": [6000000, 18000000],
+  "summary": "Mengolah data untuk memberi insight keputusan bisnis.",
+  "hardSkills": ["SQL", "Excel", "Dashboard"],
+  "softSkills": ["Analisis", "Komunikasi", "Kejelasan"],
+  "careerLadder": ["Intern", "Junior Analyst", "Analyst", "Senior", "Manager"],
+  "tools": ["SQL", "Excel", "Power BI"],
+  "terms": ["Dashboard", "Insight", "KPI"],
+  "kpis": ["Kualitas insight", "Akurasi", "Kepuasan stakeholder"],
+  "tasks": [
+    {
+      "title": "Analisis performa kampanye",
+      "difficulty": 3,
+      "prompt": "Bagaimana cara memvalidasi apakah kampanye berjalan efektif?",
+      "options": [
+        { "label": "Bandingkan KPI utama dengan baseline, segmentasi, dan tren waktu.", "score": 95, "feedback": "Akurasi dan konteks penting agar insight tidak salah dibaca." }
+      ]
+    }
+  ],
+  "events": ["Data mulai bermasalah karena adanya dari beberapa sumber yang tidak konsisten.", "Stakeholder meminta insight cepat sebelum rapat eksekutif."],
+  "realWorld": "Data analyst bekerja di persimpangan bisnis dan analitik: mereka tidak hanya melihat angka, tetapi menjelaskan apa yang benar-benar terjadi di bawahnya.",
+  "educationDisclaimer": false
+}
+```
+
+## Menambah perusahaan baru
+
+Buat file di `data/companies/` dengan data seperti `name`, `logo`, `industry`, `size`, `location`, `culture`, `salary`, `roles`, `clients`, `boss`, `coworkers`, `benefits`, `pros`, `cons`, `review`. Daftarkan ID perusahaan di `companyIds` dalam `js/app.js`.
+
+## Test
+
+```bash
+npm test
+```
+
+## Lisensi dan disclaimer
+
+Lisensi MIT sebagaimana tertera pada `LICENSE`.
+
+Game ini edukatif dan bukan pengganti nasihat profesional, medis, hukum, atau keamanan. Semuanya bersifat fiktif. Semua nama perusahaan, brand, dan tokoh dalam game ini fiktif. Kemiripan dengan pihak nyata adalah kebetulan.
