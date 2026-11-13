@@ -1,27 +1,121 @@
-// Peta kota ringkas memakai titik perpindahan; perjalanan jauh tidak disimulasikan.
-export const CITY_PLACES = [
-  { id: 'home', name: 'Rumah', icon: '🏠', travel: { walk: 0, angkot: 5, motor: 3 } },
-  { id: 'workplace', name: 'Tempat kerja', icon: '🏢', travel: { walk: 8, angkot: 5, motor: 3 } },
-  { id: 'mall', name: 'Mal', icon: '🏬', travel: { walk: 10, angkot: 6, motor: 3 } },
-  { id: 'learning', name: 'Tempat belajar', icon: '📚', travel: { walk: 8, angkot: 5, motor: 3 } }
-];
-export function travelTo(save, destination, transport = 'walk') {
-  const target = CITY_PLACES.find(place => place.id === destination);
-  if (!target) return { ok: false, minutes: 0, reason: 'Tujuan tidak ditemukan.' };
-  const minutes = target.travel[transport] ?? target.travel.walk;
-  if (save.world?.transportEnabled) {
-    const energyCost = transport === 'walk' ? 3 : transport === 'motor' ? 2 : 1;
-    save.energy = Math.max(0, (save.energy || 0) - energyCost);
+// world3d/workplaces.js
+export const DEFAULT_WORLD_SAVE = {
+  worldMode: 'menu',
+  world: {
+    locationId: 'home',
+    currentPlace: 'home',
+    transportEnabled: false,
+    freelanceBase: 'home',
+    visited: ['home'],
+    lastInteraction: null,
+  },
+};
+
+const INFERRED_TYPES = {
+  'sma-nusa-bangsa': 'school',
+  'rs-harapan-sehat': 'hospital',
+  'klinik-sehat-bersama': 'hospital',
+  'restoran-rasa-nusantara': 'restaurant_kitchen',
+  'bistro-senja': 'cafe',
+  'kopi-kilat': 'cafe',
+  'kreasi-bersama': 'coworking',
+  'kodeku-labs': 'home',
+  'piksel-nusantara': 'hq_office',
+  'garda-nusantara': 'hq_office',
+  'nusa-global': 'hq_office',
+};
+
+export function migrateWorldSave(save = {}) {
+  const current = save.world || {};
+  const world = {
+    ...DEFAULT_WORLD_SAVE.world,
+    ...current,
+  };
+
+  if (!Array.isArray(world.visited) || world.visited.length === 0) {
+    world.visited = ['home'];
   }
-  save.world ||= { currentPlace: 'home', visited: ['home'] };
-  save.world.currentPlace = destination;
-  save.world.locationId = destination;
-  save.world.visited ||= ['home'];
-  if (!save.world.visited.includes(destination)) save.world.visited.push(destination);
-  return { ok: true, minutes, destination: target.name, transport };
+
+  return {
+    ...save,
+    worldMode: save.worldMode || DEFAULT_WORLD_SAVE.worldMode,
+    world,
+  };
 }
-export function setTransportEnabled(save, enabled) {
-  save.world ||= {};
-  save.world.transportEnabled = Boolean(enabled);
-  return save.world.transportEnabled;
+
+export function workplaceTypeFor(company = {}) {
+  if (company.workplaceType) return company.workplaceType;
+  if (INFERRED_TYPES[company.id]) return INFERRED_TYPES[company.id];
+  const industryString = String(company.industry || '').toLowerCase();
+  if (/kesehatan|rumah sakit|klinik/.test(industryString)) return 'hospital';
+  if (/pendidikan|sekolah/.test(industryString)) return 'school';
+  if (/kuliner|restoran|kafe|kopi/.test(industryString)) return 'restaurant_kitchen';
+  if (/agency|agensi|kreatif|digital/.test(industryString)) return 'coworking';
+  return 'hq_office';
+}
+
+export function resolveWorkplace(company = {}, templates = []) {
+  const type = workplaceTypeFor(company);
+  const sceneId = company.sceneTemplate || type;
+  const template =
+    templates.find((item) => item.id === sceneId) ||
+    templates.find((item) => item.workplaceType === type) ||
+    null;
+
+  if (!template) {
+    return {
+      id: sceneId,
+      workplaceType: type,
+      companyId: company.id || null,
+      companyName: company.name || 'Lokasi kerja',
+      accent: company.sceneAccent || '#76d6a0',
+      decor: company.sceneDecor || [],
+      objects: [],
+      npcs: [],
+      busyHours: [],
+      name: 'Ruang kerja',
+    };
+  }
+
+  return {
+    ...template,
+    workplaceType: type,
+    companyId: company.id || null,
+    companyName: company.name || template.name || 'Lokasi kerja',
+    accent: company.sceneAccent || template.accent || '#76d6a0',
+    decor: company.sceneDecor || template.decor || [],
+  };
+}
+
+export function tasksForObjects(template = {}, profession = {}) {
+  const tasks = Array.isArray(profession.tasks) ? profession.tasks : [];
+  return (template.objects || []).map((object) => {
+    const fallbackTask = object.taskIndex !== undefined ? tasks[object.taskIndex] : null;
+    const matchedTask = tasks.find((task) => task.id === object.taskId) || fallbackTask || null;
+    return {
+      ...object,
+      task: matchedTask,
+      available: Boolean(matchedTask),
+    };
+  });
+}
+
+export function moveWorldLocation(save = {}, locationId) {
+  const migrated = migrateWorldSave(save);
+  migrated.world ||= { ...DEFAULT_WORLD_SAVE.world };
+  migrated.world.currentPlace = locationId;
+  migrated.world.locationId = locationId;
+  migrated.world.visited = Array.isArray(migrated.world.visited) ? migrated.world.visited : ['home'];
+  if (!migrated.world.visited.includes(locationId)) {
+    migrated.world.visited.push(locationId);
+  }
+  return migrated.world;
+}
+
+export function sceneForCompany(company = {}, templates = []) {
+  return resolveWorkplace(company, templates);
+}
+
+export function normalizeWorldSave(save = {}) {
+  return migrateWorldSave(save);
 }

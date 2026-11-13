@@ -1,19 +1,38 @@
-// Area publik mal: lokasi dan interaksi berbasis pilihan, tanpa chat bebas.
-export const MALL_LOCATIONS = [
-  { id: 'mall-cafe', name: 'Kafe Sudut Rona', type: 'cafe', icon: '☕', action: 'meal', cost: 45000, energy: 15, stress: -8, dialogue: ['Pesan minuman dan istirahat', 'Sapa barista dengan ramah'] },
-  { id: 'mall-foodcourt', name: 'Food court', type: 'food_court', icon: '🍜', action: 'meal', cost: 65000, energy: 25, stress: -10, dialogue: ['Makan sebelum kembali bekerja', 'Berbincang santai dengan pelanggan'] },
-  { id: 'mall-store', name: 'Toko Langkah Kecil', type: 'mall_store', icon: '🛍️', action: 'shop', cost: 120000, energy: 5, stress: -5, dialogue: ['Lihat barang kebutuhan', 'Tunda belanja dan simpan uang'] },
-  { id: 'mall-learning', name: 'Ruang Belajar', type: 'learning', icon: '📚', action: 'course', cost: 200000, energy: -5, stress: -3, skill: 0.2, dialogue: ['Ikuti kelas singkat', 'Simpan materi untuk nanti'] },
-  { id: 'mall-rest', name: 'Area istirahat', type: 'rest', icon: '🌿', action: 'rest', cost: 0, energy: 18, stress: -12, dialogue: ['Duduk dan pulihkan diri', 'Lanjutkan perjalanan'] }
+// city.js
+export const CITY_PLACES = [
+  { id: 'home', name: 'Rumah', icon: '🏠', travel: { walk: 0, angkot: 5, motor: 3 } },
+  { id: 'workplace', name: 'Tempat kerja', icon: '🏢', travel: { walk: 8, angkot: 5, motor: 3 } },
+  { id: 'mall', name: 'Mal', icon: '🏬', travel: { walk: 10, angkot: 6, motor: 3 } },
+  { id: 'learning', name: 'Tempat belajar', icon: '📚', travel: { walk: 8, angkot: 5, motor: 3 } },
 ];
-export function mallLocation(id) { return MALL_LOCATIONS.find(place => place.id === id) || null; }
-export function visitMall(save, placeId) {
-  const place = mallLocation(placeId);
-  if (!place) return { ok: false, reason: 'Lokasi tidak ditemukan.' };
-  if ((save.money || 0) < place.cost) return { ok: false, reason: `Dana belum cukup untuk ${place.name}.` };
-  save.money -= place.cost;
-  save.energy = Math.max(0, Math.min(100, (save.energy || 0) + place.energy));
-  save.stress = Math.max(0, Math.min(100, (save.stress || 0) + place.stress));
-  if (place.skill) save.skill = Math.min(10, Math.round(((save.skill || 1) + place.skill) * 10) / 10);
-  return { ok: true, place, dialogue: place.dialogue[0] };
+
+export function travelTo(save = {}, destination, transport = 'walk') {
+  const target = CITY_PLACES.find((place) => place.id === destination);
+  if (!target) {
+    return { ok: false, minutes: 0, reason: 'Tujuan tidak ditemukan.' };
+  }
+
+  save.world ||= { currentPlace: 'home', visited: ['home'] };
+  const minutes = target.travel[transport] ?? target.travel.walk;
+
+  if (save.world.transportEnabled) {
+    const costByTransport = { walk: 3, motor: 2, angkot: 1 };
+    const cost = costByTransport[transport] ?? 2;
+    save.energy = Math.max(0, (Number(save.energy) || 0) - cost);
+  }
+
+  save.world.currentPlace = destination;
+  save.world.locationId = destination;
+  save.world.visited ||= ['home'];
+  if (!save.world.visited.includes(destination)) {
+    save.world.visited.push(destination);
+  }
+
+  return { ok: true, minutes, destination: target.name, transport };
+}
+
+export function setTransportEnabled(save = {}, enabled) {
+  save.world ||= {};
+  save.world.transportEnabled = Boolean(enabled);
+  return save.world.transportEnabled;
 }
