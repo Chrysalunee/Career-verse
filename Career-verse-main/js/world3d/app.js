@@ -39,6 +39,7 @@ const getProfessionMeta = async (professionId) => {
 async function openWorld() {
   if (worldIsOpen || worldIsOpening) return;
   worldIsOpening = true;
+  try {
   const save = readSave();
   const selectedCompany = await getCompanyMeta(save.companyId);
   const selectedProfession = await getProfessionMeta(save.professionId);
@@ -87,7 +88,8 @@ async function openWorld() {
     });
     worldIsOpen = true;
   } catch (error) {
-    stage.querySelector('.world3d-view').textContent = `Dunia 3D gagal dimuat: ${error.message}. Periksa koneksi internet lalu muat ulang halaman.`;
+    const view = stage.querySelector('.world3d-view');
+    if (view) view.textContent = `Dunia 3D gagal dimuat: ${error.message}. Periksa koneksi internet lalu muat ulang halaman.`;
     worldIsOpening = false;
     return;
   }
@@ -103,6 +105,13 @@ async function openWorld() {
     document.body.classList.remove('world3d-active');
     worldIsOpen = false;
   });
+  } catch (error) {
+    stage.innerHTML = `<div class="world3d-shell"><div class="world3d-header"><h2>Career-Verse 3D</h2><button type="button" class="world3d-close">Tutup</button></div><div class="world3d-view" style="padding:2rem;color:white">Dunia 3D belum dapat dimuat: ${String(error.message || error)}. Coba muat ulang halaman.</div></div>`;
+    stage.style.display = 'flex';
+    document.body.classList.add('world3d-active');
+    stage.querySelector('.world3d-close')?.addEventListener('click', () => { stage.style.display = 'none'; document.body.classList.remove('world3d-active'); worldIsOpening = false; });
+    worldIsOpening = false;
+  }
 
   function persistWorldSave(save) {
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch { /* storage may be disabled */ }
@@ -201,6 +210,7 @@ button.textContent = '🌍 Dunia 3D';
 button.setAttribute('aria-label', 'Buka dunia 3D');
 button.addEventListener('click', openWorld);
 window.addEventListener('careerverse-app-ready', openWorld, { once: true });
+window.addEventListener('load', () => { if (!worldIsOpen && !worldIsOpening) openWorld(); }, { once: true });
 window.addEventListener('careerverse-world-task-complete', event => {
   // Keep the main career screen and the 3D interaction on the same save state.
   window.dispatchEvent(new CustomEvent('careerverse-refresh-career-state', { detail: event.detail }));
