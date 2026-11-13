@@ -6,7 +6,8 @@ let state = loadGame();
 let professions = [];
 let companies = [];
 let screen = state.screen || 'home';
-let task = null;
+// Simpan tugas aktif dalam save supaya refresh tidak menghasilkan layar tugas kosong.
+let task = state.pendingTask || null;
 
 const professionIds = ['digital-marketer', 'programmer', 'guru', 'perawat', 'chef', 'data-analyst', 'uiux-designer', 'content-creator'];
 const companyIds = ['kopi-kilat', 'nusa-global', 'kreasi-bersama', 'kodeku-labs', 'sma-nusa-bangsa', 'rs-harapan-sehat', 'klinik-sehat-bersama', 'restoran-rasa-nusantara', 'bistro-senja', 'piksel-nusantara', 'garda-nusantara'];
@@ -24,13 +25,14 @@ async function loadData() {
   if (!professions.some(item => item.id === state.professionId)) state.professionId = null;
   if (!companies.some(item => item.id === state.companyId)) state.companyId = null;
   if (state.employed && (!state.professionId || !state.companyId)) state.employed = false;
-  if (!['home', 'jobs', 'company', 'interview', 'offer', 'work', 'task', 'result', 'history'].includes(screen)) screen = 'home';
+  if (screen === 'task' && !task) screen = state.employed ? 'work' : 'home';
   start();
 }
 function getProfession() { return professions.find(item => item.id === state.professionId) || null; }
 function getCompany() { return companies.find(item => item.id === state.companyId) || null; }
 function persist() {
   state.screen = screen;
+  state.pendingTask = task;
   const saved = saveGame(state);
   const status = document.querySelector('#save-status');
   if (status) status.textContent = saved ? '✓ Progres tersimpan otomatis' : 'Penyimpanan lokal tidak tersedia';
@@ -110,11 +112,20 @@ function negotiate() {
 function beginDay() {
   const p = getProfession();
   if (!p?.tasks?.length || !state.employed) return;
-  task = p.tasks[state.tasksDone % p.tasks.length];
+  const source = p.tasks[state.tasksDone % p.tasks.length] || {};
+  // Normalisasi mencegah tugas kosong jika data lama tidak memiliki seluruh properti.
+  task = {
+    ...source,
+    title: source.title || 'Tugas harian',
+    difficulty: Number.isFinite(source.difficulty) ? source.difficulty : 1,
+    prompt: source.prompt || 'Tinjau kebutuhan pekerjaan, tentukan prioritas, dan komunikasikan rencanamu kepada tim.',
+    options: Array.isArray(source.options) ? source.options : []
+  };
+  state.pendingTask = task;
   navigate('task');
 }
 function answerTask(index) {
-  if (!task?.options?.[index]) return;
+  if (!task || !task.options[index]) return;
   const option = task.options[index];
   const result = evaluateTask(option.score, state);
   state.energy = clamp(state.energy + result.energy, 0, 100);
@@ -126,7 +137,9 @@ function answerTask(index) {
   state.xp += result.xp;
   state.tasksDone += 1;
   state.day += 1;
-  state.lastResult = { title: task.title, score: result.score, feedback: option.feedback, info: getProfession()?.realWorld || '' };
+  state.lastResult = { title: task.title, score: result.score, feedback: option.feedback || 'Tugas selesai. Tinjau hasil dan tentukan langkah berikutnya.', info: getProfession()?.realWorld || '' };
+  task = null;
+  state.pendingTask = null;
   while (state.xp >= xpToNextLevel(Math.floor(state.skill))) {
     state.xp -= xpToNextLevel(Math.floor(state.skill));
     state.skill = clamp(Number((state.skill + 0.2).toFixed(1)), 1, 10);
@@ -202,10 +215,17 @@ function promote() {
 function backToJobs() { navigate('jobs'); }
 function backToHome() { state.professionId = null; state.companyId = null; navigate('home'); }
 function goBack() {
-  if (screen === 'company') return backToJobs();
   if (screen === 'jobs') return backToHome();
+  if (screen === 'company') return backToJobs();
   if (screen === 'interview') return navigate('company');
-  if (screen === 'offer') return backToJobs();
+  if (screen === 'offer') return navigate(state.offer ? 'interview' : 'jobs');
+  if (screen === 'task') {
+    // Kembali dari tugas membatalkan layar tugas saja, tidak menghabiskan hari.
+    task = null; state.pendingTask = null;
+    return navigate('work');
+  }
+  if (screen === 'result') return navigate('work');
+  if (screen === 'history') return navigate(state.employed ? 'work' : 'jobs');
   return navigate(state.employed ? 'work' : state.professionId ? 'jobs' : 'home');
 }
 
@@ -222,6 +242,7 @@ document.querySelector('#import-save')?.addEventListener('change', async event =
     const data = JSON.parse(await file.text());
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('invalid');
     state = { ...createState(), ...data };
+    task = state.pendingTask || null;
     screen = state.screen || 'home';
     persist();
     start();
