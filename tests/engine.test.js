@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createState,acceptanceChance,evaluateTask,salaryFor,clamp} from '../js/engine.js';
+const company={roles:['programmer'],salary:[6000000,12000000]};
+const profession={id:'programmer'};
+test('state memiliki status awal yang masuk akal',()=>{const s=createState();assert.equal(s.energy,90);assert.equal(s.day,1);});
+test('peluang penerimaan dibatasi dan meningkat dengan skill',()=>{const weak=createState();weak.skill=1;const strong={...weak,skill:8};assert.ok(acceptanceChance(strong,company,profession)>acceptanceChance(weak,company,profession));assert.ok(acceptanceChance(weak,company,profession)>=5);});
+test('evaluasi tugas menaikkan reputasi untuk pilihan berkualitas',()=>{const r=evaluateTask(95,createState());assert.equal(r.rep,4);assert.ok(r.energy<0);});
+test('gaji meningkat seiring level',()=>{assert.ok(salaryFor(6000000,2)>salaryFor(6000000,0));});
+test('clamp membatasi stat',()=>{assert.equal(clamp(120,0,100),100);assert.equal(clamp(-4,0,100),0);});
