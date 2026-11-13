@@ -1,4 +1,19 @@
-# Semua file ini adalah data fiktif. Tidak ada dependency runtime.
+# Dependensi dan hasil build
 node_modules/
+dist/
+build/
+
+# File sistem dan editor
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# File log
 *.log
+npm-debug.log*
+
+# File sementara dan environment lokal
+.env
+.env.*.local
+*.tmp
