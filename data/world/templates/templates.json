@@ -1,12 +1,128 @@
 {
   "templates": [
-    {"id":"hq_office","workplaceType":"hq_office","name":"Kantor pusat","size":{"width":12,"depth":8},"accent":"#78d8a2","decor":["tanaman","papan proyek","jendela kota"],"busyHours":[9,14],"npcs":[{"id":"manager","role":"Atasan","name":"Atasan tim"},{"id":"coworker","role":"Rekan kerja","name":"Rekan lintas divisi"}],"objects":[{"id":"desk-computer","name":"Meja kerja dan komputer","hint":"Buka alat kerja untuk menjalankan mini-game profesimu.","taskProfessions":{"digital-marketer":0,"programmer":0,"data-analyst":0,"uiux-designer":0,"content-creator":0},"taskIndex":0},{"id":"meeting-board","name":"Papan rapat","hint":"Persiapkan update tugas atau masuk rapat tim.","meeting":"standup"},{"id":"coffee-corner","name":"Sudut istirahat","hint":"Beristirahat untuk memulihkan energi.","action":"rest"}]},
-    {"id":"coworking","workplaceType":"coworking","name":"Ruang kerja bersama","size":{"width":10,"depth":8},"accent":"#f0bd74","decor":["meja modular","papan ide","tanaman gantung"],"busyHours":[10,15],"npcs":[{"id":"mentor","role":"Mentor","name":"Kak Maya"},{"id":"peer","role":"Anggota komunitas","name":"Rekan coworking"}],"objects":[{"id":"shared-desk","name":"Meja kolaborasi","hint":"Kerjakan tugas profesi atau diskusikan proyek.","taskProfessions":{"digital-marketer":0,"programmer":0,"uiux-designer":0,"content-creator":0},"taskIndex":0},{"id":"idea-board","name":"Papan ide","hint":"Rencanakan tugas sebelum mulai.","action":"prepare"}]},
-    {"id":"cafe","workplaceType":"cafe","name":"Kafe dan gerai minuman","size":{"width":10,"depth":7},"accent":"#e9a978","decor":["meja kayu","tanaman pot","menu board"],"busyHours":[8,12,17],"npcs":[{"id":"customer","role":"Pelanggan","name":"Pelanggan kafe","queue":2,"patience":3},{"id":"barista","role":"Rekan kerja","name":"Barista senior"}],"objects":[{"id":"espresso-machine","name":"Mesin espresso","hint":"Pilih tugas profesi untuk menjalankan mini-game yang sesuai.","taskProfessions":{"chef":0,"digital-marketer":0,"programmer":0},"taskIndex":0},{"id":"cashier","name":"Kasir","hint":"Layani pelanggan atau cek brief gerai.","taskProfessions":{"chef":1,"digital-marketer":1},"taskIndex":1},{"id":"customer-table","name":"Meja pelanggan","hint":"Berinteraksi dengan pelanggan melalui pilihan dialog.","action":"dialogue"}]},
-    {"id":"restaurant_kitchen","workplaceType":"restaurant_kitchen","name":"Dapur restoran","size":{"width":12,"depth":8},"accent":"#f08a67","decor":["meja stainless","rak bahan","pass window"],"busyHours":[11,12,18],"npcs":[{"id":"customer","role":"Pelanggan","name":"Pelanggan restoran","queue":3,"patience":2},{"id":"chef","role":"Atasan","name":"Chef senior"}],"objects":[{"id":"prep-station","name":"Meja persiapan","hint":"Mulai mini-game profesi dan siapkan bahan.","taskProfessions":{"chef":0},"taskIndex":0},{"id":"service-window","name":"Jendela service","hint":"Tangani pesanan atau evaluasi kualitas.","taskProfessions":{"chef":1},"taskIndex":1}]},
-    {"id":"hospital","workplaceType":"hospital","name":"Ruang layanan kesehatan","size":{"width":12,"depth":9},"accent":"#77cbe0","decor":["meja perawat","papan jadwal","kursi tunggu"],"busyHours":[8,11,16],"npcs":[{"id":"patient","role":"Pasien","name":"Pasien simulasi","queue":2,"patience":4},{"id":"senior-nurse","role":"Rekan kerja","name":"Perawat senior"}],"objects":[{"id":"nurse-station","name":"Meja perawat","hint":"Mini-game edukatif tentang komunikasi dan keselamatan; bukan tindakan klinis.","taskProfessions":{"perawat":0},"taskIndex":0},{"id":"handover-board","name":"Papan serah terima","hint":"Tinjau dokumentasi dan koordinasi tim.","taskProfessions":{"perawat":1},"taskIndex":1}]},
-    {"id":"school","workplaceType":"school","name":"Ruang kelas","size":{"width":12,"depth":9},"accent":"#e3ce73","decor":["papan tulis","rak buku","poster kelas"],"busyHours":[8,10,13],"npcs":[{"id":"student","role":"Murid","name":"Murid simulasi","queue":4,"patience":3},{"id":"teacher","role":"Rekan kerja","name":"Guru pendamping"}],"objects":[{"id":"class-board","name":"Papan kelas","hint":"Buat rencana pembelajaran melalui mini-game profesi.","taskProfessions":{"guru":0},"taskIndex":0},{"id":"reading-corner","name":"Pojok baca","hint":"Beri umpan balik belajar dan dukung murid.","taskProfessions":{"guru":1},"taskIndex":1}]},
-    {"id":"home","workplaceType":"home","name":"Ruang kerja rumah","size":{"width":9,"depth":7},"accent":"#a891e8","decor":["meja rumah","rak buku","jendela"],"busyHours":[],"npcs":[{"id":"self","role":"Pekerja","name":"Kamu"}],"objects":[{"id":"home-desk","name":"Meja kerja","hint":"Kerjakan tugas dari rumah atau belajar mandiri.","taskProfessions":{"digital-marketer":0,"programmer":0,"guru":0,"data-analyst":0,"uiux-designer":0,"content-creator":0,"perawat":0,"chef":0},"taskIndex":0},{"id":"learning-shelf","name":"Rak belajar","hint":"Belajar untuk meningkatkan skill.","action":"study"}]},
-    {"id":"mall_store","workplaceType":"mall_store","name":"Gerai di mal","size":{"width":8,"depth":7},"accent":"#d68fd2","decor":["etalase","papan promo","kursi pelanggan"],"busyHours":[12,17,19],"npcs":[{"id":"shopper","role":"Pelanggan","name":"Pengunjung mal","queue":3,"patience":2}],"objects":[{"id":"shop-counter","name":"Meja layanan gerai","hint":"Layani pengunjung dengan dialog pilihan.","taskProfessions":{"digital-marketer":0,"programmer":0},"taskIndex":0},{"id":"display","name":"Etalase produk","hint":"Tinjau presentasi produk atau materi promosi.","taskProfessions":{"digital-marketer":1},"taskIndex":1}]}
+    {
+      "id": "hq_office",
+      "workplaceType": "hq_office",
+      "name": "Kantor HQ",
+      "description": "Kantor modern untuk programmer, marketer, dan tim produk.",
+      "palette": { "primary": "#4aa98d", "secondary": "#e7d8ae", "accent": "#9ed9c4" },
+      "objects": [
+        { "id": "desk-1", "name": "Meja tim", "type": "station", "hint": "Siapkan analisis performa dan prioritas kerja.", "taskId": "marketing-campaign", "taskProfessions": { "digital-marketer": 0, "programmer": 1 } },
+        { "id": "monitor-1", "name": "Monitor produk", "type": "terminal", "hint": "Buka dashboard performa dan kode deployment.", "taskId": "launch-check", "taskProfessions": { "programmer": 0, "data-analyst": 1 } },
+        { "id": "meeting-room", "name": "Ruang rapat", "type": "meeting", "hint": "Diskusikan strategi, risiko, dan ekspektasi klien.", "taskId": "sync-briefing", "taskProfessions": { "digital-marketer": 1, "data-analyst": 0 } }
+      ],
+      "npcs": [
+        { "id": "manager", "name": "Manager tim", "role": "Atasan", "mood": "terarah" },
+        { "id": "teammate", "name": "Rekan kerja", "role": "Koordinator", "mood": "ramah" }
+      ],
+      "busyHours": ["08:00", "12:00", "16:00"],
+      "accessibility": { "summary": "Area terbuka dengan tanda jelas dan label keyboard." }
+    },
+    {
+      "id": "coworking",
+      "workplaceType": "coworking",
+      "name": "Coworking Hub",
+      "description": "Ruang kerja kolaboratif untuk freelancer dan tim kecil.",
+      "palette": { "primary": "#7ba7d5", "secondary": "#f3c98c", "accent": "#dfe9ff" },
+      "objects": [
+        { "id": "hotdesk-1", "name": "Hot desk", "type": "station", "hint": "Selesaikan sprint dan tugas mandiri.", "taskId": "code-sprint", "taskProfessions": { "programmer": 0, "uiux-designer": 1 } },
+        { "id": "whiteboard-1", "name": "Whiteboard", "type": "board", "hint": "Catat ide, masalah, dan alur kerja.", "taskId": "brainstorm", "taskProfessions": { "digital-marketer": 0, "content-creator": 1 } },
+        { "id": "printer-1", "name": "Printer dan mesin scan", "type": "machine", "hint": "Siapkan materi presentasi dan bukti kegiatan.", "taskId": "briefing-print", "taskProfessions": { "data-analyst": 0 } }
+      ],
+      "npcs": [
+        { "id": "freelancer", "name": "Freelancer", "role": "Rekan kerja", "mood": "ceria" },
+        { "id": "client", "name": "Klien", "role": "Pelanggan", "mood": "antusias" }
+      ],
+      "busyHours": ["09:00", "13:00", "18:00"],
+      "accessibility": { "summary": "Label dan arah jelas, tidak mengandalkan warna saja." }
+    },
+    {
+      "id": "cafe",
+      "workplaceType": "cafe",
+      "name": "Kafe dan barista",
+      "description": "Area kerja cepat, pelanggan ramai, dan pembuatan pesanan yang presisi.",
+      "palette": { "primary": "#b57d4c", "secondary": "#d9b985", "accent": "#f0d5b0" },
+      "objects": [
+        { "id": "espresso-bar", "name": "Bar espresso", "type": "station", "hint": "Buat pesanan sesuai urutan pelanggan.", "taskId": "espresso-order", "taskProfessions": { "chef": 0, "digital-marketer": 1 } },
+        { "id": "cashier", "name": "Kasir", "type": "terminal", "hint": "Hitung total, validasi pembayaran, dan berikan balasan ramah.", "taskId": "cashier-check", "taskProfessions": { "chef": 1 } },
+        { "id": "drink-display", "name": "Rak minuman", "type": "display", "hint": "Siapkan campuran dan dekorasi sesuai permintaan.", "taskId": "drink-assembly", "taskProfessions": { "chef": 0 } }
+      ],
+      "npcs": [
+        { "id": "customer-1", "name": "Pelanggan", "role": "Pembeli", "mood": "antre" },
+        { "id": "customer-2", "name": "Pelanggan", "role": "Pembeli", "mood": "tergesa" }
+      ],
+      "busyHours": ["07:30", "11:30", "17:00"],
+      "accessibility": { "summary": "Antrean dan status pesanan ditampilkan dalam teks dan audio ringan." }
+    },
+    {
+      "id": "restaurant_kitchen",
+      "workplaceType": "restaurant_kitchen",
+      "name": "Dapur restoran",
+      "description": "Area komando masakan, batching, dan tekanan saat jam sibuk.",
+      "palette": { "primary": "#d36d4e", "secondary": "#f5c094", "accent": "#f9ead4" },
+      "objects": [
+        { "id": "stove-1", "name": "Kompor utama", "type": "station", "hint": "Masak dengan urutan tepat agar kualitas tetap stabil.", "taskId": "cook-order", "taskProfessions": { "chef": 0 } },
+        { "id": "prep-table", "name": "Meja persiapan", "type": "prep", "hint": "Siapkan bahan, bumbu, dan porsi sesuai permintaan.", "taskId": "prep-ingredients", "taskProfessions": { "chef": 1 } },
+        { "id": "supply-rack", "name": "Rak bahan", "type": "storage", "hint": "Cek stok dan hindari kekurangan bahan saat ramai.", "taskId": "stock-check", "taskProfessions": { "chef": 2 } }
+      ],
+      "npcs": [
+        { "id": "chef-head", "name": "Kepala dapur", "role": "Supervisor", "mood": "tegas" },
+        { "id": "waiter", "name": "Pelayan", "role": "Front of house", "mood": "cepat" }
+      ],
+      "busyHours": ["10:00", "12:30", "19:00"],
+      "accessibility": { "summary": "Teks jadwal, urutan, dan status masakan selalu tersedia." }
+    },
+    {
+      "id": "hospital",
+      "workplaceType": "hospital",
+      "name": "Rumah sakit",
+      "description": "Layanan pasien, ruang observasi, dan prioritas keselamatan.",
+      "palette": { "primary": "#5eb5c8", "secondary": "#d6ecf1", "accent": "#e7f5f9" },
+      "objects": [
+        { "id": "triage-station", "name": "Area triase", "type": "station", "hint": "Tentukan prioritas sebelum tindakan lanjutan.", "taskId": "triage", "taskProfessions": { "perawat": 0 } },
+        { "id": "patient-room", "name": "Kamar observasi", "type": "consult", "hint": "Cek kejelasan gejala, dokumentasi, dan komunikasi.", "taskId": "care-plan", "taskProfessions": { "perawat": 1 } },
+        { "id": "record-desk", "name": "Meja dokumentasi", "type": "desk", "hint": "Rekam perkembangan pasien dengan rapi dan jelas.", "taskId": "record-update", "taskProfessions": { "perawat": 2 } }
+      ],
+      "npcs": [
+        { "id": "doctor", "name": "Dokter", "role": "Dokter penanggung jawab", "mood": "terukur" },
+        { "id": "patient", "name": "Pasien", "role": "Pasien", "mood": "khawatir" }
+      ],
+      "busyHours": ["08:00", "11:00", "15:00"],
+      "accessibility": { "summary": "Semua status pasien disajikan sebagai daftar teks yang mudah dibaca." }
+    },
+    {
+      "id": "school",
+      "workplaceType": "school",
+      "name": "Sekolah dan kelas",
+      "description": "Ruang belajar, pengelolaan kelas, dan suasana yang beragam.",
+      "palette": { "primary": "#7f8fdb", "secondary": "#d0d6ff", "accent": "#eef0ff" },
+      "objects": [
+        { "id": "teacher-desk", "name": "Meja guru", "type": "desk", "hint": "Buat rancangan materi dan penilaian.", "taskId": "class-plan", "taskProfessions": { "guru": 0 } },
+        { "id": "blackboard", "name": "Papan tulis", "type": "board", "hint": "Jelaskan konsep dan minta siswa ikut aktif.", "taskId": "teach-topic", "taskProfessions": { "guru": 1 } },
+        { "id": "student-bench", "name": "Bangku siswa", "type": "bench", "hint": "Amati respon siswa dan sesuaikan penjelasan.", "taskId": "student-response", "taskProfessions": { "guru": 2 } }
+      ],
+      "npcs": [
+        { "id": "student-1", "name": "Murid", "role": "Siswa", "mood": "ingin tahu" },
+        { "id": "guardian", "name": "Orang tua", "role": "Wali murid", "mood": "berharap" }
+      ],
+      "busyHours": ["07:00", "10:00", "13:00"],
+      "accessibility": { "summary": "Teks instruksi dan penilaian disediakan dengan kontras tinggi." }
+    },
+    {
+      "id": "home",
+      "workplaceType": "home",
+      "name": "Rumah dan ruang kerja ringan",
+      "description": "Ruang keluarga, desk kerja, dan fokus pribadi.",
+      "palette": { "primary": "#c28b5a", "secondary": "#efe7de", "accent": "#f0decd" },
+      "objects": [
+        { "id": "desk-home", "name": "Meja kerja rumah", "type": "station", "hint": "Selesaikan pekerjaan mandiri sebelum hari dimulai.", "taskId": "home-focus", "taskProfessions": { "programmer": 0, "content-creator": 0, "digital-marketer": 0 } },
+        { "id": "kitchen-home", "name": "Area dapur", "type": "kitchen", "hint": "Siapkan konsumsi ringan dan keseimbangan energi.", "taskId": "home-recovery", "taskProfessions": { "chef": 0 } }
+      ],
+      "npcs": [
+        { "id": "family", "name": "Keluarga", "role": "Pendukung", "mood": "nyaman" }
+      ],
+      "busyHours": ["06:00", "19:00"],
+      "accessibility": { "summary": "Akses langsung tanpa tuntutan jarak jauh atau gerakan kompleks." }
+    }
   ]
 }

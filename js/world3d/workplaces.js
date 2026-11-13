@@ -1,65 +1,48 @@
-// Pemilih template tempat kerja dan migrasi aman untuk save versi lama.
-export const DEFAULT_WORLD_SAVE = {
-  worldMode: 'menu',
-  world: { locationId: 'city-hub', currentPlace: 'home', transportEnabled: false, freelanceBase: 'home', visited: ['home'], lastInteraction: null }
-};
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { getCompanyScene, mapInteractiveObjects } from '../js/world3d/workplaces.js';
+import { visitMall, travelBetween } from '../js/world3d/mall.js';
 
-const inferredTypes = {
-  'sma-nusa-bangsa': 'school',
-  'rs-harapan-sehat': 'hospital',
-  'klinik-sehat-bersama': 'hospital',
-  'restoran-rasa-nusantara': 'restaurant_kitchen',
-  'bistro-senja': 'cafe',
-  'kopi-kilat': 'cafe',
-  'kreasi-bersama': 'coworking',
-  'kodeku-labs': 'home',
-  'piksel-nusantara': 'hq_office',
-  'garda-nusantara': 'hq_office',
-  'nusa-global': 'hq_office'
-};
+const templates = JSON.parse(await readFile(new URL('../data/world/templates/templates.json', import.meta.url), 'utf8')).templates;
+const workplaceMap = JSON.parse(await readFile(new URL('../data/world/company-workplaces.json', import.meta.url), 'utf8')).companies;
 
-export function migrateWorldSave(save = {}) {
-  const world = { ...DEFAULT_WORLD_SAVE.world, ...(save.world || {}) };
-  if (!Array.isArray(world.visited)) world.visited = ['home'];
-  // Save lama tetap menggunakan menu; tidak dipaksa masuk ke scene baru.
-  return { ...save, worldMode: save.worldMode || DEFAULT_WORLD_SAVE.worldMode, world };
-}
+test('templates match company workplace metadata', () => {
+  const company = { id: 'kopi-kilat', name: 'KopiKilat' };
+  const scene = getCompanyScene(company, { companies: workplaceMap }, templates);
+  assert.equal(scene.workplaceType, 'cafe');
+  assert.equal(scene.sceneTemplate, 'cafe');
+});
 
-export function workplaceTypeFor(company = {}) {
-  return company.workplaceType || inferredTypes[company.id] || inferFromIndustry(company.industry);
-}
-function inferFromIndustry(industry = '') {
-  const text = industry.toLowerCase();
-  if (/kesehatan|rumah sakit|klinik/.test(text)) return 'hospital';
-  if (/pendidikan|sekolah/.test(text)) return 'school';
-  if (/kuliner|restoran|kafe|kopi/.test(text)) return 'restaurant_kitchen';
-  if (/agency|agensi|kreatif/.test(text)) return 'coworking';
-  return 'hq_office';
-}
+test('task objects map to the active profession data', () => {
+  const scene = {
+    objects: [
+      { id: 'desk-1', name: 'Meja tim', taskProfessions: { 'digital-marketer': 0 } },
+      { id: 'meeting-room', name: 'Ruang rapat', taskProfessions: { 'digital-marketer': 1 } },
+    ],
+  };
+  const profession = {
+    id: 'digital-marketer',
+    tasks: [{ title: 'Riset audiens' }, { title: 'Briefing kampanye' }],
+  };
+  const mapped = mapInteractiveObjects(scene, profession);
+  assert.equal(mapped[0].task.title, 'Riset audiens');
+  assert.equal(mapped[1].task.title, 'Briefing kampanye');
+});
 
-export function resolveWorkplace(company, templates = []) {
-  const type = workplaceTypeFor(company);
-  const sceneId = company.sceneTemplate || type;
-  const template = templates.find(item => item.id === sceneId) || templates.find(item => item.workplaceType === type) || null;
-  return template ? { ...template, workplaceType: type, companyId: company.id, companyName: company.name, accent: company.sceneAccent || template.accent || '#76d6a0', decor: company.sceneDecor || template.decor || [] } : null;
-}
+test('mall interaction consumes money and updates energy', () => {
+  const save = { money: 120000, energy: 72, stress: 25, skill: 1, world: { currentPlace: 'home' } };
+  const result = visitMall(save, 'food-court');
+  assert.equal(result.ok, true);
+  assert.equal(save.money, 95000);
+  assert.equal(save.world.currentPlace, 'mall');
+  assert.ok(save.energy >= 80);
+});
 
-export function tasksForObjects(template, profession) {
-  const tasks = profession?.tasks || [];
-  return (template?.objects || []).map(object => {
-    const task = tasks.find(item => item.id === object.taskId) || tasks[object.taskIndex || 0];
-    return { ...object, task: task || null, available: Boolean(task) };
-  });
-}
-
-export function moveWorldLocation(save, locationId) {
-  if (!save.world) save.world = { ...DEFAULT_WORLD_SAVE.world };
-  save.world.currentPlace = locationId;
-  save.world.locationId = locationId;
-  if (!save.world.visited.includes(locationId)) save.world.visited.push(locationId);
-  return save.world;
-}
-
-export function sceneForCompany(company, templates = []) {
-  return resolveWorkplace(company, templates);
-}
+test('city travel updates current place and energy budget', () => {
+  const save = { energy: 70, world: { currentPlace: 'home', visited: ['home'] } };
+  const result = travelBetween(save, 'workplace', 'walk');
+  assert.equal(result.ok, true);
+  assert.equal(save.world.currentPlace, 'workplace');
+  assert.equal(save.energy, 70);
+});

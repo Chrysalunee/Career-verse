@@ -1,88 +1,153 @@
-// Mount an optional, keyboard-accessible workplace world over the existing menu game.
-import { applyWorldTask, getCompanyScene, mapInteractiveObjects, moveWorld, readSave, WORLD_SAVE_KEY } from './gameplay.js';
-import { MALL_LOCATIONS, visitMall } from './mall.js';
+import { DEFAULT_WORKPLACE_TYPES, getCompanyScene, mapInteractiveObjects } from './workplaces.js';
 
-const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
-const readJson = async path => { const response = await fetch(path); if (!response.ok) throw new Error(`Data tidak tersedia: ${path}`); return response.json(); };
-let dataPromise;
-const loadWorldData = () => dataPromise ||= Promise.all([
-  readJson('./data/world/templates/templates.json'),
-  readJson('./data/world/company-workplaces.json'),
-  readJson('./data/professions/digital-marketer.json').catch(() => null),
-]).then(([templateData, metadata]) => ({ templates: templateData.templates || [], metadata }));
-function loadSave() { return readSave(localStorage.getItem(WORLD_SAVE_KEY)); }
-function saveGame(state) { try { localStorage.setItem(WORLD_SAVE_KEY, JSON.stringify(state)); return true; } catch { return false; } }
-function launchButton() {
-  if (document.querySelector('#open-world3d')) return;
-  const button = document.createElement('button');
-  button.id = 'open-world3d'; button.type = 'button'; button.className = 'world-launcher primary';
-  button.textContent = '🧊 Jelajahi Dunia 3D';
-  button.setAttribute('aria-haspopup', 'dialog');
-  button.addEventListener('click', openWorld);
-  document.body.append(button);
+export { DEFAULT_WORKPLACE_TYPES, getCompanyScene, mapInteractiveObjects } from './workplaces.js';
+export { MALL_LOCATIONS, visitMall } from './mall.js';
+export { CITY_LINKS, buildCityMap, getCityTripInfo } from './city.js';
+
+export async function loadWorldCatalog() {
+  const [templateResponse, workplaceResponse] = await Promise.all([
+    fetch('./data/world/templates/templates.json'),
+    fetch('./data/world/company-workplaces.json'),
+  ]);
+  const templatesJson = templateResponse.ok ? await templateResponse.json() : { templates: [] };
+  const workplaceJson = workplaceResponse.ok ? await workplaceResponse.json() : { companies: [] };
+  return {
+    templates: Array.isArray(templatesJson.templates) ? templatesJson.templates : [],
+    workplaceMap: Array.isArray(workplaceJson.companies) ? workplaceJson.companies : [],
+  };
 }
-function closeWorld() { document.querySelector('#world3d-overlay')?.remove(); document.querySelector('#open-world3d')?.focus(); }
-async function openWorld() {
-  const save = loadSave();
-  const overlay = document.createElement('div'); overlay.className = 'world-overlay'; overlay.id = 'world3d-overlay';
-  overlay.setAttribute('role','dialog'); overlay.setAttribute('aria-modal','true'); overlay.setAttribute('aria-labelledby','world-title');
-  overlay.innerHTML = '<section class="world-window"><p role="status">Memuat lokasi…</p></section>';
-  document.body.append(overlay);
-  overlay.addEventListener('click', event => { if (event.target === overlay) closeWorld(); });
-  overlay.addEventListener('keydown', event => { if (event.key === 'Escape') closeWorld(); });
-  try {
-    const [worldData, profession, company] = await Promise.all([
-      loadWorldData(),
-      save.professionId ? readJson(`./data/professions/${encodeURIComponent(save.professionId)}.json`).catch(() => null) : Promise.resolve(null),
-      save.companyId ? readJson(`./data/companies/${encodeURIComponent(save.companyId)}.json`).catch(() => null) : Promise.resolve(null),
-    ]);
-    renderWorld(overlay, save, worldData, profession, company);
-  } catch (error) {
-    overlay.querySelector('.world-window').innerHTML = `<h2 id="world-title">Dunia Careerverse</h2><p>${esc(error.message)}</p><button type="button" data-world-close>Tutup</button>`;
-    overlay.querySelector('[data-world-close]').onclick = closeWorld;
-  }
+
+export async function mountWorldScene(container, options = {}) {
+  if (!container || typeof window === 'undefined') return null;
+  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js');
+  const OrbitControlsModule = await import('https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/controls/OrbitControls.js');
+  const { OrbitControls } = OrbitControlsModule;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(options.background || '#101b18');
+  scene.fog = new THREE.Fog(options.background || '#101b18', 8, 30);
+
+  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / Math.max(container.clientHeight, 1), 0.1, 100);
+  camera.position.set(8, 8, 10);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.shadowMap.enabled = true;
+  container.innerHTML = '';
+  container.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.minDistance = 6;
+  controls.maxDistance = 18;
+  controls.target.set(0, 1.2, 0);
+
+  const hemi = new THREE.HemisphereLight('#dfefff', '#182d28', 1.2);
+  scene.add(hemi);
+
+  const sun = new THREE.DirectionalLight('#fff9e7', 1.5);
+  sun.position.set(6, 12, 4);
+  sun.castShadow = true;
+  scene.add(sun);
+
+  const ground = new THREE.Mesh(
+    new THREE.CylinderGeometry(4.5, 5.5, 0.8, 32),
+    new THREE.MeshStandardMaterial({ color: '#2d463d', roughness: 0.9, metalness: 0.1 })
+  );
+  ground.position.y = -0.5;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  const room = new THREE.Mesh(
+    new THREE.BoxGeometry(5.5, 3.2, 5.5),
+    new THREE.MeshStandardMaterial({ color: '#335648', roughness: 0.9, metalness: 0.15 })
+  );
+  room.position.y = 1.6;
+  room.position.z = -0.3;
+  room.castShadow = true;
+  room.receiveShadow = true;
+  scene.add(room);
+
+  const businessColor = new THREE.Color(options.color || '#6ec9a4');
+  const desk = new THREE.Mesh(
+    new THREE.BoxGeometry(1.8, 0.7, 1.2),
+    new THREE.MeshStandardMaterial({ color: businessColor, metalness: 0.1, roughness: 0.8 })
+  );
+  desk.position.set(0, 0.9, 0.6);
+  desk.castShadow = true;
+  scene.add(desk);
+
+  const screen = new THREE.Mesh(
+    new THREE.BoxGeometry(1.1, 0.7, 0.12),
+    new THREE.MeshStandardMaterial({ color: '#dfeaf1', emissive: '#5d7e8a', emissiveIntensity: 0.6 })
+  );
+  screen.position.set(0, 1.2, 0.95);
+  scene.add(screen);
+
+  const chair = new THREE.Mesh(
+    new THREE.BoxGeometry(0.9, 1.2, 0.9),
+    new THREE.MeshStandardMaterial({ color: '#d9ba8a', roughness: 0.8 })
+  );
+  chair.position.set(-1.6, 0.55, 1.4);
+  scene.add(chair);
+
+  const plant = new THREE.Group();
+  const pot = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.35, 0.42, 0.5, 16),
+    new THREE.MeshStandardMaterial({ color: '#b08a5b', roughness: 0.8 })
+  );
+  pot.position.y = 0.25;
+  const foliage = new THREE.Mesh(
+    new THREE.SphereGeometry(0.6, 18, 18),
+    new THREE.MeshStandardMaterial({ color: '#4ab780', roughness: 0.7 })
+  );
+  foliage.position.y = 1;
+  plant.add(pot, foliage);
+  plant.position.set(2.1, 0, 1.8);
+  scene.add(plant);
+
+  const npcMaterial = new THREE.MeshStandardMaterial({ color: '#f6d5a7', roughness: 0.9 });
+  const npc = new THREE.Mesh(new THREE.CapsuleGeometry(0.4, 1.2, 6, 12), npcMaterial);
+  npc.position.set(-2.2, 1.1, -0.5);
+  scene.add(npc);
+
+  const label = document.createElement('div');
+  label.className = 'world3d-label';
+  label.textContent = options.label || 'Lokasi kerja';
+  container.appendChild(label);
+
+  const resize = () => {
+    const width = container.clientWidth || 640;
+    const height = container.clientHeight || 420;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  };
+
+  window.addEventListener('resize', resize);
+
+  let animationHandle = null;
+  const tick = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    animationHandle = requestAnimationFrame(tick);
+  };
+  tick();
+
+  return {
+    scene,
+    camera,
+    renderer,
+    controls,
+    destroy() {
+      cancelAnimationFrame(animationHandle);
+      window.removeEventListener('resize', resize);
+      label.remove();
+      container.innerHTML = '';
+      renderer.dispose();
+      controls.dispose();
+    },
+  };
 }
-function renderWorld(overlay, save, worldData, profession, company, activeTask = null, activeObject = null, notice = '') {
-  const place = save.world.currentPlace || 'home';
-  const employed = Boolean(save.employed && company && profession);
-  const scene = employed ? getCompanyScene(company, worldData.metadata, worldData.templates) : null;
-  const objects = scene ? mapInteractiveObjects(scene, profession) : [];
-  const mall = place === 'mall';
-  const title = mall ? 'Mal Careerverse' : place === 'workplace' && scene ? `${scene.name} · ${company.name}` : place === 'learning' ? 'Ruang belajar' : place === 'home' ? 'Rumah dan kota' : scene?.name || 'Kota Careerverse';
-  const activeItems = mall ? MALL_LOCATIONS.map(item => `<button class="world-object" data-mall="${esc(item.id)}"><span class="world-object-icon">${item.icon}</span><strong>${esc(item.name)}</strong><small>Biaya ${new Intl.NumberFormat('id-ID').format(item.cost)} · ${esc(item.dialogue[0])}</small></button>`).join('') : objects.map((item, index) => `<button class="world-object" data-object="${index}" ${item.task ? '' : 'disabled'}><span class="world-object-icon">${index % 2 ? '🗂️' : '🖥️'}</span><strong>${esc(item.name)}</strong><small>${esc(item.hint || 'Objek interaktif')} ${item.task ? `· Tugas: ${esc(item.task.title || 'Mini-game profesi')}` : '· Tidak tersedia untuk profesi ini'}</small></button>`).join('');
-  const cityLinks = ['home','workplace','mall','learning'].map(id => `<button type="button" data-travel="${id}">${({home:'🏠 Rumah',workplace:'🏢 Tempat kerja',mall:'🏬 Mal',learning:'📚 Belajar'})[id]}</button>`).join('');
-  const taskMarkup = activeTask ? `<section class="world-task panel"><button type="button" class="world-back" data-world-back>← Kembali ke lokasi</button><span class="eyebrow">Mini-game profesi · ${esc(profession?.name || '')}</span><h2>${esc(activeTask.title || 'Tugas kerja')}</h2><p>${esc(activeTask.prompt || 'Pilih cara terbaik menangani pekerjaan ini.')}</p><div class="world-choice-list">${(activeTask.options || []).map((option,index) => `<button type="button" data-task-choice="${index}">${esc(option.label || `Pilihan ${index+1}`)}</button>`).join('')}</div></section>` : '';
-  overlay.querySelector('.world-window').innerHTML = `<header class="world-header"><div><span class="eyebrow">Careerverse · mode isometrik</span><h1 id="world-title" tabindex="-1">${esc(title)}</h1><p>${employed ? `${esc(company.logo)} ${esc(company.name)} · ${esc(profession.name)} · Energi ${Number(save.energy)||0}/100` : 'Pilih tujuan dari peta kota. Tempat kerja perusahaan muncul setelah kamu menerima tawaran kerja.'}</p></div><button type="button" data-world-close aria-label="Tutup dunia">Tutup ✕</button></header>
-    ${notice ? `<p class="notice" role="status">${esc(notice)}</p>` : ''}
-    <div class="world-layout"><div class="world-scene" style="--scene-accent:${esc(scene?.accent || '#78d8a2')}" role="img" aria-label="Tampilan isometrik ${esc(title)}. Objek dan tugas tersedia sebagai tombol di daftar berikut."><div class="iso-back-wall"></div><div class="iso-window"></div><div class="iso-floor"></div><div class="iso-rug"></div><div class="iso-desk"><span>▰</span></div><div class="iso-screen">▣</div><div class="iso-plant">🪴</div><div class="iso-chair">▥</div><div class="iso-npc">${esc(scene?.npcs?.[0]?.name || '👤')}</div><div class="iso-decor">${esc((scene?.decor || ['meja kerja','papan proyek','tanaman']).slice(0,3).join(' · '))}</div><span class="iso-label">${esc(scene?.workplaceType || (mall ? 'area publik' : 'kota'))}</span></div>
-    <aside class="world-side"><h2>🗺️ Pergi ke</h2><div class="world-travel">${cityLinks}</div><label class="world-toggle"><input type="checkbox" data-transport ${save.world.transportEnabled ? 'checked' : ''}> Hitung energi perjalanan</label><label class="world-select">Transportasi<select data-transport-mode><option value="walk">Jalan kaki</option><option value="angkot">Angkot</option><option value="motor">Motor</option></select></label><p class="muted">Perjalanan opsional; tidak ada timer atau gerak paksa.</p></aside></div>
-    <section class="panel world-objects"><h2>${mall ? 'Gerai, kafe, dan fasilitas mal' : place === 'workplace' && scene ? 'Objek kerja interaktif' : 'Lokasi kota'}</h2><p class="muted">${esc(scene ? `NPC: ${(scene.npcs||[]).map(npc=>npc.name).join(', ') || 'rekan kerja'}. Jam ramai: ${(scene.busyHours||[]).join(', ') || 'fleksibel'}.` : 'Pilih lokasi dari menu Pergi ke. Daftar berikut bisa digunakan dengan keyboard.')}</p><div class="world-object-list">${activeItems || '<p>Belum ada objek di lokasi ini.</p>'}</div></section>
-    ${taskMarkup}<footer class="world-footer"><span>Lokasi: ${esc(place)} · Lokasi dikunjungi: ${(save.world.visited||[]).map(esc).join(', ')}</span><button type="button" data-world-close>Kembali ke Careerverse</button></footer></section>`;
-  overlay.querySelectorAll('[data-world-close]').forEach(button => button.onclick = closeWorld);
-  overlay.querySelectorAll('[data-travel]').forEach(button => button.onclick = () => {
-    const current = loadSave(); current.world ||= {}; current.world.transportEnabled = Boolean(overlay.querySelector('[data-transport]').checked);
-    const result = moveWorld(current, button.dataset.travel, overlay.querySelector('[data-transport-mode]').value);
-    if (button.dataset.travel === 'workplace' && !current.employed) { renderWorld(overlay, current, worldData, profession, company, null, null, 'Terima tawaran pekerjaan terlebih dahulu agar dapat mengunjungi tempat kerja.'); return; }
-    saveGame(current); renderWorld(overlay, current, worldData, profession, company, null, null, result.ok ? `Tiba di ${button.textContent.trim()} · perjalanan ${result.minutes} menit simulasi.` : 'Tujuan tidak ditemukan.');
-  });
-  overlay.querySelectorAll('[data-object]').forEach(button => button.onclick = () => {
-    const item = objects[Number(button.dataset.object)];
-    if (!item?.task) return;
-    renderWorld(overlay, loadSave(), worldData, profession, company, item.task, item, `Kamu berinteraksi dengan ${item.name}.`);
-  });
-  overlay.querySelectorAll('[data-mall]').forEach(button => button.onclick = () => {
-    const current = loadSave(); const result = visitMall(current, button.dataset.mall);
-    if (result.ok) { current.world.currentPlace = 'mall'; current.world.lastInteraction = result.dialogue; saveGame(current); renderWorld(overlay,current,worldData,profession,company,null,null,`${result.dialogue}. Energi ${current.energy}, stres ${current.stress}${result.place.skill ? `, skill ${current.skill}` : ''}.`); }
-    else renderWorld(overlay,current,worldData,profession,company,null,null,result.reason);
-  });
-  overlay.querySelector('[data-world-back]')?.addEventListener('click', () => renderWorld(overlay,loadSave(),worldData,profession,company));
-  overlay.querySelectorAll('[data-task-choice]').forEach(button => button.onclick = () => {
-    const current = loadSave(); const result = applyWorldTask(current, activeTask, Number(button.dataset.taskChoice));
-    if (!result.ok) return;
-    current.world.currentPlace = 'workplace'; saveGame(current);
-    renderWorld(overlay,current,worldData,profession,company,null,null,`Tugas selesai dengan skor ${result.score}/100. ${activeTask.options[Number(button.dataset.taskChoice)].feedback || ''}`);
-  });
-  overlay.querySelector('[data-transport]')?.addEventListener('change', event => { const current=loadSave(); current.world.transportEnabled=event.target.checked; saveGame(current); });
-  overlay.querySelector('#world-title')?.focus();
-}
-launchButton();

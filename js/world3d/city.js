@@ -1,121 +1,39 @@
-// world3d/workplaces.js
-export const DEFAULT_WORLD_SAVE = {
-  worldMode: 'menu',
-  world: {
-    locationId: 'home',
-    currentPlace: 'home',
-    transportEnabled: false,
-    freelanceBase: 'home',
-    visited: ['home'],
-    lastInteraction: null,
-  },
-};
+export const MALL_LOCATIONS = [
+  { id: 'food-court', name: 'Food Court', icon: '🍱', cost: 25000, effects: { energy: 10, stress: -5, skill: 0 }, dialogue: ['Istirahat dan makan siang di food court.'] },
+  { id: 'coffee-stop', name: 'Kafe mal', icon: '☕', cost: 18000, effects: { energy: 8, stress: -4, skill: 0 }, dialogue: ['Minum kopi sambil memulihkan fokus.'] },
+  { id: 'book-store', name: 'Toko buku', icon: '📚', cost: 30000, effects: { energy: 2, stress: -3, skill: 1 }, dialogue: ['Belajar dari buku dan referensi baru.'] },
+  { id: 'mini-course', name: 'Kursus singkat', icon: '🎓', cost: 50000, effects: { energy: -4, stress: 4, skill: 2 }, dialogue: ['Ikut kelas singkat dan menambah skill.'] },
+];
 
-const INFERRED_TYPES = {
-  'sma-nusa-bangsa': 'school',
-  'rs-harapan-sehat': 'hospital',
-  'klinik-sehat-bersama': 'hospital',
-  'restoran-rasa-nusantara': 'restaurant_kitchen',
-  'bistro-senja': 'cafe',
-  'kopi-kilat': 'cafe',
-  'kreasi-bersama': 'coworking',
-  'kodeku-labs': 'home',
-  'piksel-nusantara': 'hq_office',
-  'garda-nusantara': 'hq_office',
-  'nusa-global': 'hq_office',
-};
+export function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, Number(value) || 0));
+}
 
-export function migrateWorldSave(save = {}) {
-  const current = save.world || {};
-  const world = {
-    ...DEFAULT_WORLD_SAVE.world,
-    ...current,
-  };
-
-  if (!Array.isArray(world.visited) || world.visited.length === 0) {
-    world.visited = ['home'];
+export function visitMall(save = {}, locationId = '') {
+  const location = MALL_LOCATIONS.find(item => item.id === locationId);
+  if (!location) return { ok: false, reason: 'Lokasi mal tidak ditemukan.' };
+  if ((Number(save.money) || 0) < location.cost) {
+    return { ok: false, reason: `Uang tidak cukup untuk ${location.name}.` };
   }
-
-  return {
-    ...save,
-    worldMode: save.worldMode || DEFAULT_WORLD_SAVE.worldMode,
-    world,
-  };
+  save.money = (Number(save.money) || 0) - location.cost;
+  save.energy = clamp((Number(save.energy) || 0) + (location.effects.energy || 0), 0, 100);
+  save.stress = clamp((Number(save.stress) || 0) + (location.effects.stress || 0), 0, 100);
+  save.skill = clamp((Number(save.skill) || 0) + (location.effects.skill || 0), 0, 10);
+  save.world = save.world || {};
+  save.world.currentPlace = 'mall';
+  save.world.lastInteraction = location.name;
+  return { ok: true, place: location, dialogue: location.dialogue[0] };
 }
 
-export function workplaceTypeFor(company = {}) {
-  if (company.workplaceType) return company.workplaceType;
-  if (INFERRED_TYPES[company.id]) return INFERRED_TYPES[company.id];
-  const industryString = String(company.industry || '').toLowerCase();
-  if (/kesehatan|rumah sakit|klinik/.test(industryString)) return 'hospital';
-  if (/pendidikan|sekolah/.test(industryString)) return 'school';
-  if (/kuliner|restoran|kafe|kopi/.test(industryString)) return 'restaurant_kitchen';
-  if (/agency|agensi|kreatif|digital/.test(industryString)) return 'coworking';
-  return 'hq_office';
-}
-
-export function resolveWorkplace(company = {}, templates = []) {
-  const type = workplaceTypeFor(company);
-  const sceneId = company.sceneTemplate || type;
-  const template =
-    templates.find((item) => item.id === sceneId) ||
-    templates.find((item) => item.workplaceType === type) ||
-    null;
-
-  if (!template) {
-    return {
-      id: sceneId,
-      workplaceType: type,
-      companyId: company.id || null,
-      companyName: company.name || 'Lokasi kerja',
-      accent: company.sceneAccent || '#76d6a0',
-      decor: company.sceneDecor || [],
-      objects: [],
-      npcs: [],
-      busyHours: [],
-      name: 'Ruang kerja',
-    };
-  }
-
-  return {
-    ...template,
-    workplaceType: type,
-    companyId: company.id || null,
-    companyName: company.name || template.name || 'Lokasi kerja',
-    accent: company.sceneAccent || template.accent || '#76d6a0',
-    decor: company.sceneDecor || template.decor || [],
-  };
-}
-
-export function tasksForObjects(template = {}, profession = {}) {
-  const tasks = Array.isArray(profession.tasks) ? profession.tasks : [];
-  return (template.objects || []).map((object) => {
-    const fallbackTask = object.taskIndex !== undefined ? tasks[object.taskIndex] : null;
-    const matchedTask = tasks.find((task) => task.id === object.taskId) || fallbackTask || null;
-    return {
-      ...object,
-      task: matchedTask,
-      available: Boolean(matchedTask),
-    };
-  });
-}
-
-export function moveWorldLocation(save = {}, locationId) {
-  const migrated = migrateWorldSave(save);
-  migrated.world ||= { ...DEFAULT_WORLD_SAVE.world };
-  migrated.world.currentPlace = locationId;
-  migrated.world.locationId = locationId;
-  migrated.world.visited = Array.isArray(migrated.world.visited) ? migrated.world.visited : ['home'];
-  if (!migrated.world.visited.includes(locationId)) {
-    migrated.world.visited.push(locationId);
-  }
-  return migrated.world;
-}
-
-export function sceneForCompany(company = {}, templates = []) {
-  return resolveWorkplace(company, templates);
-}
-
-export function normalizeWorldSave(save = {}) {
-  return migrateWorldSave(save);
+export function travelBetween(save = {}, target = 'home', transport = 'walk') {
+  const travelCost = { walk: 0, angkot: 3, motor: 2 };
+  const placeMap = { home: 'Rumah', workplace: 'Tempat kerja', mall: 'Mal', learning: 'Tempat belajar' };
+  const targetLabel = placeMap[target] || 'Lokasi';
+  if (!target) return { ok: false, reason: 'Tujuan tidak valid.' };
+  save.world = save.world || { currentPlace: 'home', visited: ['home'] };
+  save.world.visited = Array.isArray(save.world.visited) ? save.world.visited : ['home'];
+  save.world.currentPlace = target;
+  if (!save.world.visited.includes(target)) save.world.visited.push(target);
+  save.energy = clamp((Number(save.energy) || 0) - (travelCost[transport] || 0), 0, 100);
+  return { ok: true, minutes: 8, destination: targetLabel, transport };
 }
