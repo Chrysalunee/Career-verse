@@ -1,0 +1,7 @@
+{
+  "items": [
+    {"id":"coworker-question","text":"Rekan meminta bantuan memahami file kerja lama.","choices":["help","defer","ignore"]},
+    {"id":"tech-issue","text":"Kendala teknis singkat mengganggu pekerjaan.","choices":["defer","help","ignore"]},
+    {"id":"urgent-client","text":"Klien mengirim perubahan prioritas mendadak.","choices":["clarify","defer","ignore"]}
+  ]
+}

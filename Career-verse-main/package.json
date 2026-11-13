@@ -1,0 +1,9 @@
+{
+  "name": "career-verse",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/*.test.js" },
+  "description": "Simulasi karier web murni tanpa framework",
+  "license": "MIT"
+}

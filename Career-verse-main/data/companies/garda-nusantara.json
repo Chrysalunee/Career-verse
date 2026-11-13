@@ -1,0 +1,18 @@
+{
+  "id": "garda-nusantara",
+  "name": "Garda Nusantara",
+  "logo": "🛡️",
+  "industry": "Layanan digital",
+  "size": "Menengah",
+  "location": "Bandung · Hybrid",
+  "culture": "Berorientasi layanan dan stabilitas sistem; koordinasi lintas tim terjadwal.",
+  "salary": [8000000, 21000000],
+  "roles": ["programmer", "data-analyst"],
+  "clients": ["Lembayung Data", "Saku Reka"],
+  "boss": "Bu Sari — teliti dan mengutamakan komunikasi yang jelas",
+  "coworkers": ["Danu — engineer", "Mira — analis data", "Tari — product owner"],
+  "benefits": ["Anggaran pelatihan tahunan", "Jam kerja terjadwal", "Tunjangan kesehatan"],
+  "pros": ["Ritme kerja lebih terstruktur", "Kolaborasi lintas fungsi", "Fokus pada keandalan"],
+  "cons": ["Perubahan perlu melalui proses persetujuan", "Rilis direncanakan dengan ketat"],
+  "review": "Proses kerja jelas dan fokus pada kualitas layanan, meski perubahan mendesak perlu koordinasi lebih awal."
+}

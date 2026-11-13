@@ -1,0 +1,39 @@
+{
+  "id": "content-creator",
+  "name": "Content Creator",
+  "icon": "🎥",
+  "salaryRange": [5000000, 22000000],
+  "summary": "Mengembangkan ide dan membuat konten yang konsisten, relevan, dan sesuai suara brand.",
+  "hardSkills": ["Storytelling", "Produksi video", "Editing", "Perencanaan konten", "Analitik konten"],
+  "softSkills": ["Kreativitas", "Adaptasi", "Komunikasi", "Konsistensi"],
+  "careerLadder": ["Intern", "Junior Creator", "Content Creator", "Content Strategist", "Creative Lead"],
+  "tools": ["Kamera ponsel", "CapCut", "Canva", "Content calendar", "Analytics dashboard"],
+  "terms": ["Hook", "Retention", "Brand voice", "Engagement", "Call to action"],
+  "kpis": ["Reach relevan", "Engagement", "Retention", "Konsistensi publikasi"],
+  "tasks": [
+    {
+      "title": "Menyusun seri konten",
+      "difficulty": 2,
+      "prompt": "Brand ingin membangun keterlibatan dalam dua minggu. Pendekatan mana yang paling realistis?",
+      "options": [
+        { "label": "Buat seri bertema dengan jadwal konsisten, hook yang jelas, dan format yang bisa dievaluasi.", "score": 94, "feedback": "Seri yang konsisten membantu audiens mengenali pesan dan memberi ruang untuk belajar dari performa." },
+        { "label": "Unggah semua ide sekaligus tanpa melihat kapasitas produksi.", "score": 28, "feedback": "Perencanaan menjaga mutu dan beban kerja tetap realistis." },
+        { "label": "Ikuti semua tren meski tidak sesuai brand.", "score": 18, "feedback": "Tren perlu dipilih berdasarkan relevansi, bukan sekadar popularitas." }
+      ]
+    },
+    {
+      "title": "Evaluasi performa video",
+      "difficulty": 3,
+      "prompt": "Views tinggi tetapi penonton cepat berhenti menonton. Apa yang sebaiknya ditinjau?",
+      "options": [
+        { "label": "Tinjau retensi per bagian, kecocokan hook dengan isi, dan kejelasan pesan.", "score": 94, "feedback": "Retensi dan kesesuaian janji konten membantu menjelaskan kualitas perhatian audiens." },
+        { "label": "Unggah ulang video berkali-kali tanpa perubahan.", "score": 20, "feedback": "Uji hipotesis yang jelas daripada mengulang tanpa evaluasi." },
+        { "label": "Hapus semua konten yang belum viral.", "score": 15, "feedback": "Konten perlu dinilai berdasarkan tujuan dan konteks, bukan viralitas saja." }
+      ]
+    }
+  ],
+  "events": ["Klien meminta konten tambahan dengan tenggat yang sama.", "Sebuah tren cocok dengan audiens tetapi berisiko melenceng dari tone brand.", "Tim perlu mengatur ulang kalender setelah materi utama terlambat."],
+  "ethicalDilemmas": ["Brand meminta testimoni yang dibuat-buat; jelaskan bahwa testimoni harus nyata dan berizin.", "Konten memakai musik atau gambar yang belum jelas izinnya; cari materi berlisensi atau minta izin sebelum publikasi."],
+  "realWorld": "Content creator menggabungkan riset audiens, penceritaan, produksi, hak penggunaan materi, konsistensi brand, dan evaluasi performa.",
+  "educationDisclaimer": false
+}

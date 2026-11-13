@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createState,acceptanceChance,evaluateTask,salaryFor,clamp,canPromote,xpToNextLevel} from '../js/engine.js';
+const company={roles:['programmer'],salary:[6000000,12000000]};
+const profession={id:'programmer',careerLadder:['Intern','Junior','Senior']};
+test('state memiliki status awal yang masuk akal',()=>{const s=createState();assert.equal(s.energy,90);assert.equal(s.day,1);assert.equal(s.money,1200000);});
+test('peluang penerimaan dibatasi dan meningkat dengan skill',()=>{const weak=createState();weak.skill=1;const strong={...weak,skill:8};assert.ok(acceptanceChance(strong,company,profession)>acceptanceChance(weak,company,profession));assert.ok(acceptanceChance(weak,company,profession)>=5);});
+test('evaluasi tugas memperhitungkan energi dan stres',()=>{const rested=evaluateTask(90,createState());const tired=evaluateTask(90,{...createState(),energy:10,stress:90});assert.ok(rested.score>tired.score);assert.equal(rested.rep,4);});
+test('gaji meningkat seiring level',()=>{assert.ok(salaryFor(6000000,2)>salaryFor(6000000,0));});
+test('clamp membatasi stat',()=>{assert.equal(clamp(120,0,100),100);assert.equal(clamp(-4,0,100),0);});
+test('promosi mensyaratkan skill, kontribusi, reputasi dan level yang tersedia',()=>{const state={...createState(),tasksDone:8,skill:2.5,internal:50,level:'Intern'};assert.equal(canPromote(state,profession),true);assert.equal(canPromote({...state,tasksDone:7},profession),false);assert.equal(canPromote({...state,internal:20},profession),false);});
+test('kebutuhan XP meningkat bertahap',()=>{assert.equal(xpToNextLevel(1),100);assert.equal(xpToNextLevel(3),180);});

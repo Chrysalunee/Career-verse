@@ -1,0 +1,41 @@
+{
+  "screen": "task",
+  "professionId": "digital-marketer",
+  "companyId": "kopi-kilat",
+  "employed": true,
+  "day": 1,
+  "energy": 90,
+  "stress": 12,
+  "reputation": 12,
+  "internal": 12,
+  "money": 1200000,
+  "skill": 1,
+  "satisfaction": 55,
+  "tasksDone": 0,
+  "xp": 0,
+  "relationship": 30,
+  "salary": 6180000,
+  "level": "Intern",
+  "history": [
+    {
+      "company": "KopiKilat",
+      "role": "Intern",
+      "day": 1,
+      "note": "Mulai onboarding dan masa percobaan"
+    }
+  ],
+  "achievements": [],
+  "event": null,
+  "lastResult": null,
+  "offer": true,
+  "offeredSalary": 6180000,
+  "lastChance": 74,
+  "interviewFeedback": "Jawabanmu menjelaskan prioritas, komunikasi, dan hasil secara konkret.",
+  "eventOutcome": "",
+  "promotion": null,
+  "payday": "",
+  "review": "",
+  "studyMessage": "",
+  "onboarding": "Hari pertama di KopiKilat! Kenali tim dan sepakati target awal bersama Bu Ratna — tegas dan terbuka pada alasan yang jelas.",
+  "negotiation": ""
+}

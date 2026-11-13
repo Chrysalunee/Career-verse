@@ -1,0 +1,18 @@
+{
+  "id": "piksel-nusantara",
+  "name": "Piksel Nusantara",
+  "logo": "🧩",
+  "industry": "Teknologi",
+  "size": "Menengah",
+  "location": "Yogyakarta · Remote",
+  "culture": "Kolaboratif dan otonom; eksperimen dihargai, tetapi prioritas produk dapat berubah.",
+  "salary": [8500000, 22000000],
+  "roles": ["programmer", "uiux-designer", "data-analyst"],
+  "clients": ["Gawai Pintar", "Toko Rona", "JelajahIn"],
+  "boss": "Mas Reza — visioner dan terbuka pada eksperimen",
+  "coworkers": ["Lina — product designer", "Joko — data lead", "Bimo — engineer"],
+  "benefits": ["Dana kursus", "Dukungan perangkat kerja", "Bonus proyek"],
+  "pros": ["Otonomi tinggi", "Kesempatan belajar lintas fungsi", "Dampak produk terlihat"],
+  "cons": ["Prioritas dapat berubah", "Peran tim kecil kadang melebar"],
+  "review": "Tim kecil dengan ruang belajar luas; dokumentasikan keputusan ketika arah produk berubah."
+}

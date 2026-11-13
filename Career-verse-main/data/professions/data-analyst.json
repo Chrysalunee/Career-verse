@@ -1,0 +1,39 @@
+{
+  "id": "data-analyst",
+  "name": "Data Analyst",
+  "icon": "📊",
+  "salaryRange": [6000000, 18000000],
+  "summary": "Menganalisis data bisnis untuk memberi insight dan mengukur pencapaian strategi.",
+  "hardSkills": ["SQL", "Spreadsheet", "Visualisasi data", "Statistika dasar", "Business intelligence"],
+  "softSkills": ["Analisis kritis", "Komunikasi", "Pemecahan masalah", "Ketelitian"],
+  "careerLadder": ["Intern", "Junior Analyst", "Data Analyst", "Senior Analyst", "Analytics Manager"],
+  "tools": ["SQL", "Spreadsheet", "Power BI", "Looker Studio"],
+  "terms": ["Dashboard", "KPI", "Insight", "Segmentasi", "Anomali"],
+  "kpis": ["Akurasi insight", "Kegunaan dashboard", "Kepuasan stakeholder"],
+  "tasks": [
+    {
+      "title": "Analisis performa kampanye",
+      "difficulty": 3,
+      "prompt": "Reach kampanye naik, tetapi konversi turun. Apa yang sebaiknya diperiksa sebelum mengubah anggaran?",
+      "options": [
+        { "label": "Bandingkan segmen audiens, funnel, landing page, dan periode dengan data pembanding.", "score": 96, "feedback": "Konteks, kualitas data, dan pembanding membantu menghindari kesimpulan yang keliru." },
+        { "label": "Langsung naikkan anggaran karena reach meningkat.", "score": 32, "feedback": "Reach tidak selalu berarti hasil bisnis meningkat. Periksa funnel dan tujuan terlebih dahulu." },
+        { "label": "Hapus seluruh kampanye dan mulai dari nol.", "score": 18, "feedback": "Perubahan besar sebaiknya didukung analisis penyebab dan eksperimen terukur." }
+      ]
+    },
+    {
+      "title": "Menyederhanakan dashboard",
+      "difficulty": 2,
+      "prompt": "Stakeholder hanya punya waktu 15 menit untuk membaca dashboard. Apa prioritas desainnya?",
+      "options": [
+        { "label": "Tampilkan KPI utama, tren, konteks, dan insight yang bisa ditindaklanjuti.", "score": 94, "feedback": "Dashboard yang baik membantu pengguna menjawab pertanyaan dan mengambil keputusan." },
+        { "label": "Tampilkan semua metrik dari seluruh divisi pada satu halaman.", "score": 28, "feedback": "Terlalu banyak angka dapat menyamarkan informasi yang penting." },
+        { "label": "Gunakan grafik tanpa judul agar dashboard tampak ringkas.", "score": 15, "feedback": "Judul dan konteks membantu mencegah salah tafsir." }
+      ]
+    }
+  ],
+  "events": ["Data dari dua sumber tidak konsisten; tim perlu menyepakati definisi metrik.", "Stakeholder meminta insight sebelum rapat, sementara validasi belum selesai.", "Perubahan definisi KPI membuat perbandingan historis perlu ditinjau."],
+  "ethicalDilemmas": ["Stakeholder meminta menghilangkan periode yang hasilnya buruk dari laporan; jelaskan dampak dan tampilkan konteks secara transparan.", "Data pengguna mengandung informasi pribadi yang tidak diperlukan; minimalkan akses dan gunakan data sesuai kebijakan."],
+  "realWorld": "Data analyst memeriksa kualitas data, memahami pertanyaan bisnis, memilih pembanding yang tepat, lalu menyampaikan keterbatasan dan insight dengan jelas.",
+  "educationDisclaimer": false
+}

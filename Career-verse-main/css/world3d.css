@@ -1,0 +1,142 @@
+.world3d-button {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  background: linear-gradient(135deg, #38b78b, #2f6d61);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.9rem 1.2rem;
+  font-weight: 800;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+#careerverse-world3d-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: none;
+  padding: 1rem;
+  background: rgba(3, 7, 8, 0.8);
+}
+
+.world3d-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: #0d1b15;
+  border: 1px solid #5c7a69;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.world3d-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(146, 184, 170, 0.4);
+}
+
+.world3d-header h2 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.world3d-close {
+  background: #182e27;
+  color: #fff;
+  border: 1px solid #739984;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+}
+
+.world3d-view {
+  width: 100%;
+  height: min(68vh, 620px);
+  background: linear-gradient(180deg, #0c1920, #142b25);
+}
+
+.world3d-label {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(228, 234, 222, 0.7);
+  color: #fff;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.world3d-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.8rem;
+  padding: 0.9rem 1.2rem 1.2rem;
+  color: #dcebe0;
+}
+
+.world3d-meta p {
+  margin: 0;
+}
+
+.world3d-view { position: relative; overflow: hidden; }
+.world3d-view canvas { display: block; width: 100%; height: 100%; }
+.world3d-prompt {
+  position: absolute; left: 50%; bottom: 58px; transform: translateX(-50%);
+  max-width: calc(100% - 24px); padding: 0.55rem 0.9rem; border-radius: 999px;
+  color: #eef8f1; background: rgba(9, 27, 21, 0.76); border: 1px solid rgba(220, 245, 230, 0.25);
+  font-size: 0.84rem; text-align: center; pointer-events: none;
+}
+.world3d-prompt.is-active { background: rgba(20, 91, 65, 0.94); border-color: #9de4bd; }
+.world3d-controls-hint {
+  position: absolute; left: 12px; top: 12px; padding: 0.45rem 0.65rem;
+  border-radius: 9px; color: #f1f7f3; background: rgba(10, 25, 20, 0.72);
+  font-size: 0.75rem; pointer-events: none;
+}
+.world3d-controls-hint span { opacity: 0.55; padding: 0 0.25rem; }
+.world3d-task-panel {
+  margin: 0 1.2rem 1.2rem; padding: 1rem; border: 1px solid #769987;
+  border-radius: 14px; color: #e8f2eb; background: #142b22;
+}
+.world3d-task-panel[hidden] { display: none; }
+.world3d-task-panel h3 { margin: 0 0 0.45rem; }
+.world3d-task-panel p { margin: 0 0 0.85rem; line-height: 1.5; }
+.world3d-task-options { display: grid; gap: 0.55rem; }
+.world3d-task-option, .world3d-task-close {
+  border: 1px solid #6b927b; border-radius: 10px; padding: 0.7rem 0.85rem;
+  color: #f4fff7; background: #254737; text-align: left; cursor: pointer;
+}
+.world3d-task-option:hover, .world3d-task-close:hover { background: #32634c; }
+.world3d-task-close { margin-top: 0.7rem; background: transparent; }
+.world3d-task-feedback { color: #b9edc8; font-weight: 700; }
+@media (max-width: 640px) {
+  #careerverse-world3d-stage { padding: 0.35rem; }
+  .world3d-view { height: 64vh; }
+  .world3d-controls-hint { font-size: 0.68rem; }
+  .world3d-task-panel { margin: 0 0.65rem 0.65rem; }
+}
+
+.world3d-clock {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(235, 245, 235, 0.35);
+  border-radius: 10px;
+  color: #f4fff7;
+  background: rgba(10, 25, 20, 0.78);
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .world3d-clock { top: auto; bottom: 12px; right: 12px; font-size: 0.72rem; }
+}

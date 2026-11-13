@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10251f">
+  <meta name="description" content="Careerverse — simulasi karier interaktif dalam Bahasa Indonesia.">
+  <title>Careerverse — Simulasi Karier</title>
+  <link rel="stylesheet" href="./css/styles.css?v=5">
+  <link rel="stylesheet" href="./css/world3d.css?v=1">
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke konten utama</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Careerverse beranda">🧭 <span>Careerverse</span></a>
+    <div class="toolbar">
+      <span id="save-status" aria-live="polite">Progres tersimpan otomatis</span>
+      <button id="export-save" class="quiet" type="button">Ekspor save</button>
+      <label class="import-button quiet">Impor save<input id="import-save" type="file" accept="application/json"></label>
+      <button id="reset-game" class="quiet" type="button">Mulai ulang</button>
+    </div>
+  </header>
+  <main id="main" class="wrap"><div id="app" aria-live="polite"></div></main>
+  <footer class="footer">Game edukasi fiktif · Progres tersimpan di perangkat ini · <a href="./README.md">Tentang game</a></footer>
+  <script type="module" src="./js/app.js?v=5"></script>
+</body>
+</html>

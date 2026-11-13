@@ -1,0 +1,39 @@
+{
+  "id": "uiux-designer",
+  "name": "UI/UX Designer",
+  "icon": "🎨",
+  "salaryRange": [7000000, 20000000],
+  "summary": "Merancang pengalaman produk yang mudah dipahami, inklusif, dan sesuai kebutuhan pengguna.",
+  "hardSkills": ["Riset pengguna", "User flow", "Wireframe", "Prototyping", "Usability testing", "Design system"],
+  "softSkills": ["Empati", "Kolaborasi", "Komunikasi", "Menerima masukan"],
+  "careerLadder": ["Intern", "Junior Designer", "Product Designer", "Senior Designer", "Design Lead"],
+  "tools": ["Figma", "FigJam", "Prototipe interaktif", "Papan riset"],
+  "terms": ["Wireframe", "Prototype", "Usability", "User flow", "Accessibility"],
+  "kpis": ["Keberhasilan tugas pengguna", "Kejelasan alur", "Aksesibilitas", "Kepuasan pengguna"],
+  "tasks": [
+    {
+      "title": "Rancang alur onboarding",
+      "difficulty": 2,
+      "prompt": "Pengguna baru kesulitan memulai. Perbaikan mana yang paling layak diuji lebih dulu?",
+      "options": [
+        { "label": "Amati titik kebingungan, sederhanakan langkah penting, lalu uji prototipe dengan pengguna.", "score": 96, "feedback": "Riset dan uji kegunaan membantu memastikan desain menyelesaikan masalah yang nyata." },
+        { "label": "Tampilkan semua fitur di satu layar agar tidak ada yang terlewat.", "score": 25, "feedback": "Terlalu banyak informasi sekaligus dapat menambah beban kognitif." },
+        { "label": "Ubah warna tombol tanpa memeriksa alur pengguna.", "score": 35, "feedback": "Perubahan visual perlu didukung pemahaman tentang hambatan pengguna." }
+      ]
+    },
+    {
+      "title": "Meninjau checkout",
+      "difficulty": 3,
+      "prompt": "Pengguna sering berhenti saat checkout. Apa langkah awal yang berpusat pada pengguna?",
+      "options": [
+        { "label": "Tinjau data alur dan lakukan uji kegunaan untuk menemukan titik hambatan.", "score": 95, "feedback": "Gabungkan bukti kuantitatif dan pengamatan pengguna sebelum memilih solusi." },
+        { "label": "Tambahkan lebih banyak pilihan pada setiap langkah.", "score": 22, "feedback": "Pilihan tambahan bisa menambah kebingungan jika akar masalah belum diketahui." },
+        { "label": "Hilangkan semua pesan validasi supaya checkout lebih cepat.", "score": 10, "feedback": "Validasi yang jelas membantu mencegah kesalahan dan mendukung aksesibilitas." }
+      ]
+    }
+  ],
+  "events": ["Hasil uji menunjukkan label tombol membingungkan.", "Stakeholder meminta perubahan visual menjelang rilis.", "Pengguna dengan kebutuhan aksesibilitas menemukan hambatan pada alur utama."],
+  "ethicalDilemmas": ["Tim meminta pola gelap yang mendorong pengguna berlangganan; usulkan pilihan yang transparan dan mudah dibatalkan.", "Riset merekam informasi pribadi yang tidak diperlukan; hapus atau batasi data dan minta persetujuan yang sesuai."],
+  "realWorld": "UI/UX designer merancang alur berdasarkan kebutuhan pengguna, berkolaborasi dengan produk dan engineering, menguji prototipe, serta mempertimbangkan aksesibilitas sejak awal.",
+  "educationDisclaimer": false
+}

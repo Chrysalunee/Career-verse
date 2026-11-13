@@ -1,0 +1,15 @@
+{
+  "companies": [
+    { "id": "kopi-kilat", "name": "KopiKilat", "workplaceType": "cafe", "sceneTemplate": "cafe" },
+    { "id": "bistro-senja", "name": "Bistro Senja", "workplaceType": "restaurant_kitchen", "sceneTemplate": "restaurant_kitchen" },
+    { "id": "restoran-rasa-nusantara", "name": "Restoran Rasa Nusantara", "workplaceType": "restaurant_kitchen", "sceneTemplate": "restaurant_kitchen" },
+    { "id": "kodeku-labs", "name": "Kodeku Labs", "workplaceType": "hq_office", "sceneTemplate": "hq_office" },
+    { "id": "piksel-nusantara", "name": "Piksel Nusantara", "workplaceType": "coworking", "sceneTemplate": "coworking" },
+    { "id": "garda-nusantara", "name": "Garda Nusantara", "workplaceType": "hq_office", "sceneTemplate": "hq_office" },
+    { "id": "nusa-global", "name": "NusaGlobal", "workplaceType": "hq_office", "sceneTemplate": "hq_office" },
+    { "id": "kreasi-bersama", "name": "KreasiBersama", "workplaceType": "coworking", "sceneTemplate": "coworking" },
+    { "id": "klinik-sehat-bersama", "name": "Klinik Sehat Bersama", "workplaceType": "hospital", "sceneTemplate": "hospital" },
+    { "id": "rs-harapan-sehat", "name": "RS Harapan Sehat", "workplaceType": "hospital", "sceneTemplate": "hospital" },
+    { "id": "sma-nusa-bangsa", "name": "SMA Nusa Bangsa", "workplaceType": "school", "sceneTemplate": "school" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "styles": {
+    "default": {"start":8,"end":17,"lunch":12,"standup":true},
+    "startup": {"start":8,"end":17,"lunch":12,"standup":true},
+    "korporasi": {"start":8,"end":17,"lunch":12,"standup":true},
+    "agency": {"start":9,"end":18,"lunch":13,"standup":false},
+    "remote": {"start":9,"end":17,"lunch":12,"standup":false},
+    "freelance": {"start":9,"end":17,"lunch":13,"standup":false}
+  },
+  "notes": {"startup":"Rapat singkat dan chat lebih sering.","korporasi":"Email formal dan jadwal tetap.","agency":"Klien dan tenggat dapat bertumpuk.","remote":"Utamakan komunikasi tertulis dan perbedaan zona waktu.","freelance":"Atur jadwal sendiri; tidak ada rapat internal wajib."}
+}
