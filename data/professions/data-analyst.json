@@ -1,90 +1,39 @@
-# Karier Nyata — Career-verse
-
-Game simulasi karier berbasis web, HTML/CSS/JS murni, tanpa framework. Fokus pada pengalaman kerja yang terasa nyata: memilih profesi, melamar ke perusahaan, mengerjakan tugas harian, berkolaborasi dengan tim/brand, dan meraih promosi seiring pengalaman.
-
-## Fitur utama
-
-- Pilihan profesi dan perusahaan yang berbeda trade-off
-- Lamaran + wawancara singkat dengan pilihan jawaban
-- Siklus kerja harian: tugas -> mini-game -> evaluasi -> info dunia nyata
-- Stat: energi, stres, reputasi, relasi tim, skill, kemampuan, uang, promosi
-- Event kerja acak dan keputusan dengan dampak jangka panjang
-- Timeline karier dan pencapaian
-- Save lokal, import/export, serta mode offline yang aman karena semua data bersifat statis
-- Desain responsif, aksesibilitas dasar, dan bahasa Indonesia/Inggris pada UI
-
-## Jalankan game
-
-Karena browser membatasi fetch JSON dari `file://`, jalankan server lokal terlebih dahulu:
-
-```bash
-python3 -m http.server 8000
-```
-
-Lalu buka:
-
-http://localhost:8000
-
-## Struktur folder
-
-- `index.html`
-- `css/styles.css`
-- `js/engine.js`
-- `js/app.js`
-- `js/ui.js`
-- `data/professions/*.json`
-- `data/companies/*.json`
-- `data/brands/brands.json`
-- `tests/engine.test.js`
-- `README.md`
-
-## Menambah profesi baru
-
-Tambahkan file JSON baru dalam `data/professions/` lalu daftarkan ID-nya di `js/app.js` pada `professionIds`.
-
-Contoh struktur:
-
-```json
 {
   "id": "data-analyst",
   "name": "Data Analyst",
   "icon": "📊",
   "salaryRange": [6000000, 18000000],
-  "summary": "Mengolah data untuk memberi insight keputusan bisnis.",
-  "hardSkills": ["SQL", "Excel", "Dashboard"],
-  "softSkills": ["Analisis", "Komunikasi", "Kejelasan"],
-  "careerLadder": ["Intern", "Junior Analyst", "Analyst", "Senior", "Manager"],
-  "tools": ["SQL", "Excel", "Power BI"],
-  "terms": ["Dashboard", "Insight", "KPI"],
-  "kpis": ["Kualitas insight", "Akurasi", "Kepuasan stakeholder"],
+  "summary": "Menganalisis data bisnis untuk memberi insight dan mengukur pencapaian strategi.",
+  "hardSkills": ["SQL", "Spreadsheet", "Visualisasi data", "Statistika dasar", "Business intelligence"],
+  "softSkills": ["Analisis kritis", "Komunikasi", "Pemecahan masalah", "Ketelitian"],
+  "careerLadder": ["Intern", "Junior Analyst", "Data Analyst", "Senior Analyst", "Analytics Manager"],
+  "tools": ["SQL", "Spreadsheet", "Power BI", "Looker Studio"],
+  "terms": ["Dashboard", "KPI", "Insight", "Segmentasi", "Anomali"],
+  "kpis": ["Akurasi insight", "Kegunaan dashboard", "Kepuasan stakeholder"],
   "tasks": [
     {
       "title": "Analisis performa kampanye",
       "difficulty": 3,
-      "prompt": "Bagaimana cara memvalidasi apakah kampanye berjalan efektif?",
+      "prompt": "Reach kampanye naik, tetapi konversi turun. Apa yang sebaiknya diperiksa sebelum mengubah anggaran?",
       "options": [
-        { "label": "Bandingkan KPI utama dengan baseline, segmentasi, dan tren waktu.", "score": 95, "feedback": "Akurasi dan konteks penting agar insight tidak salah dibaca." }
+        { "label": "Bandingkan segmen audiens, funnel, landing page, dan periode dengan data pembanding.", "score": 96, "feedback": "Konteks, kualitas data, dan pembanding membantu menghindari kesimpulan yang keliru." },
+        { "label": "Langsung naikkan anggaran karena reach meningkat.", "score": 32, "feedback": "Reach tidak selalu berarti hasil bisnis meningkat. Periksa funnel dan tujuan terlebih dahulu." },
+        { "label": "Hapus seluruh kampanye dan mulai dari nol.", "score": 18, "feedback": "Perubahan besar sebaiknya didukung analisis penyebab dan eksperimen terukur." }
+      ]
+    },
+    {
+      "title": "Menyederhanakan dashboard",
+      "difficulty": 2,
+      "prompt": "Stakeholder hanya punya waktu 15 menit untuk membaca dashboard. Apa prioritas desainnya?",
+      "options": [
+        { "label": "Tampilkan KPI utama, tren, konteks, dan insight yang bisa ditindaklanjuti.", "score": 94, "feedback": "Dashboard yang baik membantu pengguna menjawab pertanyaan dan mengambil keputusan." },
+        { "label": "Tampilkan semua metrik dari seluruh divisi pada satu halaman.", "score": 28, "feedback": "Terlalu banyak angka dapat menyamarkan informasi yang penting." },
+        { "label": "Gunakan grafik tanpa judul agar dashboard tampak ringkas.", "score": 15, "feedback": "Judul dan konteks membantu mencegah salah tafsir." }
       ]
     }
   ],
-  "events": ["Data mulai bermasalah karena adanya dari beberapa sumber yang tidak konsisten.", "Stakeholder meminta insight cepat sebelum rapat eksekutif."],
-  "realWorld": "Data analyst bekerja di persimpangan bisnis dan analitik: mereka tidak hanya melihat angka, tetapi menjelaskan apa yang benar-benar terjadi di bawahnya.",
+  "events": ["Data dari dua sumber tidak konsisten; tim perlu menyepakati definisi metrik.", "Stakeholder meminta insight sebelum rapat, sementara validasi belum selesai.", "Perubahan definisi KPI membuat perbandingan historis perlu ditinjau."],
+  "ethicalDilemmas": ["Stakeholder meminta menghilangkan periode yang hasilnya buruk dari laporan; jelaskan dampak dan tampilkan konteks secara transparan.", "Data pengguna mengandung informasi pribadi yang tidak diperlukan; minimalkan akses dan gunakan data sesuai kebijakan."],
+  "realWorld": "Data analyst memeriksa kualitas data, memahami pertanyaan bisnis, memilih pembanding yang tepat, lalu menyampaikan keterbatasan dan insight dengan jelas.",
   "educationDisclaimer": false
 }
-```
-
-## Menambah perusahaan baru
-
-Buat file di `data/companies/` dengan data seperti `name`, `logo`, `industry`, `size`, `location`, `culture`, `salary`, `roles`, `clients`, `boss`, `coworkers`, `benefits`, `pros`, `cons`, `review`. Daftarkan ID perusahaan di `companyIds` dalam `js/app.js`.
-
-## Test
-
-```bash
-npm test
-```
-
-## Lisensi dan disclaimer
-
-Lisensi MIT sebagaimana tertera pada `LICENSE`.
-
-Game ini edukatif dan bukan pengganti nasihat profesional, medis, hukum, atau keamanan. Semuanya bersifat fiktif. Semua nama perusahaan, brand, dan tokoh dalam game ini fiktif. Kemiripan dengan pihak nyata adalah kebetulan.

@@ -1,38 +1,18 @@
 {
-  "id": "content-creator",
-  "name": "Content Creator",
-  "icon": "🎥",
-  "salaryRange": [5000000, 22000000],
-  "summary": "Membuat ide, konten, dan eksekusi digital yang menarik serta relevan dengan audiens.",
-  "hardSkills": ["Storytelling", "Editing", "Brand positioning", "Analitik konten", "Produksi video"],
-  "softSkills": ["Kreativitas", "Adaptasi", "Komunikasi", "Konsistensi"],
-  "careerLadder": ["Intern", "Junior Creator", "Content Strategist", "Senior", "Manager"],
-  "tools": ["CapCut", "Canva", "Adobe Premiere", "Notion"],
-  "terms": ["Hook", "Retention", "Brand voice", "Series content"],
-  "kpis": ["Reach", "Engagement", "Retention", "Conversion to action"],
-  "tasks": [
-    {
-      "title": "Rancang seri konten",
-      "difficulty": 2,
-      "prompt": "Brand baru ingin membangun engagement dalam 2 minggu. Strategi paling masuk akal?",
-      "options": [
-        { "label": "Buat seri dengan hook jelas, format konsisten, dan variasi tema yang relevan.", "score": 94, "feedback": "Konsistensi membantu audiens mengenali brand dan membangun kebiasaan menonton." },
-        { "label": "Posting semua konten tanpa jangka waktu yang kuat", "score": 22, "feedback": "Konten tanpa jadwal memberi sedikit ruang untuk membangun brand memory." },
-        { "label": "Mengejar tren tanpa menyesuaikan audience", "score": 18, "feedback": "Tren bisa membantu, tapi relevansi to the audience tetap utama." }
-      ]
-    },
-    {
-      "title": "Menilai performa konten",
-      "difficulty": 3,
-      "prompt": "Video mendapat banyak view tetapi engagement turun. Apa yang perlu diperiksa?",
-      "options": [
-        { "label": "Lihat hook, durasi, relevansi visual, serta CTA yang muncul di awal video.", "score": 93, "feedback": "View tinggi bukan jaminan aksi atau keterlibatan yang relevan." },
-        { "label": "Menaikkan postingan tanpa menganalisis alasan", "score": 24, "feedback": "Tingkat output tidak otomatis meningkatkan kualitas." },
-        { "label": "Menghapus semua konten yang tidak langsung laku", "score": 14, "feedback": "Banyak konten butuh interpretasi, bukan keputusan sembrono." }
-      ]
-    }
-  ],
-  "events": ["Brand meminta format konten yang lebih ringkas untuk platform baru.", "Ada konten viral yang bisa dimanfaatkan tanpa melanggar tone brand.", "Pengalaman audiens berubah karena tren platform baru."],
-  "realWorld": "Content creator bukan hanya membuat video menarik, tetapi juga memastikan pesan brand, audience fit, dan konsistensi produksi tetap sehat dalam jangka panjang.",
-  "educationDisclaimer": false
+  "id": "piksel-nusantara",
+  "name": "Piksel Nusantara",
+  "logo": "🧩",
+  "industry": "Teknologi",
+  "size": "Menengah",
+  "location": "Yogyakarta · Remote",
+  "culture": "Kolaboratif dan otonom; eksperimen dihargai, tetapi prioritas produk dapat berubah.",
+  "salary": [8500000, 22000000],
+  "roles": ["programmer", "uiux-designer", "data-analyst"],
+  "clients": ["Gawai Pintar", "Toko Rona", "JelajahIn"],
+  "boss": "Mas Reza — visioner dan terbuka pada eksperimen",
+  "coworkers": ["Lina — product designer", "Joko — data lead", "Bimo — engineer"],
+  "benefits": ["Dana kursus", "Dukungan perangkat kerja", "Bonus proyek"],
+  "pros": ["Otonomi tinggi", "Kesempatan belajar lintas fungsi", "Dampak produk terlihat"],
+  "cons": ["Prioritas dapat berubah", "Peran tim kecil kadang melebar"],
+  "review": "Tim kecil dengan ruang belajar luas; dokumentasikan keputusan ketika arah produk berubah."
 }

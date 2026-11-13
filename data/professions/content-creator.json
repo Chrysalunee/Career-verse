@@ -1,38 +1,39 @@
 {
-  "id": "uiux-designer",
-  "name": "UI/UX Designer",
-  "icon": "🎨",
-  "salaryRange": [7000000, 20000000],
-  "summary": "Merancang pengalaman produk yang intuitif, aman, dan menyenangkan untuk pengguna.",
-  "hardSkills": ["Wireframe", "User flow", "Usability testing", "Prototype", "Design system"],
-  "softSkills": ["Empati", "Komunikasi", "Penelitian", "Iterasi"],
-  "careerLadder": ["Intern", "Junior Designer", "Designer", "Senior", "Lead"],
-  "tools": ["Figma", "FigJam", "Notion", "Maze"],
-  "terms": ["Wireframe", "Prototype", "Usability", "User flow"],
-  "kpis": ["Usability", "Kejelasan alur", "Kepuasan user"],
+  "id": "content-creator",
+  "name": "Content Creator",
+  "icon": "🎥",
+  "salaryRange": [5000000, 22000000],
+  "summary": "Mengembangkan ide dan membuat konten yang konsisten, relevan, dan sesuai suara brand.",
+  "hardSkills": ["Storytelling", "Produksi video", "Editing", "Perencanaan konten", "Analitik konten"],
+  "softSkills": ["Kreativitas", "Adaptasi", "Komunikasi", "Konsistensi"],
+  "careerLadder": ["Intern", "Junior Creator", "Content Creator", "Content Strategist", "Creative Lead"],
+  "tools": ["Kamera ponsel", "CapCut", "Canva", "Content calendar", "Analytics dashboard"],
+  "terms": ["Hook", "Retention", "Brand voice", "Engagement", "Call to action"],
+  "kpis": ["Reach relevan", "Engagement", "Retention", "Konsistensi publikasi"],
   "tasks": [
     {
-      "title": "Menyusun alur onboarding",
+      "title": "Menyusun seri konten",
       "difficulty": 2,
-      "prompt": "Undangan baru untuk produk e-commerce perlu onboarding yang cepat. Apa yang paling cocok?",
+      "prompt": "Brand ingin membangun keterlibatan dalam dua minggu. Pendekatan mana yang paling realistis?",
       "options": [
-        { "label": "Fokus pada 3 langkah utama, kartu visual jelas, dan kontrol yang sedikit demi Mengurangi hambatan.", "score": 95, "feedback": "Onboarding yang sederhana menurunkan beban kognitif." },
-        { "label": "Tampilkan semua fitur sekaligus di layar pertama", "score": 20, "feedback": "Terlalu banyak pilihan justru menghambat pahamnya pengguna." },
-        { "label": "Gunakan teks panjang tanpa prioritas visual", "score": 15, "feedback": "Pengguna butuh orientasi yang cepat dan jelas." }
+        { "label": "Buat seri bertema dengan jadwal konsisten, hook yang jelas, dan format yang bisa dievaluasi.", "score": 94, "feedback": "Seri yang konsisten membantu audiens mengenali pesan dan memberi ruang untuk belajar dari performa." },
+        { "label": "Unggah semua ide sekaligus tanpa melihat kapasitas produksi.", "score": 28, "feedback": "Perencanaan menjaga mutu dan beban kerja tetap realistis." },
+        { "label": "Ikuti semua tren meski tidak sesuai brand.", "score": 18, "feedback": "Tren perlu dipilih berdasarkan relevansi, bukan sekadar popularitas." }
       ]
     },
     {
-      "title": "Uji usability",
+      "title": "Evaluasi performa video",
       "difficulty": 3,
-      "prompt": "Pengguna gagal menyelesaikan checkout. Apa yang paling masuk akal?",
+      "prompt": "Views tinggi tetapi penonton cepat berhenti menonton. Apa yang sebaiknya ditinjau?",
       "options": [
-        { "label": "Lihat langkah checkout, label form, serta hambatan bisnis sebelum menambahkan fitur baru.", "score": 94, "feedback": "Masalah usability sering muncul dari alur, notifikasi, atau kejelasan informasi." },
-        { "label": "Tambah banyak tombol agar tampak lengkap", "score": 25, "feedback": "Fitur yang terlalu banyak bisa membingungkan." },
-        { "label": "Menaikkan warna agar lebih mencolok", "score": 22, "feedback": "Tampilan bukan solusi utama jika alur pengisian gagal." }
+        { "label": "Tinjau retensi per bagian, kecocokan hook dengan isi, dan kejelasan pesan.", "score": 94, "feedback": "Retensi dan kesesuaian janji konten membantu menjelaskan kualitas perhatian audiens." },
+        { "label": "Unggah ulang video berkali-kali tanpa perubahan.", "score": 20, "feedback": "Uji hipotesis yang jelas daripada mengulang tanpa evaluasi." },
+        { "label": "Hapus semua konten yang belum viral.", "score": 15, "feedback": "Konten perlu dinilai berdasarkan tujuan dan konteks, bukan viralitas saja." }
       ]
     }
   ],
-  "events": ["Produk terhambat karena user kesulitan saat checkout.", "Stakeholder menuntut perubahan visual di menit terakhir.", "Testing usability menunjukkan masalah di alur onboarding."],
-  "realWorld": "UI/UX designer tidak hanya membuat interface tampak bagus; mereka merancang pengalaman yang masuk akal, cepat dipahami, dan dapat membantu pengguna mencapai tujuan dengan nyaman.",
+  "events": ["Klien meminta konten tambahan dengan tenggat yang sama.", "Sebuah tren cocok dengan audiens tetapi berisiko melenceng dari tone brand.", "Tim perlu mengatur ulang kalender setelah materi utama terlambat."],
+  "ethicalDilemmas": ["Brand meminta testimoni yang dibuat-buat; jelaskan bahwa testimoni harus nyata dan berizin.", "Konten memakai musik atau gambar yang belum jelas izinnya; cari materi berlisensi atau minta izin sebelum publikasi."],
+  "realWorld": "Content creator menggabungkan riset audiens, penceritaan, produksi, hak penggunaan materi, konsistensi brand, dan evaluasi performa.",
   "educationDisclaimer": false
 }

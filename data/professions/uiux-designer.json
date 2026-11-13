@@ -1,38 +1,39 @@
 {
-  "id": "data-analyst",
-  "name": "Data Analyst",
-  "icon": "📊",
-  "salaryRange": [6000000, 18000000],
-  "summary": "Menganalisis data bisnis untuk memberi insight dan mengukur pencapaian strategi.",
-  "hardSkills": ["SQL", "Excel", "Dashboard", "Statistika dasar", "Business intelligence"],
-  "softSkills": ["Analisis", "Komunikasi", "Pemecahan masalah", "Kejelasan"],
-  "careerLadder": ["Intern", "Junior Analyst", "Analyst", "Senior", "Manager"],
-  "tools": ["SQL", "Excel", "Power BI", "Looker Studio"],
-  "terms": ["Dashboard", "KPI", "Insight", "Trend analysis"],
-  "kpis": ["Akurasi insight", "Kepuasan stakeholder", "Kualitas dashboard"],
+  "id": "uiux-designer",
+  "name": "UI/UX Designer",
+  "icon": "🎨",
+  "salaryRange": [7000000, 20000000],
+  "summary": "Merancang pengalaman produk yang mudah dipahami, inklusif, dan sesuai kebutuhan pengguna.",
+  "hardSkills": ["Riset pengguna", "User flow", "Wireframe", "Prototyping", "Usability testing", "Design system"],
+  "softSkills": ["Empati", "Kolaborasi", "Komunikasi", "Menerima masukan"],
+  "careerLadder": ["Intern", "Junior Designer", "Product Designer", "Senior Designer", "Design Lead"],
+  "tools": ["Figma", "FigJam", "Prototipe interaktif", "Papan riset"],
+  "terms": ["Wireframe", "Prototype", "Usability", "User flow", "Accessibility"],
+  "kpis": ["Keberhasilan tugas pengguna", "Kejelasan alur", "Aksesibilitas", "Kepuasan pengguna"],
   "tasks": [
     {
-      "title": "Analisis performa kampanye",
-      "difficulty": 3,
-      "prompt": "Kampanye naik 20% dalam reach, tapi conversion turun. Apa yang perlu diperiksa terlebih dahulu?",
+      "title": "Rancang alur onboarding",
+      "difficulty": 2,
+      "prompt": "Pengguna baru kesulitan memulai. Perbaikan mana yang paling layak diuji lebih dulu?",
       "options": [
-        { "label": "Bandingkan segmentasi audiens, landing page, dan funnel conversion sebelum menaikkan anggaran.", "score": 96, "feedback": "Konteks dan segmentasi sangat penting agar insight tidak menyesatkan." },
-        { "label": "Naikkan anggaran karena reach naik", "score": 32, "feedback": "Reach mungkin bagus, tapi quality traffic dan funnel bisa menurun." },
-        { "label": "Hentikan kampanye lalu mengganti semua strategi", "score": 18, "feedback": "Analisis yang cepat tetap butuh bukti sebelum perubahan besar." }
+        { "label": "Amati titik kebingungan, sederhanakan langkah penting, lalu uji prototipe dengan pengguna.", "score": 96, "feedback": "Riset dan uji kegunaan membantu memastikan desain menyelesaikan masalah yang nyata." },
+        { "label": "Tampilkan semua fitur di satu layar agar tidak ada yang terlewat.", "score": 25, "feedback": "Terlalu banyak informasi sekaligus dapat menambah beban kognitif." },
+        { "label": "Ubah warna tombol tanpa memeriksa alur pengguna.", "score": 35, "feedback": "Perubahan visual perlu didukung pemahaman tentang hambatan pengguna." }
       ]
     },
     {
-      "title": "Dashboard revisi",
-      "difficulty": 2,
-      "prompt": "Stakeholder minta dashboard yang mudah dibaca di rapat 15 menit. Apa yang paling masuk akal?",
+      "title": "Meninjau checkout",
+      "difficulty": 3,
+      "prompt": "Pengguna sering berhenti saat checkout. Apa langkah awal yang berpusat pada pengguna?",
       "options": [
-        { "label": "Fokus pada KPI utama, tren, dan insight yang bisa diambil tindakan.", "score": 92, "feedback": "Dashboard harus memudahkan keputusan, bukan sekadar menampilkan data." },
-        { "label": "Tampilkan semua metrik dari semua divisi", "score": 28, "feedback": "Jumlah data yang banyak bukan berarti lebih berguna." },
-        { "label": "Hanya menampilkan nilai besar dan grafik tanpa penjelasan", "score": 20, "feedback": "Insight perlu konteks agar dapat dipahami." }
+        { "label": "Tinjau data alur dan lakukan uji kegunaan untuk menemukan titik hambatan.", "score": 95, "feedback": "Gabungkan bukti kuantitatif dan pengamatan pengguna sebelum memilih solusi." },
+        { "label": "Tambahkan lebih banyak pilihan pada setiap langkah.", "score": 22, "feedback": "Pilihan tambahan bisa menambah kebingungan jika akar masalah belum diketahui." },
+        { "label": "Hilangkan semua pesan validasi supaya checkout lebih cepat.", "score": 10, "feedback": "Validasi yang jelas membantu mencegah kesalahan dan mendukung aksesibilitas." }
       ]
     }
   ],
-  "events": ["Data dari sumber berbeda tidak konsisten dan perlu ditentukan source of truth.", "Stakeholder menuntut insight cepat sebelum rapat eksekutif.", "Beberapa metrik mulai melenceng karena perubahan definisi KPI."],
-  "realWorld": "Data analyst tidak hanya membaca angka; mereka mengubah data menjadi pemahaman yang bisa dipakai untuk keputusan bisnis nyata.",
+  "events": ["Hasil uji menunjukkan label tombol membingungkan.", "Stakeholder meminta perubahan visual menjelang rilis.", "Pengguna dengan kebutuhan aksesibilitas menemukan hambatan pada alur utama."],
+  "ethicalDilemmas": ["Tim meminta pola gelap yang mendorong pengguna berlangganan; usulkan pilihan yang transparan dan mudah dibatalkan.", "Riset merekam informasi pribadi yang tidak diperlukan; hapus atau batasi data dan minta persetujuan yang sesuai."],
+  "realWorld": "UI/UX designer merancang alur berdasarkan kebutuhan pengguna, berkolaborasi dengan produk dan engineering, menguji prototipe, serta mempertimbangkan aksesibilitas sejak awal.",
   "educationDisclaimer": false
 }
