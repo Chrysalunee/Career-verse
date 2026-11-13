@@ -51,6 +51,7 @@ async function loadData() {
   if (state.employed && (!state.professionId || !state.companyId)) state.employed = false;
   if (screen === 'task' && !task) screen = state.employed ? 'work' : 'home';
   start();
+  window.dispatchEvent(new Event('careerverse-app-ready'));
 }
 function getProfession() { return professions.find(item => item.id === state.professionId) || null; }
 function getCompany() { return companies.find(item => item.id === state.companyId) || null; }
