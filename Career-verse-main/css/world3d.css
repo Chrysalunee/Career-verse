@@ -140,3 +140,44 @@
 @media (max-width: 640px) {
   .world3d-clock { top: auto; bottom: 12px; right: 12px; font-size: 0.72rem; }
 }
+
+
+/* Full-screen 3D-first presentation */
+#careerverse-world3d-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  padding: 0;
+  background: #0b1713;
+}
+.world3d-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.world3d-header {
+  flex: 0 0 auto;
+  padding: 0.55rem 1rem;
+  min-height: 58px;
+}
+.world3d-header h2 { font-size: 1.15rem; margin: 0.1rem 0 0; }
+.world3d-view { flex: 1 1 auto; min-height: 240px; height: auto; overflow: hidden; }
+.world3d-meta { flex: 0 0 auto; padding: 0.45rem 1rem; gap: 0.25rem 1rem; font-size: 0.78rem; }
+.world3d-meta p { margin: 0; }
+.world3d-task-panel { flex: 0 0 auto; max-height: 32vh; overflow: auto; }
+.world3d-active > .topbar,
+.world3d-active > #main,
+.world3d-active > .footer,
+.world3d-active > .world3d-button { display: none !important; }
+@media (max-width: 640px) {
+  .world3d-header { padding: 0.45rem 0.7rem; }
+  .world3d-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .world3d-view { min-height: 55vh; }
+}
