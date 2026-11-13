@@ -2,6 +2,8 @@ import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './boot.js';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js';
 
 const SAVE_KEY = 'career-verse-save';
+let worldIsOpen = false;
+let worldIsOpening = false;
 const stage = document.createElement('div');
 stage.id = 'careerverse-world3d-stage';
 stage.style.display = 'none';
@@ -35,6 +37,8 @@ const getProfessionMeta = async (professionId) => {
 };
 
 async function openWorld() {
+  if (worldIsOpen || worldIsOpening) return;
+  worldIsOpening = true;
   const save = readSave();
   const selectedCompany = await getCompanyMeta(save.companyId);
   const selectedProfession = await getProfessionMeta(save.professionId);
@@ -62,8 +66,12 @@ async function openWorld() {
     </div>
   `;
 
+  stage.style.display = 'flex';
+  document.body.classList.add('world3d-active');
   const host = document.getElementById('world3d-view');
-  const app = await mountWorldScene(host, {
+  let app;
+  try {
+    app = await mountWorldScene(host, {
     color: scene?.palette?.primary || '#6ec9a4',
     label: `${selectedCompany?.name || 'Kantor'} · ${selectedProfession?.name || 'Profesi'}`,
     task: currentTask,
@@ -76,8 +84,14 @@ async function openWorld() {
       else if (target.id === 'npc-ratna') showNpcDialogue();
       else if (target.id === 'coffee-machine') makeCoffee();
     },
-  });
-  stage.style.display = 'block';
+    });
+    worldIsOpen = true;
+  } catch (error) {
+    stage.querySelector('.world3d-view').textContent = `Dunia 3D gagal dimuat: ${error.message}. Periksa koneksi internet lalu muat ulang halaman.`;
+    worldIsOpening = false;
+    return;
+  }
+  worldIsOpening = false;
 
   const close = stage.querySelector('.world3d-close');
   close.addEventListener('click', () => {
@@ -86,6 +100,8 @@ async function openWorld() {
     persistWorldSave(latest);
     app?.destroy();
     stage.style.display = 'none';
+    document.body.classList.remove('world3d-active');
+    worldIsOpen = false;
   });
 
   function persistWorldSave(save) {
@@ -184,6 +200,7 @@ button.className = 'world3d-button';
 button.textContent = '🌍 Dunia 3D';
 button.setAttribute('aria-label', 'Buka dunia 3D');
 button.addEventListener('click', openWorld);
+window.addEventListener('careerverse-app-ready', openWorld, { once: true });
 window.addEventListener('careerverse-world-task-complete', event => {
   // Keep the main career screen and the 3D interaction on the same save state.
   window.dispatchEvent(new CustomEvent('careerverse-refresh-career-state', { detail: event.detail }));
