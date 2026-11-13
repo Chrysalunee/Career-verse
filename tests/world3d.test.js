@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { migrateWorldSave, resolveWorkplace, tasksForObjects, moveWorldLocation, workplaceTypeFor } from '../js/world3d/workplaces.js';
+import { travelTo } from '../js/world3d/city.js';
+import { MALL_LOCATIONS, visitMall } from '../js/world3d/mall.js';
+import { worldSceneModel } from '../js/world3d/index.js';
+const templates=JSON.parse(await (await import('node:fs/promises')).readFile(new URL('../data/world/templates/templates.json',import.meta.url),'utf8')).templates;
+test('company metadata selects appropriate scene template',()=>{assert.equal(workplaceTypeFor({id:'kopi-kilat'}),'cafe');assert.equal(resolveWorkplace({id:'sma-nusa-bangsa',sceneTemplate:'school'},templates).id,'school');});
+test('objects map to existing profession mini-games',()=>{const p={id:'programmer',tasks:[{title:'Debug existing game'}]};const model=worldSceneModel({id:'nusa-global',workplaceType:'hq_office'},p,templates);assert.equal(model.objects[0].task.title,'Debug existing game');assert.ok(model.accessibleDescription.includes('Meja kerja'));});
+test('old saves migrate without changing legacy fields',()=>{const old={day:8,energy:61,professionId:'guru'};const migrated=migrateWorldSave(old);assert.equal(migrated.day,8);assert.equal(migrated.energy,61);assert.equal(migrated.worldMode,'menu');assert.deepEqual(migrated.world.visited,['home']);});
+test('location change records visited places',()=>{const save=migrateWorldSave({});moveWorldLocation(save,'mall');assert.equal(save.world.currentPlace,'mall');assert.ok(save.world.visited.includes('mall'));});
+test('optional commute deducts energy only when enabled',()=>{const save=migrateWorldSave({energy:70});travelTo(save,'workplace','walk');assert.equal(save.energy,70);save.world.transportEnabled=true;travelTo(save,'mall','walk');assert.equal(save.energy,67);});
+test('mall meal/learning purchases apply cost and wellness/skill effects',()=>{const save=migrateWorldSave({money:300000,energy:40,stress:30,skill:1});const result=visitMall(save,'mall-foodcourt');assert.equal(result.ok,true);assert.equal(save.energy,65);assert.ok(save.money<300000);assert.equal(MALL_LOCATIONS.length,5);});

@@ -1,0 +1,15 @@
+{
+  "companies": {
+    "kopi-kilat":{"workplaceType":"cafe","sceneTemplate":"cafe","sceneAccent":"#eaa06f","sceneDecor":["logo KopiKilat","menu musiman"]},
+    "nusa-global":{"workplaceType":"hq_office","sceneTemplate":"hq_office","sceneAccent":"#79b8df","sceneDecor":["peta regional","papan target"]},
+    "kreasi-bersama":{"workplaceType":"coworking","sceneTemplate":"coworking","sceneAccent":"#e3a9d2","sceneDecor":["dinding karya","papan kampanye"]},
+    "kodeku-labs":{"workplaceType":"home","sceneTemplate":"home","sceneAccent":"#82a6ef","sceneDecor":["stiker kode","meja prototipe"]},
+    "sma-nusa-bangsa":{"workplaceType":"school","sceneTemplate":"school","sceneAccent":"#e2cc69","sceneDecor":["lambang sekolah","papan jadwal"]},
+    "rs-harapan-sehat":{"workplaceType":"hospital","sceneTemplate":"hospital","sceneAccent":"#75c8dc","sceneDecor":["papan shift","tanaman ruang tunggu"]},
+    "klinik-sehat-bersama":{"workplaceType":"hospital","sceneTemplate":"hospital","sceneAccent":"#78d1b3","sceneDecor":["poster edukasi","papan antrean"]},
+    "restoran-rasa-nusantara":{"workplaceType":"restaurant_kitchen","sceneTemplate":"restaurant_kitchen","sceneAccent":"#ed9168","sceneDecor":["menu daerah fiktif","rak bumbu"]},
+    "bistro-senja":{"workplaceType":"cafe","sceneTemplate":"cafe","sceneAccent":"#d79e7b","sceneDecor":["lampu senja","meja kecil"]},
+    "piksel-nusantara":{"workplaceType":"hq_office","sceneTemplate":"hq_office","sceneAccent":"#8d9cf0","sceneDecor":["dinding pixel","prototipe produk"]},
+    "garda-nusantara":{"workplaceType":"hq_office","sceneTemplate":"hq_office","sceneAccent":"#8db6a0","sceneDecor":["papan layanan","peta proses"]}
+  }
+}
