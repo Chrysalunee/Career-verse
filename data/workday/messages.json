@@ -1,0 +1,8 @@
+{
+  "items": [
+    {"id":"revision","kind":"revision","from":"Bu Linda · Klien","subject":"Permintaan revisi","text":"Klien meminta satu revisi tambahan. Klarifikasi bagian yang berubah dan dampaknya pada tenggat.","important":true,"replies":["Saya konfirmasi bagian yang perlu direvisi dan dampak jadwalnya.","Saya setuju semuanya tanpa mengecek kapasitas."]},
+    {"id":"praise","kind":"praise","from":"Kak Maya · Mentor","subject":"Apresiasi kerja","text":"Terima kasih sudah memberi kabar progres lebih awal. Itu membantu tim mengatur pekerjaan.","important":false,"replies":[]},
+    {"id":"phishing","kind":"training","from":"Admin akun tidak dikenal","subject":"[Latihan] Verifikasi akun sekarang","text":"Pesan simulasi meminta kata sandi lewat tautan mendesak. Jangan pernah membagikan kata sandi; laporkan melalui kanal resmi.","important":true,"replies":[]},
+    {"id":"after-hours","kind":"boundary","from":"Atasan","subject":"Pesan setelah jam kerja","text":"Bisakah ini dicek malam ini? Kamu boleh menetapkan batas dan membalas pada jam kerja berikutnya jika bukan keadaan darurat.","important":false,"replies":["Saya catat dan akan meninjaunya pada jam kerja berikutnya.","Saya tidak tersedia malam ini; kita bahas pada jam kerja besok."]}
+  ]
+}

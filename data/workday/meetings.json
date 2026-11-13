@@ -1,0 +1,8 @@
+{
+  "items": [
+    {"id":"standup","title":"Stand-up harian","hour":9,"everyDays":1,"duration":1,"type":"internal"},
+    {"id":"client-review","title":"Review dengan klien","hour":14,"everyDays":2,"duration":1,"type":"client"},
+    {"id":"one-on-one","title":"One-on-one dengan atasan","hour":15,"everyDays":5,"duration":1,"type":"manager"},
+    {"id":"brainstorm","title":"Brainstorming lintas tim","hour":10,"everyDays":3,"duration":1,"type":"cross-team"}
+  ]
+}
