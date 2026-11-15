@@ -1,5 +1,5 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './boot.js';
-import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './boot.js?v=2';
+import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js?v=2';
 
 const SAVE_KEY = 'career-verse-save';
 let worldIsOpen = false;
