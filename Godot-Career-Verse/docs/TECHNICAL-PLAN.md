@@ -1,53 +1,41 @@
 # Career-Verse — Godot Migration Plan
 
-## Why Godot 4
-Godot 4 provides a native 3D scene tree, CharacterBody3D physics, AnimationTree, navigation, UI controls, resource workflows, and desktop export without licensing fees. The current repository is a Three.js browser prototype; the Godot project is therefore developed alongside it rather than replacing it abruptly.
+## Principles
+1. Preserve the browser game and its source data.
+2. Treat company/profession JSON as the migration source of truth, without claiming parity until Godot gameplay uses it.
+3. Migrate in small testable slices and keep saves versioned.
+4. Use original or properly licensed assets; clearly identify placeholders.
+5. Keep browser and Godot save files separate until an explicit, tested import/export adapter exists.
 
-## Migration principles
-1. Preserve the original browser game and all source data.
-2. Treat JSON profession/company/world data as the first migration source of truth.
-3. Port systems in small, testable slices; do not claim a system is migrated until it is playable in Godot.
-4. Use original or properly licensed assets; keep placeholder assets clearly identified.
-5. Keep save data versioned before adding more complex systems.
+## Stage 4 — 3D foundation
+- [x] Godot project, main scene, third-person controller, collision, jump, procedural town, day/night, appearance prototype, local save/load.
+- [ ] Godot editor/runtime validation on target hardware.
+- [ ] Rigged humanoid and animation state machine.
 
-## Stage 4 — Playable 3D foundation
-- [x] Godot project and main scene
-- [x] Third-person movement and mouse camera
-- [x] Collision, gravity, and jump
-- [x] Procedural town blockout and interactable destinations
-- [x] Basic day/night lighting and clock
-- [x] Appearance-selection prototype
-- [x] Local save/load prototype
-- [ ] Godot editor/runtime validation on target hardware
-- [ ] Rigged humanoid model, face/hair customization, and animation state machine
+## Stage 5 — Playable life loop foundation
+- [x] Hunger, energy, hygiene, social, and fun need values decay with simulated time.
+- [x] Home, cafe/market, school, and park provide basic need/skill actions.
+- [x] Resident placeholder waypoint routines.
+- [x] Basic Android screen controls.
+- [x] Versioned local save for position, time/day, appearance, needs, skill, and wallet.
+- [ ] Godot editor/runtime and Android device validation.
 
-## Next stages
-### Stage 5 — Character and life systems
-- Import a licensed humanoid model with idle/walk/run animations
-- Build character creator resources and persist selections
-- Add hunger, energy, hygiene, health, happiness, and social meters
-- Add sleep, eating, showering, and rest interactions
+## Remaining migration phases
+### Career systems
+- [ ] Load and validate profession/company JSON in Godot.
+- [ ] Port job applications, interview choices, work tasks, pay cadence, reviews, and promotions.
+- [ ] Define a deliberate browser/Godot save import/export schema; never silently overwrite either runtime's save.
 
-### Stage 6 — NPC and interiors
-- Replace static placeholders with CharacterBody3D NPCs
-- Add NavigationRegion3D, schedules, dialogue, and relationship data
-- Build enterable home, office, cafe, and market interiors
+### World and production quality
+- [ ] Enterable home, office, cafe and market interiors.
+- [ ] Replace primitive characters with licensed rigged humanoids and animation blending.
+- [ ] NPC schedules, dialogue, relationships, and navigation.
+- [ ] Audio, accessibility settings, quality tiers, performance profiling, and export presets.
 
-### Stage 7 — Career and economy
-- Port profession/company JSON into Godot Resources or validated JSON loaders
-- Implement applications, work tasks, performance, salary, expenses, wallet, and bank
-- Add skill progression and career changes
-
-### Stage 8 — Content and release quality
-- Expand town districts and transport
-- Add audio, VFX, accessibility, settings, and optimized lighting
-- Add automated gameplay tests and desktop export presets
-
-## Validation checklist for the first local run
-- Project imports without parse errors in Godot 4.3+
-- Player stands on the ground and does not fall through it
-- WASD movement and mouse orbit work
-- Player collides with building shells
-- E displays building interaction text when aimed at a building
-- Character controls change placeholder appearance
-- Save Game writes a JSON save; restarting restores position and selections
+## First local validation checklist
+- [ ] Import `Godot-Career-Verse/project.godot` in Godot 4.3+ without parse errors.
+- [ ] Player remains grounded, moves, jumps, collides, and interacts with all six locations.
+- [ ] Needs decrease over time and interactions restore the intended needs.
+- [ ] NPCs move between waypoints without leaving the town area.
+- [ ] Save, restart, and verify position, day/time, needs, skill, wallet, and appearance.
+- [ ] Test touch buttons and safe-area layout on a physical Android device.
