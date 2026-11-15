@@ -1,4 +1,4 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './boot.js?v=2';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './boot.js?v=3';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js?v=2';
 
 const SAVE_KEY = 'career-verse-save';
