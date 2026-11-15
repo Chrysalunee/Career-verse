@@ -2,7 +2,6 @@ import { DEFAULT_WORKPLACE_TYPES, getCompanyScene, mapInteractiveObjects } from 
 
 export { DEFAULT_WORKPLACE_TYPES, getCompanyScene, mapInteractiveObjects } from './workplaces.js';
 export { MALL_LOCATIONS, visitMall } from './mall.js';
-export { CITY_LINKS, buildCityMap, getCityTripInfo } from './city.js';
 
 export async function loadWorldCatalog() {
   const [templateResponse, workplaceResponse] = await Promise.all([
