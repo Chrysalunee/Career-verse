@@ -1,4 +1,3 @@
-import './world3d/app.js';
 import { render } from './ui.js';
 import { clamp, createState, loadGame, saveGame, acceptanceChance, evaluateTask, salaryFor, canPromote, xpToNextLevel, formatMoney } from './engine.js';
 
@@ -279,6 +278,19 @@ document.querySelector('#reset-game')?.addEventListener('click', () => {
     state = createState(); screen = 'home'; task = null; persist(); start();
   }
 });
+// Load the 3D layer independently so a 3D/CDN error cannot prevent the career UI from starting.
+import('./world3d/app.js')
+  .then(() => window.dispatchEvent(new Event('careerverse-app-ready')))
+  .catch(error => {
+    console.error('Career-Verse 3D failed to initialize:', error);
+    const fallback = document.createElement('button');
+    fallback.type = 'button';
+    fallback.textContent = 'Dunia 3D gagal dimuat — lihat Console';
+    fallback.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:9999;padding:12px 16px;background:#7b302c;color:white;border:0;border-radius:10px';
+    fallback.title = String(error?.message || error);
+    document.body.appendChild(fallback);
+  });
+
 loadData().catch(error => {
   app.innerHTML = `<section class="panel"><h1>Belum dapat memuat game</h1><p>${error.message}</p><p>Pastikan data tersedia di branch main, lalu muat ulang halaman.</p></section>`;
 });
