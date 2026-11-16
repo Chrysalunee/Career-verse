@@ -174,8 +174,8 @@ func _add_npc(npc_name: String, pos: Vector3, color: Color, waypoints: Array[Vec
 	visual.name = "HumanoidVisual"
 	visual.set_script(HUMANOID_SCRIPT)
 	npc.add_child(visual)
-	visual.call("set_appearance", Color("#d7a987"), Color("#30251f"), color, 0)
 	add_child(npc)
+	visual.call("set_appearance", Color("#d7a987"), Color("#30251f"), color, 0)
 	npc_routines.append({"node": npc, "waypoints": waypoints, "index": 0, "wait": randf_range(0.0, 2.0), "speed": randf_range(0.7, 1.15)})
 
 func _update_npc_routines(delta: float) -> void:
@@ -212,10 +212,10 @@ func _build_player() -> void:
 	# The controller origin is at the feet; the capsule is centered at half-height.
 	player.position = Vector3(0, 0.05, 20)
 	var collision := CollisionShape3D.new()
-	collision.position.y = 0.95
+	collision.position.y = 1.1
 	var capsule_shape := CapsuleShape3D.new()
 	capsule_shape.radius = 0.34
-	capsule_shape.height = 1.9
+	capsule_shape.height = 2.2
 	collision.shape = capsule_shape
 	player.add_child(collision)
 
