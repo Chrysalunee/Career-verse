@@ -1,6 +1,7 @@
 extends Node3D
 
 const PLAYER_SCRIPT = preload("res://scripts/player_controller.gd")
+const HUMANOID_SCRIPT = preload("res://scripts/humanoid_visual.gd")
 const NEED_DECAY_PER_GAME_MINUTE := {"hunger": 0.028, "energy": 0.018, "hygiene": 0.014, "social": 0.009, "fun": 0.011}
 const NEED_LABELS := {"hunger": "Lapar", "energy": "Energi", "hygiene": "Kebersihan", "social": "Sosial", "fun": "Hiburan"}
 const SAVE_PATH := "user://career_verse_3d_save.json"
@@ -169,26 +170,11 @@ func _add_npc(npc_name: String, pos: Vector3, color: Color, waypoints: Array[Vec
 	var npc := Node3D.new()
 	npc.name = npc_name
 	npc.position = pos
-	var torso := MeshInstance3D.new()
-	var capsule := CapsuleMesh.new()
-	capsule.radius = 0.32
-	capsule.height = 1.45
-	torso.mesh = capsule
-	torso.position.y = 0.95
-	var body_material := StandardMaterial3D.new()
-	body_material.albedo_color = color
-	torso.material_override = body_material
-	npc.add_child(torso)
-	var head := MeshInstance3D.new()
-	var sphere := SphereMesh.new()
-	sphere.radius = 0.23
-	sphere.height = 0.46
-	head.mesh = sphere
-	head.position.y = 1.83
-	var skin := StandardMaterial3D.new()
-	skin.albedo_color = Color("#d7a987")
-	head.material_override = skin
-	npc.add_child(head)
+	var visual := Node3D.new()
+	visual.name = "HumanoidVisual"
+	visual.set_script(HUMANOID_SCRIPT)
+	npc.add_child(visual)
+	visual.call("set_appearance", Color("#d7a987"), Color("#30251f"), color, 0)
 	add_child(npc)
 	npc_routines.append({"node": npc, "waypoints": waypoints, "index": 0, "wait": randf_range(0.0, 2.0), "speed": randf_range(0.7, 1.15)})
 
@@ -198,8 +184,11 @@ func _update_npc_routines(delta: float) -> void:
 		var waypoints: Array = routine.waypoints
 		if not is_instance_valid(npc) or waypoints.is_empty():
 			continue
+		var visual := npc.get_node_or_null("HumanoidVisual")
 		if float(routine.wait) > 0.0:
 			routine.wait = maxf(0.0, float(routine.wait) - delta)
+			if visual:
+				visual.call("set_walking", false)
 			continue
 		var target: Vector3 = waypoints[int(routine.index)]
 		var offset := target - npc.position
@@ -207,46 +196,34 @@ func _update_npc_routines(delta: float) -> void:
 		if offset.length() < 0.25:
 			routine.index = (int(routine.index) + 1) % waypoints.size()
 			routine.wait = randf_range(0.8, 2.2)
+			if visual:
+				visual.call("set_walking", false)
 			continue
 		npc.position += offset.normalized() * float(routine.speed) * delta
 		npc.rotation.y = atan2(offset.x, offset.z)
+		if visual:
+			visual.call("set_walking", true)
 
 func _build_player() -> void:
 	var player_node := CharacterBody3D.new()
 	player_node.set_script(PLAYER_SCRIPT)
 	player = player_node as CVPlayer
 	player.name = "Player"
-	player.position = Vector3(0, 1.2, 20)
+	# The controller origin is at the feet; the capsule is centered at half-height.
+	player.position = Vector3(0, 0.05, 20)
 	var collision := CollisionShape3D.new()
+	collision.position.y = 0.85
 	var capsule_shape := CapsuleShape3D.new()
 	capsule_shape.radius = 0.34
 	capsule_shape.height = 1.7
 	collision.shape = capsule_shape
 	player.add_child(collision)
-	var body_mesh := MeshInstance3D.new()
-	body_mesh.name = "BodyMesh"
-	var capsule := CapsuleMesh.new()
-	capsule.radius = 0.34
-	capsule.height = 1.55
-	body_mesh.mesh = capsule
-	body_mesh.position.y = 0.95
-	player.add_child(body_mesh)
-	var outfit := MeshInstance3D.new()
-	outfit.name = "OutfitMesh"
-	var outfit_mesh := CapsuleMesh.new()
-	outfit_mesh.radius = 0.345
-	outfit_mesh.height = 0.92
-	outfit.mesh = outfit_mesh
-	outfit.position.y = 0.78
-	player.add_child(outfit)
-	var hair := MeshInstance3D.new()
-	hair.name = "HairMesh"
-	var hair_mesh := SphereMesh.new()
-	hair_mesh.radius = 0.35
-	hair_mesh.height = 0.42
-	hair.mesh = hair_mesh
-	hair.position.y = 1.72
-	player.add_child(hair)
+
+	var humanoid := Node3D.new()
+	humanoid.name = "HumanoidVisual"
+	humanoid.set_script(HUMANOID_SCRIPT)
+	player.add_child(humanoid)
+
 	var pivot := Node3D.new()
 	pivot.name = "CameraPivot"
 	pivot.position.y = 1.55
