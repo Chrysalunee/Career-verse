@@ -11,14 +11,14 @@ const places=[
 const clamp=v=>Math.max(0,Math.min(100,v));
 const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return {}}};
 const write=s=>{try{localStorage.setItem(KEY,JSON.stringify(s))}catch{}};
-function tag(text){const c=document.createElement('canvas');c.width=512;c.height=112;const x=c.getContext('2d');x.fillStyle='#18352de8';x.beginPath();x.roundRect(6,6,500,100,18);x.fill();x.fillStyle='white';x.font='bold 34px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(text,256,56,470);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));s.scale.set(7,1.55,1);return s}
+function tag(text){const c=document.createElement('canvas');c.width=1024;c.height=224;const x=c.getContext('2d');x.fillStyle='#18352de8';x.beginPath();x.roundRect(12,12,1000,200,36);x.fill();x.fillStyle='white';x.font='bold 68px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(text,512,112,940);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));s.scale.set(7,1.55,1);return s}
 export async function loadWorldCatalog(){return {templates:[],workplaceMap:[]}}
 export function getCompanyScene(){return null}
 export async function mountWorldScene(container){
 if(!container)throw Error('Area dunia 3D tidak ditemukan.');
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.6));renderer.setSize(container.clientWidth||innerWidth,container.clientHeight||innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;container.replaceChildren(renderer.domElement);
-const scene=new THREE.Scene();scene.background=new THREE.Color('#8fc9e8');scene.fog=new THREE.Fog('#8fc9e8',72,165);const camera=new THREE.PerspectiveCamera(62,(container.clientWidth||innerWidth)/(container.clientHeight||innerHeight),.1,220);
-const hemi=new THREE.HemisphereLight('#fff0df','#6b8c57',2.35);scene.add(hemi);const sun=new THREE.DirectionalLight('#ffe1ad',2.6);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2.25));renderer.setSize(container.clientWidth||innerWidth,container.clientHeight||innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;container.replaceChildren(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#8fc9e8');scene.fog=new THREE.Fog('#8fc9e8',72,165);const camera=new THREE.PerspectiveCamera(58,(container.clientWidth||innerWidth)/(container.clientHeight||innerHeight),.1,220);
+const hemi=new THREE.HemisphereLight('#fff0df','#6b8c57',2.35);scene.add(hemi);const sun=new THREE.DirectionalLight('#ffe1ad',2.6);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
 const material=c=>new THREE.MeshStandardMaterial({color:c,roughness:.78});
 function box(parent,x,y,z,w,h,d,c){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material(c));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(140,140),material('#78a95f'));floor.rotation.x=-Math.PI/2;floor.position.y=-.25;floor.receiveShadow=true;scene.add(floor);
@@ -44,7 +44,7 @@ for(const p of places){
  box(g,0,p.h*.49,front+.82,p.w+.4,.18,1.55,p.id==='cafe'?'#d2a66a':'#e56b4e');
  for(let k=-4;k<=4;k++)box(g,k*.62,p.h*.49-.15,front+.82,.18,.36,1.56,k%2?'#f0dfc1':'#f28b55');
  box(g,0,p.h*.76,front+.2,Math.min(p.w*.8,8),.82,.2,'#dc5945');
- const signCanvas=document.createElement('canvas');signCanvas.width=512;signCanvas.height=128;const sx=signCanvas.getContext('2d');sx.fillStyle='#9b4734';sx.fillRect(0,0,512,128);sx.fillStyle='#fff0d5';sx.font='bold 48px Arial';sx.textAlign='center';sx.textBaseline='middle';sx.fillText(p.name.toUpperCase(),256,64,480);
+ const signCanvas=document.createElement('canvas');signCanvas.width=1024;signCanvas.height=256;const sx=signCanvas.getContext('2d');sx.fillStyle='#9b4734';sx.fillRect(0,0,512,128);sx.fillStyle='#fff0d5';sx.font='bold 92px Arial';sx.textAlign='center';sx.textBaseline='middle';sx.fillText(p.name.toUpperCase(),512,128,960);
  const signTex=new THREE.CanvasTexture(signCanvas);signTex.colorSpace=THREE.SRGBColorSpace;const sign=new THREE.Mesh(new THREE.PlaneGeometry(Math.min(p.w*.8,8),.72),new THREE.MeshBasicMaterial({map:signTex}));sign.position.set(0,p.h*.76,front+.32);g.add(sign);
  if(p.id==='market'||p.id==='cafe'){box(g,0,.8,front+1.8,p.w*.72,1.2,.75,'#805b40');for(let j=0;j<5;j++){const fruit=new THREE.Mesh(new THREE.SphereGeometry(.19,12,10),material(['#d84b35','#e1b943','#669b55','#c65b3f','#e6ca67'][j]));fruit.position.set(-p.w*.25+j*p.w*.125,1.5,front+1.8);g.add(fruit)}}
  const hit=new THREE.Mesh(new THREE.BoxGeometry(p.w+2,p.h+3,p.d+2),new THREE.MeshBasicMaterial({visible:false}));hit.position.y=p.h/2;hit.userData.place=p;g.add(hit);hits.push(hit);
