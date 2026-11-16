@@ -86,7 +86,7 @@ func _build_character() -> void:
 		add_child(leg_pivot)
 		_mesh("Thigh", _capsule(0.115, 0.48), Vector3(0, -0.22, 0), pants_material, leg_pivot)
 		_mesh("LowerLeg", _capsule(0.09, 0.43), Vector3(0, -0.59, 0.015), pants_material, leg_pivot)
-		_mesh("Shoe", _box(Vector3(0.23, 0.13, 0.36)), Vector3(0, -0.84, 0.065), shoe_material, leg_pivot)
+		_mesh("Shoe", _box(Vector3(0.23, 0.13, 0.36)), Vector3(0, -0.70, 0.065), shoe_material, leg_pivot)
 		limb_pivots.append(leg_pivot)
 
 func _make_material(color: Color, rough: float) -> StandardMaterial3D:
