@@ -60,7 +60,7 @@ Renderer strategy:
 - [x] Basic third-person movement, camera, collision, jump and interaction ray.
 - [x] Initial procedural town with six locations.
 - [x] Day clock, simple lighting cycle, needs and local save.
-- [ ] Replace single capsule player with a reusable articulated humanoid placeholder and visible locomotion.
+- [x] Replace single capsule player with a reusable articulated humanoid placeholder and visible locomotion.
 - [ ] Add a clear interaction prompt and pause/settings flow.
 - [ ] Validate project in Godot Editor and test desktop controls.
 
