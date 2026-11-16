@@ -9,7 +9,7 @@ signal interacted(target_id: String, target_name: String, description: String)
 @onready var pivot: Node3D = $CameraPivot
 @onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
 @onready var camera: Camera3D = $CameraPivot/SpringArm3D/Camera3D
-@onready var body_mesh: MeshInstance3D = $BodyMesh
+@onready var humanoid: CVHumanoidVisual = $HumanoidVisual
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var gender_index: int = 0
@@ -68,9 +68,10 @@ func _physics_process(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, direction.x * speed, 22.0 * delta)
 	velocity.z = move_toward(velocity.z, direction.z * speed, 22.0 * delta)
 	move_and_slide()
+	humanoid.set_walking(direction.length_squared() > 0.01 and is_on_floor())
 	if direction.length_squared() > 0.01:
 		var target_angle := atan2(direction.x, direction.z)
-		body_mesh.rotation.y = lerp_angle(body_mesh.rotation.y, target_angle, 10.0 * delta)
+		rotation.y = lerp_angle(rotation.y, target_angle, 10.0 * delta)
 
 func _try_interact() -> void:
 	var from := camera.global_position
@@ -93,20 +94,11 @@ func customize(gender_delta: int = 0, skin_delta: int = 0, hair_delta: int = 0, 
 	_apply_appearance()
 
 func _apply_appearance() -> void:
-	var skin_material := StandardMaterial3D.new()
-	skin_material.albedo_color = SKIN_COLORS[skin_index]
-	body_mesh.material_override = skin_material
-	var outfit := get_node_or_null("OutfitMesh") as MeshInstance3D
-	if outfit:
-		var outfit_material := StandardMaterial3D.new()
-		outfit_material.albedo_color = OUTFIT_COLORS[outfit_index]
-		outfit.material_override = outfit_material
-	var hair := get_node_or_null("HairMesh") as MeshInstance3D
-	if hair:
-		var hair_material := StandardMaterial3D.new()
-		hair_material.albedo_color = HAIR_COLORS[hair_index]
-		hair.material_override = hair_material
-	var capsule := body_mesh.mesh as CapsuleMesh
-	if capsule:
-		capsule.height = 1.55 if gender_index == 0 else 1.48
-		capsule.radius = 0.34 if gender_index == 0 else 0.31
+	if not is_instance_valid(humanoid):
+		return
+	humanoid.set_appearance(
+		SKIN_COLORS[skin_index],
+		HAIR_COLORS[hair_index],
+		OUTFIT_COLORS[outfit_index],
+		gender_index
+	)
