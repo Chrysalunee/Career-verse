@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 	else:
 		walk_clock = move_toward(walk_clock, 0.0, delta * 5.0)
 	for i in range(limb_pivots.size()):
-		var phase := walk_clock + (0.0 if i % 2 == 0 else PI)
+		var phase := walk_clock + (PI if i >= 2 else 0.0) + (PI if i % 2 == 1 else 0.0)
 		limb_pivots[i].rotation.x = sin(phase) * (0.42 if walking else 0.0)
 	if torso:
 		torso.position.y = 1.2 + (absf(sin(walk_clock * 2.0)) * 0.035 if walking else 0.0)
@@ -116,12 +116,13 @@ func _box(size: Vector3) -> BoxMesh:
 	mesh.size = size
 	return mesh
 
-func _mesh(part_name: String, mesh_resource: Mesh, pos: Vector3, material: Material, parent: Node = self) -> MeshInstance3D:
+func _mesh(part_name: String, mesh_resource: Mesh, pos: Vector3, material: Material, parent: Node = null) -> MeshInstance3D:
+	var target: Node = self if parent == null else parent
 	var instance := MeshInstance3D.new()
 	instance.name = part_name
 	instance.mesh = mesh_resource
 	instance.position = pos
 	instance.material_override = material
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	parent.add_child(instance)
+	target.add_child(instance)
 	return instance
