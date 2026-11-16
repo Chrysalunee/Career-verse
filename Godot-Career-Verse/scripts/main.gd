@@ -212,10 +212,10 @@ func _build_player() -> void:
 	# The controller origin is at the feet; the capsule is centered at half-height.
 	player.position = Vector3(0, 0.05, 20)
 	var collision := CollisionShape3D.new()
-	collision.position.y = 0.85
+	collision.position.y = 0.95
 	var capsule_shape := CapsuleShape3D.new()
 	capsule_shape.radius = 0.34
-	capsule_shape.height = 1.7
+	capsule_shape.height = 1.9
 	collision.shape = capsule_shape
 	player.add_child(collision)
 
