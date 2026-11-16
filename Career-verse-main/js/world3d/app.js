@@ -1,4 +1,4 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './boot.js?v=3';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=1';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js?v=2';
 
 const SAVE_KEY = 'career-verse-save';
@@ -53,14 +53,14 @@ async function openWorld() {
       <div class="world3d-header">
         <div>
           <span class="eyebrow">Careerverse 3D</span>
-          <h2>${selectedCompany?.name || 'Dunia kerja'}</h2>
+          <h2>${'Dunia Career-Verse · Stage 5'}</h2>
         </div>
         <button type="button" class="world3d-close" aria-label="Tutup dunia 3D">Tutup</button>
       </div>
       <div class="world3d-view" id="world3d-view" aria-label="Pemandangan 3D tempat kerja"></div>
       <div class="world3d-meta">
         <p><strong>Profesi:</strong> ${selectedProfession?.name || 'Belum dipilih'}</p>
-        <p><strong>Tempat kerja:</strong> ${scene?.workplaceType || 'hq_office'}</p>
+        <p><strong>Tempat kerja:</strong> ${'Kota kehidupan · Stage 5'}</p>
         <p><strong>Hari:</strong> ${Number(save.day) || 1} · <strong>Energi:</strong> ${Number(save.energy) || 0}% · <strong>Tugas selesai:</strong> ${Number(save.tasksDone) || 0}</p>
       </div>
       <div class="world3d-task-panel" id="world3d-task-panel" hidden></div>
