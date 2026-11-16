@@ -4,7 +4,7 @@ config_version=5
 [application]
 config/name="Career-Verse 3D"
 run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.3", "Forward Plus")
 
 [display]
 window/size/viewport_width=1440
@@ -14,8 +14,8 @@ window/size/window_height_override=800
 window/stretch/mode="canvas_items"
 
 [rendering]
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
+renderer/rendering_method="forward_plus"
+renderer/rendering_method.mobile="mobile"
 environment/defaults/default_clear_color=Color(0.48, 0.68, 0.82, 1)
 
 [input]

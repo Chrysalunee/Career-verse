@@ -1,7 +1,7 @@
 extends CharacterBody3D
 class_name CVPlayer
 
-signal interacted(target_name: String, description: String)
+signal interacted(target_id: String, target_name: String, description: String)
 
 @export var move_speed: float = 5.2
 @export var sprint_multiplier: float = 1.65
@@ -41,7 +41,8 @@ func _add_key_action(action: String, key: Key) -> void:
 		InputMap.add_action(action)
 	var event := InputEventKey.new()
 	event.physical_keycode = key
-	InputMap.action_add_event(action, event)
+	if not InputMap.action_has_event(action, event):
+		InputMap.action_add_event(action, event)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and mouse_captured:
@@ -58,17 +59,15 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 	elif Input.is_action_just_pressed("jump"):
 		velocity.y = 4.5
-
 	var input_vector := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var basis := pivot.global_transform.basis
-	var direction := (basis.x * input_vector.x + -basis.z * input_vector.y)
+	var direction := basis.x * input_vector.x + -basis.z * input_vector.y
 	direction.y = 0.0
 	direction = direction.normalized()
 	var speed := move_speed * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
 	velocity.x = move_toward(velocity.x, direction.x * speed, 22.0 * delta)
 	velocity.z = move_toward(velocity.z, direction.z * speed, 22.0 * delta)
 	move_and_slide()
-
 	if direction.length_squared() > 0.01:
 		var target_angle := atan2(direction.x, direction.z)
 		body_mesh.rotation.y = lerp_angle(body_mesh.rotation.y, target_angle, 10.0 * delta)
@@ -80,7 +79,11 @@ func _try_interact() -> void:
 	query.exclude = [get_rid()]
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if hit and hit.collider.has_meta("building_name"):
-		interacted.emit(str(hit.collider.get_meta("building_name")), str(hit.collider.get_meta("building_description")))
+		interacted.emit(
+			str(hit.collider.get_meta("building_id", "")),
+			str(hit.collider.get_meta("building_name")),
+			str(hit.collider.get_meta("building_description"))
+		)
 
 func customize(gender_delta: int = 0, skin_delta: int = 0, hair_delta: int = 0, outfit_delta: int = 0) -> void:
 	gender_index = posmod(gender_index + gender_delta, 2)
