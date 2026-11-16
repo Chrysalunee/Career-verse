@@ -71,7 +71,7 @@ func _physics_process(delta: float) -> void:
 	humanoid.set_walking(direction.length_squared() > 0.01 and is_on_floor())
 	if direction.length_squared() > 0.01:
 		var target_angle := atan2(direction.x, direction.z)
-		rotation.y = lerp_angle(rotation.y, target_angle, 10.0 * delta)
+		humanoid.rotation.y = lerp_angle(humanoid.rotation.y, target_angle, 10.0 * delta)
 
 func _try_interact() -> void:
 	var from := camera.global_position
