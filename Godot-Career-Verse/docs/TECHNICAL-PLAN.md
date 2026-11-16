@@ -10,12 +10,13 @@
 ## Stage 4 — 3D foundation
 - [x] Godot project, main scene, third-person controller, collision, jump, procedural town, day/night, appearance prototype, local save/load.
 - [ ] Godot editor/runtime validation on target hardware.
-- [ ] Rigged humanoid and animation state machine.
+- [x] Reusable procedural humanoid blockout with separate limbs and a basic alternating walk cycle.
+- [ ] Replace the blockout with licensed/original rigged humanoid GLB assets and a Skeleton3D animation state machine.
 
 ## Stage 5 — Playable life loop foundation
 - [x] Hunger, energy, hygiene, social, and fun need values decay with simulated time.
 - [x] Home, cafe/market, school, and park provide basic need/skill actions.
-- [x] Resident placeholder waypoint routines.
+- [x] Resident waypoint routines using the shared humanoid visual and walk cycle.
 - [x] Basic Android screen controls.
 - [x] Versioned local save for position, time/day, appearance, needs, skill, and wallet.
 - [ ] Godot editor/runtime and Android device validation.
@@ -28,7 +29,7 @@
 
 ### World and production quality
 - [ ] Enterable home, office, cafe and market interiors.
-- [ ] Replace primitive characters with licensed rigged humanoids and animation blending.
+- [ ] Replace procedural blockout characters with licensed/original rigged humanoids and animation blending.
 - [ ] NPC schedules, dialogue, relationships, and navigation.
 - [ ] Audio, accessibility settings, quality tiers, performance profiling, and export presets.
 
