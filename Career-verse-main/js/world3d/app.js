@@ -1,4 +1,4 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=5';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=6';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js?v=2';
 
 const SAVE_KEY = 'career-verse-save';
