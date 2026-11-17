@@ -16,3 +16,45 @@
 .world3d-clock{position:absolute;top:12px;right:12px;padding:.5rem .75rem;border:1px solid #fff;border-radius:10px;color:#51446e;background:#ffffffdf;font-size:.8rem;font-weight:850;font-variant-numeric:tabular-nums;pointer-events:none}
 .world3d-active>.topbar,.world3d-active>#main,.world3d-active>.footer,.world3d-active>.world3d-button{display:none!important}
 @media(max-width:640px){#careerverse-world3d-stage{padding:0}.world3d-header{padding:.45rem .7rem}.world3d-meta{gap:.25rem .7rem;font-size:.72rem}.world3d-view{min-height:55vh}.world3d-controls-hint{font-size:.68rem}.world3d-task-panel{margin:0;padding:.75rem}.world3d-clock{top:auto;bottom:12px;right:12px;font-size:.72rem}}
+
+
+/* Text visibility and safe layout fixes */
+.world3d-shell{min-height:0;min-width:0}
+.world3d-header{position:relative;z-index:5;min-width:0;flex-wrap:wrap}
+.world3d-header>div{min-width:0;flex:1 1 220px}
+.world3d-header .eyebrow{display:block;line-height:1.35;overflow-wrap:anywhere}
+.world3d-header h2{max-width:100%;line-height:1.25;overflow-wrap:anywhere;white-space:normal}
+.world3d-close{flex:0 0 auto;white-space:nowrap}
+.world3d-view{isolation:isolate;min-width:0;min-height:260px}
+.world3d-view canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.world3d-meta{position:relative;z-index:4;align-items:flex-start;min-width:0;line-height:1.5;overflow:visible}
+.world3d-meta p{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.world3d-task-panel{position:relative;z-index:6;flex-shrink:0;max-height:min(34vh,300px);min-width:0;overscroll-behavior:contain}
+.world3d-task-panel h3,.world3d-task-panel p{white-space:normal;overflow-wrap:anywhere;word-break:normal}
+.world3d-task-options{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.world3d-task-option,.world3d-task-close{white-space:normal;overflow-wrap:anywhere;line-height:1.45;min-height:44px}
+.world3d-label,.world3d-prompt,.world3d-controls-hint,.world3d-clock{z-index:3;max-width:calc(100% - 24px);white-space:normal;overflow-wrap:anywhere;line-height:1.4}
+.world3d-prompt{width:max-content;max-width:calc(100% - 28px);bottom:16px;transform:translateX(-50%)}
+.world3d-controls-hint{top:12px;left:12px;right:auto}
+.world3d-clock{top:12px;right:12px;left:auto}
+.cv5hud{z-index:4;overflow:visible}
+.cv5hud .top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px 12px}
+.cv5hud .top>b{grid-column:1;grid-row:1;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.cv5hud .clock{grid-column:2;grid-row:1;max-width:100%;white-space:normal;text-align:center}
+.cv5hud .needs{grid-column:1/-1;grid-row:2;display:flex;justify-content:flex-start;flex-wrap:wrap;gap:6px;max-width:100%}
+.cv5hud .needs span{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+.cv5hud .help{max-width:min(520px,calc(100% - 28px));white-space:normal;line-height:1.45;overflow-wrap:anywhere}
+.cv5hud .prompt{width:max-content;max-width:calc(100% - 28px);white-space:normal;line-height:1.45;overflow-wrap:anywhere}
+@media(max-width:640px){
+ .world3d-header{gap:.5rem}
+ .world3d-header>div{flex-basis:160px}
+ .world3d-meta{display:grid;grid-template-columns:1fr;gap:4px}
+ .world3d-task-panel{max-height:38dvh;padding:.7rem}
+ .world3d-task-options{grid-template-columns:1fr}
+ .cv5hud .top{grid-template-columns:1fr auto;gap:6px}
+ .cv5hud .top>b{font-size:11px;padding:8px}
+ .cv5hud .clock{font-size:12px;padding:8px}
+ .cv5hud .needs span{font-size:10px;padding:7px 9px}
+ .cv5hud .help{bottom:12px;font-size:11px}
+ .cv5hud .prompt{bottom:54px;font-size:12px}
+}
