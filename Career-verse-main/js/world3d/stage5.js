@@ -44,12 +44,24 @@ function windowPanel(g,x,y,z,w,h,p){
  box(g,x,y,z+.12,w-.12,.07,.08,p.trim);
 }
 function makeSign(g,p,front,width){
- const c=document.createElement('canvas');c.width=1024;c.height=256;
- const x=c.getContext('2d');x.fillStyle=palettes[p.id].door;x.beginPath();x.roundRect(10,10,1004,236,34);x.fill();
- x.fillStyle='#fffaf2';x.font='bold 84px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(p.name.toUpperCase(),512,128,940);
- const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
- const m=new THREE.Mesh(new THREE.PlaneGeometry(width,.72),new THREE.MeshBasicMaterial({map:t}));
- m.position.set(0,Math.min(p.h*.72,6),front+.24);g.add(m);
+ // Billboard sign: always readable from the street, never hidden by facade geometry.
+ const canvas=document.createElement('canvas');canvas.width=1536;canvas.height=384;
+ const ctx=canvas.getContext('2d');
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.shadowColor='rgba(42,30,65,.22)';ctx.shadowBlur=24;ctx.shadowOffsetY=10;
+ ctx.fillStyle='#fffaf2';ctx.beginPath();ctx.roundRect(20,20,1496,344,58);ctx.fill();
+ ctx.shadowColor='transparent';ctx.lineWidth=14;ctx.strokeStyle=palettes[p.id].accent;ctx.stroke();
+ ctx.fillStyle='#49375f';
+ let fontSize=112;ctx.textAlign='center';ctx.textBaseline='middle';
+ do{ctx.font='900 '+fontSize+'px system-ui, Arial';fontSize-=4}
+ while(ctx.measureText(p.name.toUpperCase()).width>1360&&fontSize>48);
+ ctx.fillText(p.name.toUpperCase(),768,192,1360);
+ const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+ texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
+ const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false}));
+ sprite.scale.set(Math.max(4.8,Math.min(width, p.name.length*.24+2.2)),1.2,1);
+ sprite.position.set(0,Math.min(p.h*.72, p.id==='work'?9.5:p.h+1.1),front+1.15);
+ sprite.renderOrder=1000;g.add(sprite);
 }
 for(const p of places){
  const g=new THREE.Group();g.position.set(p.x,0,p.z);scene.add(g);
