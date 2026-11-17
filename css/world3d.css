@@ -1,82 +1,9 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './index.js';
-
-const SAVE_KEY = 'career-verse-save';
-const stage = document.createElement('div');
-stage.id = 'careerverse-world3d-stage';
-stage.style.display = 'none';
-
-const readSave = () => {
-  try {
-    return JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
-  } catch {
-    return {};
-  }
-};
-
-const getCompanyMeta = async (companyId) => {
-  if (!companyId) return null;
-  try {
-    const response = await fetch(`./data/companies/${companyId}.json`);
-    return response.ok ? await response.json() : null;
-  } catch {
-    return null;
-  }
-};
-
-const getProfessionMeta = async (professionId) => {
-  if (!professionId) return null;
-  try {
-    const response = await fetch(`./data/professions/${professionId}.json`);
-    return response.ok ? await response.json() : null;
-  } catch {
-    return null;
-  }
-};
-
-async function openWorld() {
-  const save = readSave();
-  const selectedCompany = await getCompanyMeta(save.companyId);
-  const selectedProfession = await getProfessionMeta(save.professionId);
-  const catalog = await loadWorldCatalog();
-  const scene = getCompanyScene(selectedCompany || {}, catalog.workplaceMap, catalog.templates); 
-
-  stage.innerHTML = `
-    <div class="world3d-shell">
-      <div class="world3d-header">
-        <div>
-          <span class="eyebrow">Careerverse 3D</span>
-          <h2>${selectedCompany?.name || 'Dunia kerja'}</h2>
-        </div>
-        <button type="button" class="world3d-close" aria-label="Tutup dunia 3D">Tutup</button>
-      </div>
-      <div class="world3d-view" id="world3d-view" aria-label="Pemandangan 3D tempat kerja"></div>
-      <div class="world3d-meta">
-        <p><strong>Profesi:</strong> ${selectedProfession?.name || 'Belum dipilih'}</p>
-        <p><strong>Tempat kerja:</strong> ${scene?.workplaceType || 'hq_office'}</p>
-      </div>
-    </div>
-  `;
-
-  const host = document.getElementById('world3d-view');
-  const app = await mountWorldScene(host, {
-    color: scene?.palette?.primary || '#6ec9a4',
-    label: `${selectedCompany?.name || 'Kantor'} · ${selectedProfession?.name || 'Profesi'}`,
-  });
-  stage.style.display = 'block';
-
-  const close = stage.querySelector('.world3d-close');
-  close.addEventListener('click', () => {
-    app?.destroy();
-    stage.style.display = 'none';
-  });
-}
-
-const button = document.createElement('button');
-button.type = 'button';
-button.className = 'world3d-button';
-button.textContent = '🌍 Dunia 3D';
-button.setAttribute('aria-label', 'Buka dunia 3D');
-button.addEventListener('click', openWorld);
-
-document.body.appendChild(stage);
-document.body.appendChild(button);
+/* Bright 3D world overlay and controls */
+#careerverse-world3d-stage{position:fixed;inset:0;z-index:20;overflow:auto;background:rgba(47,38,72,.38);backdrop-filter:blur(8px);padding:clamp(12px,3vw,34px)}
+.world3d-shell{max-width:1120px;margin:0 auto;background:linear-gradient(145deg,#fff,#fff5fa);border:1px solid #eadcf4;border-radius:28px;padding:clamp(16px,3vw,28px);box-shadow:0 24px 80px rgba(42,30,65,.25);color:#302b43}
+.world3d-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.world3d-header h2{margin:4px 0;color:#4a3d70}.world3d-close{background:linear-gradient(135deg,#f28bb5,#ff927f)}
+.world3d-view{position:relative;min-height:clamp(340px,58vh,620px);overflow:hidden;border:1px solid #e7d9f2;border-radius:22px;background:linear-gradient(145deg,#c9eaff,#f8e4f0 55%,#fff0d8)}
+.world3d-view canvas{display:block;width:100%;height:100%;min-height:inherit}.world3d-label{position:absolute;left:16px;top:16px;padding:8px 14px;border:1px solid #fff;background:#ffffffd9;border-radius:99px;color:#55466f;font-weight:800;box-shadow:0 4px 16px #45345a18;pointer-events:none}
+.world3d-meta{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:10px}.world3d-meta p{margin:6px 0;color:#6f6680}.world3d-meta strong{color:#4e4269}
+.world3d-button{position:fixed;right:22px;bottom:22px;z-index:5;background:linear-gradient(135deg,#8d70df,#ef8db8);border:0;border-radius:999px;padding:13px 20px;box-shadow:0 9px 25px #765bc544;font-weight:800}
+@media(max-width:640px){#careerverse-world3d-stage{padding:8px}.world3d-shell{border-radius:18px}.world3d-view{min-height:420px}.world3d-button{right:14px;bottom:14px}}
