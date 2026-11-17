@@ -4,14 +4,42 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fff3f8">
-  <meta http-equiv="refresh" content="0; url=./Career-verse-main/">
-  <title>Career-Verse</title>
-  <script>location.replace(new URL('./Career-verse-main/', location.href).href);</script>
+  <meta name="description" content="Career-Verse — simulasi karier interaktif.">
+  <title>Career-Verse — Simulasi Karier</title>
+  <link rel="stylesheet" href="./css/styles.css?v=20261117-2">
+  <link rel="stylesheet" href="./css/world3d.css?v=20261117-2">
+  <style>
+    .topbar .toolbar button,.topbar .toolbar label{min-height:38px}
+    .topbar .toolbar{color:#514568}
+    #app{min-height:55vh}
+    #app h1,#app h2,#app h3,#app p,#app li,#app strong,#app span{overflow-wrap:anywhere}
+    #app .card,#app .panel{color:#302b43}
+    #app .card p,#app .panel p{color:#625b73}
+    #app button{white-space:normal;line-height:1.35}
+    #app :focus-visible{outline:3px solid #5b45c6;outline-offset:3px}
+    .footer{color:#514568}
+  </style>
 </head>
 <body>
-  <main style="font:16px system-ui;padding:2rem;color:#51446e">
-    <h1>Membuka Career-Verse…</h1>
-    <p>Jika halaman tidak berpindah otomatis, <a href="./Career-verse-main/">buka Career-Verse di sini</a>.</p>
+  <a class="skip-link" href="#app">Lewati ke konten utama</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Career-Verse beranda">✦ Career-Verse</a>
+    <nav class="toolbar" aria-label="Menu penyimpanan">
+      <span id="save-status" role="status" aria-live="polite">Progres tersimpan otomatis di perangkat ini</span>
+      <button class="quiet" id="export-save" type="button">Ekspor save</button>
+      <label class="import-button">Impor save<input id="import-save" type="file" accept="application/json"></label>
+      <button class="quiet" id="reset-game" type="button">Reset game</button>
+    </nav>
+  </header>
+  <main id="app" class="wrap" tabindex="-1">
+    <section class="panel" aria-live="polite">
+      <h1>Memuat Career-Verse…</h1>
+      <p>Mohon tunggu sebentar.</p>
+    </section>
   </main>
+  <footer class="footer">
+    Career-Verse · Simulasi karier interaktif · Progres disimpan secara lokal di browser.
+  </footer>
+  <script type="module" src="./js/app.js?v=20261117-2"></script>
 </body>
 </html>
