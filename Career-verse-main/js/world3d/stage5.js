@@ -6,7 +6,7 @@ const places=[
 {id:'cafe',name:'Kafe Senja',x:-17,z:-12,w:9,d:8,h:5,c:'#f2a66f',desc:'Makan dan bertemu warga: lapar +28.'},
 {id:'market',name:'Pasar Harian',x:16,z:13,w:10,d:9,h:6,c:'#f0c85c',desc:'Belanja kebutuhan sehari-hari: lapar +28.'},
 {id:'school',name:'Sekolah Nusa Bangsa',x:31,z:1,w:10,d:12,h:7,c:'#f3d98d',desc:'Belajar dan meningkatkan kemampuan diri.'},
-{id:'park',name:'Taman Kota',x:-31,z:0,w:8,d:8,h:4,c:'#75b978',desc:'Bersantai: hiburan +25, sosial +12.'}
+{id:'park',name:'Taman Kota',x:-31,z:0,w:8,d:8,h:4,c:'#b69be8',desc:'Bersantai: hiburan +25, sosial +12.'}
 ];
 const clamp=v=>Math.max(0,Math.min(100,v));
 const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return {}}};
@@ -22,10 +22,10 @@ const hemi=new THREE.HemisphereLight('#ffffff','#d9c9e8',2.6);scene.add(hemi);co
 const material=c=>new THREE.MeshStandardMaterial({color:c,roughness:.78});
 function box(parent,x,y,z,w,h,d,c){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material(c));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(140,140),material('#fff0df'));floor.rotation.x=-Math.PI/2;floor.position.y=-.25;floor.receiveShadow=true;scene.add(floor);
-box(scene,0,-.12,0,13,.2,110,'#b7a9c9');box(scene,0,-.12,0,110,.2,13,'#b7a9c9');
-box(scene,-8.2,.02,0,2.8,.28,110,'#ffe1b8');box(scene,8.2,.02,0,2.8,.28,110,'#e7dafa');
-box(scene,0,.02,-8.2,110,.28,2.8,'#b9ad98');box(scene,0,.02,8.2,110,.28,2.8,'#b9ad98');
-for(let i=-5;i<=5;i++){box(scene,0,.015,i*9,.16,.03,3.5,'#fff7df');box(scene,i*9,.015,0,3.5,.03,.16,'#ffe6ef')}
+box(scene,0,-.12,0,13,.2,110,'#d8cafa');box(scene,0,-.12,0,110,.2,13,'#d8cafa');
+box(scene,-8.2,.02,0,2.8,.28,110,'#ffd8b8');box(scene,8.2,.02,0,2.8,.28,110,'#f8d6e7');
+box(scene,0,.02,-8.2,110,.28,2.8,'#bfe8f7');box(scene,0,.02,8.2,110,.28,2.8,'#bfe8f7');
+for(let i=-5;i<=5;i++){box(scene,0,.015,i*9,.16,.03,3.5,'#fff0bd');box(scene,i*9,.015,0,3.5,.03,.16,'#f5c3d9')}
 for(const side of [-1,1])for(let i=-50;i<50;i+=2)box(scene,side*8.2,.18,i,.025,.02,1.7,'#d8cce9');
 const hits=[];
 const palettes={
@@ -105,7 +105,7 @@ for(const p of places){
    box(g,0,2.1,front+.1,2.2,3.8,.25,pal.door);
    for(const x of [-3.7,-1.8,1.8,3.7])windowPanel(g,x,3.4,front+.08,1.25,1.7,pal);
    box(g,0,p.h+1.15,-1,3.2,2.3,3.0,pal.accent);
-   const clockFace=new THREE.Mesh(new THREE.CircleGeometry(.68,32),new THREE.MeshBasicMaterial({color:'#fff7df'}));clockFace.position.set(0,p.h+1.2,front+.25);g.add(clockFace);
+   const clockFace=new THREE.Mesh(new THREE.CircleGeometry(.68,32),new THREE.MeshBasicMaterial({color:'#fff0bd'}));clockFace.position.set(0,p.h+1.2,front+.25);g.add(clockFace);
    box(g,0,p.h+2.25,-1,3.5,.2,3.2,pal.roof);
    makeSign(g,p,front,p.w*.68);
  }else{
@@ -123,7 +123,7 @@ for(const p of places){
 for(let i=0;i<12;i++){const x=-42+(i*7.4)%84,z=i%2?24:-24;box(scene,x,1.5,z,.45,3,.45,'#72533a');const crown=new THREE.Mesh(new THREE.SphereGeometry(1.5,12,10),material('#b49be8'));crown.position.set(x,3.4,z);scene.add(crown)}
 const player=new THREE.Group();player.position.set(0,0,20);scene.add(player);
 function capsule(parent,r,len,c,x,y,z){const m=new THREE.Mesh(new THREE.CapsuleGeometry(r,len,6,12),material(c));m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m}
-function makeHuman(parent,shirt='#477b91',hairColor='#30251e'){
+function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e'){
  const skin=material('#e0ad89'),skinShadow=material('#b9785d'),hair=material(hairColor);
  const torso=capsule(parent,.31,.62,shirt,0,1.22,0);torso.scale.set(1.05,1,.72);
  capsule(parent,.105,.16,'#e0ad89',0,1.72,0);
@@ -151,7 +151,7 @@ function makeHuman(parent,shirt='#477b91',hairColor='#30251e'){
  for(let y=1.48;y>1.08;y-=.14){const button=new THREE.Mesh(new THREE.SphereGeometry(.018,8,8),material('#f4e4c6'));button.position.set(0,y,.225);parent.add(button)}
  box(parent,0,.78,.02,.36,.07,.56,'#5a4539');
 }
-makeHuman(player,'#477b91','#30251e');
+makeHuman(player,'#e58eb2','#30251e');
 const routes=[[[-5,-5],[-11,-2],[-8,5]],[[6,7],[10,4],[4,0]],[[24,-2],[20,-7],[28,3]]],npcs=[];
 routes.forEach((r,i)=>{const n=new THREE.Group();n.position.set(r[0][0],0,r[0][1]);scene.add(n);makeHuman(n,['#ed8a78','#5f9fda','#e2b34f'][i],['#3a2823','#29251f','#493226'][i]);npcs.push({node:n,route:r,index:1})});
 const hud=document.createElement('div');hud.className='cv5hud';hud.innerHTML='<div class="top"><b>CAREER-VERSE · STAGE 5</b><strong class="clock">08:00 · HARI 1</strong><div class="needs"></div></div><div class="help">WASD bergerak · Shift berlari · E berinteraksi · Drag mouse untuk kamera</div><div class="prompt">Jelajahi kota. Dekati bangunan dan tekan E.</div>';container.append(hud);
