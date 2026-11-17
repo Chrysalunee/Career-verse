@@ -279,7 +279,7 @@ document.querySelector('#reset-game')?.addEventListener('click', () => {
   }
 });
 // Load the 3D layer independently so a 3D/CDN error cannot prevent the career UI from starting.
-import('./world3d/app.js?v=2')
+import('./world3d/app.js?v=3')
   .then(() => window.dispatchEvent(new Event('careerverse-app-ready')))
   .catch(error => {
     console.error('Career-Verse 3D failed to initialize:', error);
