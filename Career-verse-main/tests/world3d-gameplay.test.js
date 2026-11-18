@@ -67,7 +67,7 @@ test('3D city locations apply distinct capped needs and progression effects', as
   assert.equal(save.xp, 15);
   assert.equal(save.needs.energy, 96);
   assert.equal(save.world.currentPlace, 'school');
-  assert.deepEqual(save.world.visited, ['school']);
+  assert.deepEqual(save.world.visited, ['home', 'school']);
   assert.equal(applyWorldPlaceInteraction(save, 'unknown').ok, false);
 });
 
