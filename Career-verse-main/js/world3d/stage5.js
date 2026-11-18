@@ -1,5 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
 import { applyWorldPlaceInteraction, applyWorldNpcConversation, advanceWorldNeeds, advanceWorldClock } from './gameplay.js';
+import { getCompanyScene as resolveCompanyScene } from './workplaces.js';
 const KEY='career-verse-save';
 const places=[
 {id:'home',name:'Rumah',x:-13,z:12,w:9,d:8,h:6,c:'#f2c7a5',desc:'Istirahat dan mandi: energi +25, kebersihan +35.'},
@@ -13,8 +14,29 @@ const clamp=v=>Math.max(0,Math.min(100,v));
 const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return {}}};
 const write=s=>{try{localStorage.setItem(KEY,JSON.stringify(s))}catch{}};
 function tag(text){const c=document.createElement('canvas');c.width=1024;c.height=224;const x=c.getContext('2d');x.fillStyle='#6e5aaee8';x.beginPath();x.roundRect(12,12,1000,200,36);x.fill();x.fillStyle='white';x.font='bold 68px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(text,512,112,940);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));s.scale.set(7,1.55,1);return s}
-export async function loadWorldCatalog(){return {templates:[],workplaceMap:[]}}
-export function getCompanyScene(){return null}
+export async function loadWorldCatalog(){
+  const readJson = async (relativePath) => {
+    const response = await fetch(new URL(relativePath, import.meta.url));
+    if (!response.ok) throw new Error(`Katalog dunia tidak dapat dimuat: ${relativePath}`);
+    return response.json();
+  };
+  try {
+    const [templateData, workplaceMap] = await Promise.all([
+      readJson('../../data/world/templates/templates.json'),
+      readJson('../../data/world/company-workplaces.json')
+    ]);
+    return {
+      templates: Array.isArray(templateData.templates) ? templateData.templates : [],
+      workplaceMap
+    };
+  } catch (error) {
+    console.error('[Career-Verse] Gagal memuat katalog tempat kerja:', error);
+    return { templates: [], workplaceMap: { companies: [] }, error };
+  }
+}
+export function getCompanyScene(company, metadata = {}, templates = []) {
+  return resolveCompanyScene(company, templates, metadata);
+}
 export async function mountWorldScene(container, options = {}){
 if(!container)throw Error('Area dunia 3D tidak ditemukan.');
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2.25));renderer.setSize(container.clientWidth||innerWidth,container.clientHeight||innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;container.replaceChildren(renderer.domElement);
