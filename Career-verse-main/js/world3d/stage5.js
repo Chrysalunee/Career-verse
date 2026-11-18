@@ -185,9 +185,9 @@ function interact(){
  let place=null,distance=9;
  for(const candidate of places){const d=Math.hypot(player.position.x-candidate.x,player.position.z-candidate.z);if(d<distance){distance=d;place=candidate}}
  if(!place){prompt.textContent='Dekati warga atau salah satu lokasi kota, lalu tekan E.';return}
- if(place.id==='work'&&typeof options.onInteract==='function'){
+ if(typeof options.onInteract==='function'&&['work','home','cafe','market','school','park'].includes(place.id)){
   prompt.textContent='Kamu tiba di kantor. Membuka aktivitas kerja...';
-  options.onInteract({id:'work-desk',place});
+  options.onInteract({id:place.id==='work'?'work-desk':'daily-'+place.id,place});
   return;
  }
  const save=read(),result=applyWorldPlaceInteraction(save,place.id);
