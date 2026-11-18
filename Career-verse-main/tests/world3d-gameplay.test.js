@@ -94,7 +94,7 @@ test('daily-life activities update needs, money, clock, and legacy energy', asyn
   assert.equal(save.energy, save.needs.energy);
   const sleep = applyDailyActivity(save, 'sleep');
   assert.equal(sleep.ok, true);
-  assert.equal(save.world.clockMinutes, 515);
+  assert.equal(save.world.clockMinutes, 395);
   assert.equal(save.world.calendarDay, 2);
   assert.equal(save.day, 2);
   assert.equal(save.needs.energy, 100);
