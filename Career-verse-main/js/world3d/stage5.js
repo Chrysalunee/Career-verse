@@ -15,7 +15,7 @@ const write=s=>{try{localStorage.setItem(KEY,JSON.stringify(s))}catch{}};
 function tag(text){const c=document.createElement('canvas');c.width=1024;c.height=224;const x=c.getContext('2d');x.fillStyle='#6e5aaee8';x.beginPath();x.roundRect(12,12,1000,200,36);x.fill();x.fillStyle='white';x.font='bold 68px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(text,512,112,940);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));s.scale.set(7,1.55,1);return s}
 export async function loadWorldCatalog(){return {templates:[],workplaceMap:[]}}
 export function getCompanyScene(){return null}
-export async function mountWorldScene(container){
+export async function mountWorldScene(container, options = {}){
 if(!container)throw Error('Area dunia 3D tidak ditemukan.');
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2.25));renderer.setSize(container.clientWidth||innerWidth,container.clientHeight||innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;container.replaceChildren(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color('#b9e4ff');scene.fog=new THREE.Fog('#b9e4ff',82,180);const camera=new THREE.PerspectiveCamera(58,(container.clientWidth||innerWidth)/(container.clientHeight||innerHeight),.1,220);
@@ -185,6 +185,11 @@ function interact(){
  let place=null,distance=9;
  for(const candidate of places){const d=Math.hypot(player.position.x-candidate.x,player.position.z-candidate.z);if(d<distance){distance=d;place=candidate}}
  if(!place){prompt.textContent='Dekati warga atau salah satu lokasi kota, lalu tekan E.';return}
+ if(place.id==='work'&&typeof options.onInteract==='function'){
+  prompt.textContent='Kamu tiba di kantor. Membuka aktivitas kerja...';
+  options.onInteract({id:'work-desk',place});
+  return;
+ }
  const save=read(),result=applyWorldPlaceInteraction(save,place.id);
  if(!result.ok){prompt.textContent=result.message;return}
  Object.assign(needs,save.needs||{});updateNeeds();
