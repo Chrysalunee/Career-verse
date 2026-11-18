@@ -115,3 +115,31 @@ export function applyWorldNpcConversation(save, npcName = 'Warga kota') {
   save.world.lastConversation = String(npcName);
   return { ok: true, npcName: String(npcName), needs: { ...save.needs }, relationship: save.relationship, stress: save.stress };
 }
+
+
+/**
+ * Advance everyday needs by simulation time (not wall-clock time).
+ * Rates are expressed per in-game hour so pausing or slow devices do not
+ * unexpectedly drain a character's needs.
+ */
+export function advanceWorldNeeds(needs, gameMinutes) {
+  if (!needs || !Number.isFinite(gameMinutes) || gameMinutes <= 0) return needs;
+  const hours = gameMinutes / 60;
+  const rates = { hunger: 2.4, energy: 1.4, hygiene: 0.9, social: 0.7, fun: 0.8 };
+  for (const [key, rate] of Object.entries(rates)) {
+    const current = Number(needs[key]);
+    needs[key] = Math.max(0, Math.min(100, (Number.isFinite(current) ? current : 0) - rate * hours));
+  }
+  return needs;
+}
+
+/** Advance the 24-hour city clock and calendar without losing extra save fields. */
+export function advanceWorldClock(clockMinutes, calendarDay, gameMinutes) {
+  const total = Math.max(0, Number(clockMinutes) || 0) + Math.max(0, Number(gameMinutes) || 0);
+  const daysPassed = Math.floor(total / 1440);
+  return {
+    clockMinutes: total % 1440,
+    calendarDay: Math.max(1, Number(calendarDay) || 1) + daysPassed,
+    daysPassed,
+  };
+}
