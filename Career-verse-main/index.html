@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff3f8">
+  <meta name="theme-color" content="#eee8df">
   <meta name="description" content="Careerverse — simulasi karier interaktif dalam Bahasa Indonesia.">
   <title>Careerverse — Simulasi Karier</title>
   <link rel="stylesheet" href="./css/styles.css?v=7">
@@ -21,7 +21,54 @@
     </div>
   </header>
   <main id="main" class="wrap"><div id="app" aria-live="polite"></div></main>
-  <footer class="footer">Game edukasi fiktif · Progres tersimpan di perangkat ini · <a href="./README.md">Tentang game</a></footer>
+  
+  <section id="tentang-careerverse" class="about-section" aria-labelledby="about-title">
+    <div class="about-hero">
+      <span class="about-eyebrow">LIFE & CAREER SIMULATOR</span>
+      <h1 id="about-title">Bangun karier. Jalani ceritamu.</h1>
+      <p>Career-Verse adalah simulasi karier interaktif berbahasa Indonesia. Pilih profesi, temukan tempat kerja, selesaikan tantangan, dan lihat bagaimana keputusanmu membentuk perjalanan karier.</p>
+      <div class="about-pills"><span>🎓 Pilih profesi</span><span>💼 Bangun karier</span><span>🌆 Jelajahi dunia 3D</span><span>⭐ Kembangkan diri</span></div>
+    </div>
+    <div class="about-heading"><span class="about-kicker">KENALI PERMAINANNYA</span><h2>Satu dunia, banyak kemungkinan.</h2><p>Jelajahi fitur Career-Verse langsung dari halaman game ini.</p></div>
+    <div class="about-grid">
+      <article class="about-card"><span>🧭</span><h3>Tentukan jalanmu</h3><p>Pilih profesi dan perusahaan fiktif untuk memulai perjalanan karier.</p></article>
+      <article class="about-card"><span>📝</span><h3>Masuk dunia kerja</h3><p>Jalani lamaran, wawancara, penawaran kerja, tugas, dan evaluasi.</p></article>
+      <article class="about-card"><span>📅</span><h3>Atur aktivitas</h3><p>Kelola jadwal, rapat, pesan, deadline, dan ringkasan harian.</p></article>
+      <article class="about-card"><span>🏙️</span><h3>Jelajahi lokasi</h3><p>Kenali rumah, tempat kerja, mal, dan tempat belajar melalui dunia game.</p></article>
+      <article class="about-card"><span>🎮</span><h3>Masuk dunia 3D</h3><p>Jelajahi lingkungan 3D, bergerak dengan WASD atau tombol panah, dan berinteraksi saat tersedia.</p></article>
+      <article class="about-card"><span>💾</span><h3>Jaga progresmu</h3><p>Progres tersimpan di browser. Gunakan ekspor dan impor save untuk cadangan.</p></article>
+    </div>
+    <div class="about-interactive">
+      <div><span class="about-kicker">TEMUKAN MINATMU</span><h2>Gaya perjalanan karier seperti apa yang menarik?</h2><p>Pilih minat untuk melihat gambaran aktivitas yang bisa kamu coba.</p></div>
+      <div class="about-choices" role="group" aria-label="Pilih minat karier">
+        <button type="button" class="about-choice" data-kind="creative" aria-pressed="true">🎨 Kreatif</button>
+        <button type="button" class="about-choice" data-kind="business" aria-pressed="false">📊 Bisnis</button>
+        <button type="button" class="about-choice" data-kind="people" aria-pressed="false">🤝 Pelayanan</button>
+      </div>
+      <div class="about-result" id="about-result" aria-live="polite"><strong>Jalur kreatif</strong><p>Susun ide, kerjakan tugas, terima evaluasi, dan kembangkan skill.</p></div>
+    </div>
+    <div class="about-footerline"><span>CAREER-VERSE</span><span>Simulasi karier interaktif · Prototipe game</span></div>
+  </section>
+  <footer class="footer">Game edukasi fiktif · Progres tersimpan di perangkat ini · <a href="#tentang-careerverse">Tentang Career-Verse</a></footer>
   <script type="module" src="./js/app.js?v=15"></script>
+
+<style>
+.about-section{--a-ink:#252b31;--a-muted:#667078;--a-paper:#faf8f3;--a-slate:#405565;--a-clay:#b7654b;max-width:1160px;margin:70px auto 0;padding:28px 22px 10px;color:var(--a-ink)}
+.about-hero{padding:clamp(28px,6vw,62px);border-radius:24px;color:#fffaf2;background:radial-gradient(ellipse at 85% 18%,rgba(191,145,104,.3),transparent 30%),linear-gradient(115deg,#293946,#3d5362 52%,#596a73);box-shadow:0 24px 58px rgba(39,48,55,.18)}
+.about-eyebrow,.about-kicker{font-size:.76rem;font-weight:850;letter-spacing:.14em;color:#c8a77a}
+.about-hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;letter-spacing:-.04em;max-width:780px;margin:18px 0}
+.about-hero p{max-width:720px;color:#e0e5e6;font-size:1.08rem}
+.about-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.about-pills span{padding:10px 14px;border-radius:10px;background:#ffffff18;border:1px solid #ffffff32;font-weight:750}
+.about-heading{margin:42px 0 18px}.about-heading h2,.about-interactive h2{margin:8px 0;color:#293641;font-size:clamp(1.6rem,3vw,2.2rem)}.about-heading p,.about-interactive p{color:var(--a-muted)}
+.about-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.about-card{padding:22px;border:1px solid #ded6ca;border-radius:16px;background:linear-gradient(145deg,#fffdf9,#f2eee7);box-shadow:0 10px 28px #36302a0d}.about-card>span{font-size:2rem}.about-card h3{margin:8px 0;color:#344654}.about-card p{margin:0;color:#68737a;line-height:1.6}
+.about-interactive{margin-top:34px;padding:clamp(20px,4vw,34px);border-radius:20px;background:linear-gradient(135deg,#e4e0d8,#dce3e5);border:1px solid #cbd3d5}
+.about-choices{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.about-choice{padding:11px 17px;border-radius:9px;border:1px solid #c9cfcf;background:#faf8f3;color:#394c59;font-weight:750;cursor:pointer}.about-choice[aria-pressed=true]{background:linear-gradient(135deg,#40596b,#2f4555);color:white;border-color:#40596b}.about-result{padding:18px;border-radius:13px;background:#fbf9f4;border:1px solid #d9d2c7}.about-result p{margin:5px 0 0}.about-footerline{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:35px 0 10px;padding-top:18px;border-top:1px solid #d7d0c6;color:#6c7478;font-size:.8rem;font-weight:700;letter-spacing:.06em}
+@media(max-width:760px){.about-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about-section{padding-inline:14px}}
+@media(max-width:480px){.about-grid{grid-template-columns:1fr}.about-hero{border-radius:17px}.about-pills span{font-size:.86rem}}
+</style>
+<script>
+(()=>{const data={creative:['Jalur kreatif','Susun ide, kerjakan tugas, terima evaluasi, dan kembangkan skill.'],business:['Jalur bisnis','Atur prioritas, ikuti rapat, selesaikan target, dan bangun reputasi profesional.'],people:['Jalur pelayanan','Berinteraksi dengan karakter, memahami kebutuhan, dan menyelesaikan aktivitas layanan.']};document.querySelectorAll('.about-choice').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.about-choice').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));const [h,p]=data[b.dataset.kind];document.querySelector('#about-result').innerHTML='<strong>'+h+'</strong><p>'+p+'</p>'}))})();
+</script>
+
 </body>
 </html>
