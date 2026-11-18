@@ -18,6 +18,10 @@
     #app button{white-space:normal;line-height:1.35}
     #app :focus-visible{outline:3px solid #5b45c6;outline-offset:3px}
     .footer{color:#514568}
+    .game-enter-link{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:0 19px;border-radius:11px;background:linear-gradient(135deg,#40596b,#2e4555);color:#fff;text-decoration:none;font-weight:800;letter-spacing:.01em;box-shadow:0 7px 18px #29394624;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;white-space:nowrap}
+    .game-enter-link:hover{transform:translateY(-2px);background:linear-gradient(135deg,#506d80,#344d60);box-shadow:0 10px 22px #29394630}
+    .game-enter-link:focus-visible{outline:3px solid #b89a68;outline-offset:3px}
+    @media(max-width:700px){.topbar{gap:10px;flex-wrap:wrap}.game-enter-link{margin-left:auto;min-height:38px;padding:0 14px;font-size:.9rem}.topbar .toolbar{flex-basis:100%;flex-wrap:wrap}}
   </style>
 <style>
   /* Integrated About section */
@@ -53,6 +57,7 @@
   <a class="skip-link" href="#app">Lewati ke konten utama</a>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Career-Verse beranda">✦ Career-Verse</a>
+    <a class="game-enter-link" href="#app" aria-label="Masuk ke area permainan Career-Verse">Masuk ke game <span aria-hidden="true">↗</span></a>
     <nav class="toolbar" aria-label="Menu penyimpanan">
       <span id="save-status" role="status" aria-live="polite">Progres tersimpan otomatis di perangkat ini</span>
       <button class="quiet" id="export-save" type="button">Ekspor save</button>
