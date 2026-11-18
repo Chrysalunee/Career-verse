@@ -72,3 +72,46 @@ export function applySupervisorConversation(save, choice = {}) {
   save.world.lastConversation = 'Bu Ratna';
   return { relationship: save.relationship, reputation: save.reputation, stress: save.stress, satisfaction: save.satisfaction, skill: save.skill };
 }
+
+
+const clampWorldNeed = value => Math.max(0, Math.min(100, Number(value) || 0));
+
+/** Apply a city-location action to the shared Career-Verse save. */
+export function applyWorldPlaceInteraction(save, placeId) {
+  const effects = {
+    home: { energy: 25, hygiene: 35, message: 'Kamu beristirahat dan merapikan diri di rumah.' },
+    cafe: { hunger: 28, fun: 5, message: 'Kamu menikmati makanan dan suasana Kafe Senja.' },
+    market: { hunger: 18, message: 'Kamu mengisi tenaga setelah beraktivitas di Pasar Harian.' },
+    work: { energy: -8, skill: 2, message: 'Kamu menyelesaikan sesi aktivitas di kantor.' },
+    school: { energy: -4, fun: 8, skill: 5, xp: 10, message: 'Kamu mengikuti sesi belajar dan mengembangkan kemampuan.' },
+    park: { fun: 25, social: 12, stress: -5, message: 'Kamu bersantai dan menikmati udara segar di taman.' },
+  };
+  const effect = effects[placeId];
+  if (!save || !effect) return { ok: false, message: 'Lokasi tidak tersedia.' };
+  save.needs ||= { hunger: 82, energy: 90, hygiene: 88, social: 55, fun: 72 };
+  for (const key of ['hunger', 'energy', 'hygiene', 'social', 'fun']) {
+    if (effect[key] !== undefined) save.needs[key] = clampWorldNeed((Number(save.needs[key]) || 0) + effect[key]);
+  }
+  if (effect.skill) save.skill = clampWorldNeed((Number(save.skill) || 0) + effect.skill);
+  if (effect.xp) save.xp = (Number(save.xp) || 0) + effect.xp;
+  if (effect.stress) save.stress = clampWorldNeed((Number(save.stress) || 0) + effect.stress);
+  save.world ||= { currentPlace: 'home', visited: ['home'] };
+  save.world.currentPlace = placeId;
+  save.world.visited ||= ['home'];
+  if (!save.world.visited.includes(placeId)) save.world.visited.push(placeId);
+  save.world.lastInteraction = effect.message;
+  return { ok: true, message: effect.message, needs: { ...save.needs } };
+}
+
+/** A short social interaction with a named city NPC. */
+export function applyWorldNpcConversation(save, npcName = 'Warga kota') {
+  if (!save) return { ok: false };
+  save.needs ||= { hunger: 82, energy: 90, hygiene: 88, social: 55, fun: 72 };
+  save.needs.social = clampWorldNeed((Number(save.needs.social) || 0) + 8);
+  save.needs.fun = clampWorldNeed((Number(save.needs.fun) || 0) + 3);
+  save.relationship = clampWorldNeed((Number(save.relationship) || 0) + 2);
+  save.stress = Math.max(0, (Number(save.stress) || 0) - 2);
+  save.world ||= { currentPlace: 'home', visited: ['home'] };
+  save.world.lastConversation = String(npcName);
+  return { ok: true, npcName: String(npcName), needs: { ...save.needs }, relationship: save.relationship, stress: save.stress };
+}

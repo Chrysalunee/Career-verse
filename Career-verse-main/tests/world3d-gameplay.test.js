@@ -53,3 +53,32 @@ test('supervisor conversation affects relationship and selected career stats', a
   assert.equal(save.skill, 2);
   assert.equal(save.world.lastConversation, 'Bu Ratna');
 });
+
+test('3D city locations apply distinct capped needs and progression effects', async () => {
+  const { applyWorldPlaceInteraction } = await import('../js/world3d/gameplay.js');
+  const save = { needs: { hunger: 90, energy: 95, hygiene: 80, social: 50, fun: 90 }, skill: 10, xp: 5 };
+  const home = applyWorldPlaceInteraction(save, 'home');
+  assert.equal(home.ok, true);
+  assert.equal(save.needs.energy, 100);
+  assert.equal(save.needs.hygiene, 100);
+  const school = applyWorldPlaceInteraction(save, 'school');
+  assert.equal(school.ok, true);
+  assert.equal(save.skill, 15);
+  assert.equal(save.xp, 15);
+  assert.equal(save.needs.energy, 96);
+  assert.equal(save.world.currentPlace, 'school');
+  assert.deepEqual(save.world.visited, ['home', 'school']);
+  assert.equal(applyWorldPlaceInteraction(save, 'unknown').ok, false);
+});
+
+test('3D NPC conversation improves social needs and relationship without exceeding caps', async () => {
+  const { applyWorldNpcConversation } = await import('../js/world3d/gameplay.js');
+  const save = { needs: { social: 96, fun: 99 }, relationship: 99, stress: 5 };
+  const result = applyWorldNpcConversation(save, 'Alya');
+  assert.equal(result.ok, true);
+  assert.equal(save.needs.social, 100);
+  assert.equal(save.needs.fun, 100);
+  assert.equal(save.relationship, 100);
+  assert.equal(save.stress, 3);
+  assert.equal(save.world.lastConversation, 'Alya');
+});

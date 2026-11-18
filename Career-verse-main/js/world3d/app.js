@@ -1,4 +1,4 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=7';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=8';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js?v=2';
 
 const SAVE_KEY = 'career-verse-save';
@@ -81,8 +81,11 @@ async function openWorld() {
     totalGameMinutes: save.world?.totalGameMinutes || save.world?.clockMinutes || 9 * 60,
     calendarDay: save.world?.calendarDay || save.day || 1,
     onInteract: (target) => {
-      if (target.id === 'work-desk') showWorkTask(currentTask);
-      else if (target.id === 'npc-ratna') showNpcDialogue();
+      if (target.id === 'work-desk') {
+        const liveSave = readSave();
+        const activeTask = tasks.length ? tasks[(Number(liveSave.tasksDone) || 0) % tasks.length] : null;
+        showWorkTask(activeTask);
+      } else if (target.id === 'npc-ratna') showNpcDialogue();
       else if (target.id === 'coffee-machine') makeCoffee();
     },
     });

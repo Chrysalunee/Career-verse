@@ -1,0 +1,33 @@
+name: Career-Verse tests
+
+on:
+  push:
+    branches:
+      - "launch/**"
+    paths:
+      - "Career-verse-main/**"
+      - ".github/workflows/test.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "Career-verse-main/**"
+      - ".github/workflows/test.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Career-verse-main
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run game logic tests
+        run: npm test
