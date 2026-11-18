@@ -8,11 +8,18 @@
   <title>Careerverse — Simulasi Karier</title>
   <link rel="stylesheet" href="./css/styles.css?v=7">
   <link rel="stylesheet" href="./css/world3d.css?v=8">
+<style>
+.game-enter-link{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:0 19px;border-radius:11px;background:linear-gradient(135deg,#40596b,#2e4555);color:#fff;text-decoration:none;font-weight:800;letter-spacing:.01em;white-space:nowrap;box-shadow:0 7px 18px rgba(41,57,70,.15);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.game-enter-link:hover{transform:translateY(-2px);background:linear-gradient(135deg,#506d80,#344d60);box-shadow:0 10px 22px rgba(41,57,70,.2)}
+.game-enter-link:focus-visible{outline:3px solid #b89a68;outline-offset:3px}
+@media(max-width:700px){.topbar{gap:10px;flex-wrap:wrap}.game-enter-link{margin-left:auto;min-height:38px;padding:0 14px;font-size:.9rem}.topbar .toolbar{flex-basis:100%;flex-wrap:wrap}}
+</style>
 </head>
 <body>
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Careerverse beranda">🧭 <span>Careerverse</span></a>
+    <a class="game-enter-link" href="#main">Masuk ke game <span aria-hidden="true">↗</span></a>
     <div class="toolbar">
       <span id="save-status" aria-live="polite">Progres tersimpan otomatis</span>
       <button id="export-save" class="quiet" type="button">Ekspor save</button>
