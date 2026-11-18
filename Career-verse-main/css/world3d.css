@@ -58,3 +58,22 @@
  .cv5hud .help{bottom:12px;font-size:11px}
  .cv5hud .prompt{bottom:54px;font-size:12px}
 }
+
+
+/* Realistic environment UI palette: stone, slate, warm ivory and clay */
+#careerverse-world3d-stage{background:linear-gradient(135deg,#d9dfe1,#eee5d9 55%,#d5dce0)}
+.world3d-shell{background:#f7f4ee;color:#29313b}
+.world3d-header{background:linear-gradient(90deg,#f4eee5,#e8e9e7,#e5ebee);border-color:#d8d2c8}
+.world3d-header h2,.world3d-task-panel h3{color:#34485b}
+.world3d-close{background:linear-gradient(135deg,#526a7d,#718493)}
+.world3d-view{background:linear-gradient(180deg,#b9cbd3,#d9d9d1 56%,#e9dfd2)}
+.world3d-label,.world3d-controls-hint,.world3d-clock{color:#34485b;background:#fbf9f2ed;border-color:#fff}
+.world3d-meta{color:#56616b;background:#f8f5ef}.world3d-meta p{color:#68727c}
+.world3d-prompt{color:#4b5962;background:#fbf9f2ed;border-color:#fff}
+.world3d-prompt.is-active{background:#f2e6d9;border-color:#c5a46d;color:#705c38}
+.world3d-task-panel{border-color:#d8d2c8;color:#46515a;background:linear-gradient(145deg,#fbf9f4,#eeece6)}
+.world3d-task-panel p{color:#68727c}
+.world3d-task-option,.world3d-task-close{border-color:#d3dce0;color:#40515e;background:#edf0f1}
+.world3d-task-option:hover,.world3d-task-close:hover{background:#e2e8eb}
+.world3d-task-feedback{color:#526a7d}
+.world3d-button{background:linear-gradient(135deg,#526a7d,#b8755e);box-shadow:0 12px 32px #34485b33}
