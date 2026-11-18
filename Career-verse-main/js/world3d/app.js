@@ -149,6 +149,7 @@ async function openWorld() {
           panel.append(feedback); return;
         }
         persistWorldSave(current);
+        window.dispatchEvent(new CustomEvent('careerverse-world-activity-complete', { detail: current }));
         const feedback = document.createElement('p'); feedback.className = 'world3d-task-feedback';
         feedback.textContent = result.message + (result.cost ? ' Uang tersisa: Rp' + Number(result.money).toLocaleString('id-ID') + '.' : '');
         const done = document.createElement('button'); done.type = 'button'; done.className = 'world3d-task-close'; done.textContent = 'Lanjutkan'; done.addEventListener('click', () => { panel.hidden = true; });
