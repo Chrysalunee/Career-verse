@@ -82,3 +82,29 @@ test('3D NPC conversation improves social needs and relationship without exceedi
   assert.equal(save.stress, 3);
   assert.equal(save.world.lastConversation, 'Alya');
 });
+
+test('daily-life activities update needs, money, clock, and legacy energy', async () => {
+  const { applyDailyActivity } = await import('../js/world3d/gameplay.js');
+  const save = { money: 100000, energy: 50, day: 1, needs: { hunger: 20, energy: 40, hygiene: 30, social: 40, fun: 30 }, world: { clockMinutes: 22 * 60, calendarDay: 1, visited: ['home'] } };
+  const meal = applyDailyActivity(save, 'meal');
+  assert.equal(meal.ok, true);
+  assert.equal(save.money, 75000);
+  assert.equal(save.needs.hunger, 68);
+  assert.equal(save.world.clockMinutes, 22 * 60 + 35);
+  assert.equal(save.energy, save.needs.energy);
+  const sleep = applyDailyActivity(save, 'sleep');
+  assert.equal(sleep.ok, true);
+  assert.equal(save.world.clockMinutes, 395);
+  assert.equal(save.world.calendarDay, 2);
+  assert.equal(save.day, 2);
+  assert.equal(save.needs.energy, 100);
+});
+
+test('daily-life purchase is rejected without enough money and does not mutate save', async () => {
+  const { applyDailyActivity } = await import('../js/world3d/gameplay.js');
+  const save = { money: 1000, needs: { hunger: 10, energy: 50 } };
+  const before = JSON.stringify(save);
+  const result = applyDailyActivity(save, 'groceries');
+  assert.equal(result.ok, false);
+  assert.equal(JSON.stringify(save), before);
+});

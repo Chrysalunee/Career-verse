@@ -1,5 +1,5 @@
 import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=8';
-import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation } from './gameplay.js?v=2';
+import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation, applyDailyActivity } from './gameplay.js?v=3';
 
 const SAVE_KEY = 'career-verse-save';
 let worldIsOpen = false;
@@ -85,7 +85,8 @@ async function openWorld() {
         const liveSave = readSave();
         const activeTask = tasks.length ? tasks[(Number(liveSave.tasksDone) || 0) % tasks.length] : null;
         showWorkTask(activeTask);
-      } else if (target.id === 'npc-ratna') showNpcDialogue();
+      } else if (target.id.startsWith('daily-')) showDailyActivity(target.id.slice(6));
+      else if (target.id === 'npc-ratna') showNpcDialogue();
       else if (target.id === 'coffee-machine') makeCoffee();
     },
     });
@@ -119,6 +120,45 @@ async function openWorld() {
   function persistWorldSave(save) {
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch { /* storage may be disabled */ }
     window.dispatchEvent(new CustomEvent('careerverse-refresh-career-state', { detail: save }));
+  }
+
+
+  function showDailyActivity(placeId) {
+    const panel = stage.querySelector('#world3d-task-panel');
+    if (!panel) return;
+    const menus = {
+      home: { title: 'Rumah · Aktivitas harian', items: [['sleep','Tidur 8 jam'],['shower','Mandi dan bersiap']] },
+      cafe: { title: 'Kafe Senja · Istirahat', items: [['meal','Makan · Rp25.000']] },
+      market: { title: 'Pasar Harian · Belanja', items: [['groceries','Belanja kebutuhan · Rp75.000']] },
+      school: { title: 'Sekolah · Pengembangan diri', items: [['study','Belajar 1 jam']] },
+      park: { title: 'Taman Kota · Waktu luang', items: [['relax','Bersantai 45 menit']] },
+    };
+    const menu = menus[placeId];
+    if (!menu) return;
+    const title = document.createElement('h3'); title.textContent = menu.title;
+    const description = document.createElement('p'); description.textContent = 'Pilih aktivitas. Waktu, kebutuhan, dan uang akan diperbarui pada save yang sama.';
+    panel.replaceChildren(title, description);
+    const list = document.createElement('div'); list.className = 'world3d-task-options';
+    menu.items.forEach(([id,label]) => {
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'world3d-task-option'; button.textContent = label;
+      button.addEventListener('click', () => {
+        const current = readSave();
+        const result = applyDailyActivity(current, id);
+        if (!result.ok) {
+          const feedback = document.createElement('p'); feedback.className = 'world3d-task-feedback'; feedback.textContent = result.message;
+          panel.append(feedback); return;
+        }
+        persistWorldSave(current);
+        window.dispatchEvent(new CustomEvent('careerverse-world-activity-complete', { detail: current }));
+        const feedback = document.createElement('p'); feedback.className = 'world3d-task-feedback';
+        feedback.textContent = result.message + (result.cost ? ' Uang tersisa: Rp' + Number(result.money).toLocaleString('id-ID') + '.' : '');
+        const done = document.createElement('button'); done.type = 'button'; done.className = 'world3d-task-close'; done.textContent = 'Lanjutkan'; done.addEventListener('click', () => { panel.hidden = true; });
+        panel.replaceChildren(title, feedback, done);
+      });
+      list.append(button);
+    });
+    const close = document.createElement('button'); close.type = 'button'; close.className = 'world3d-task-close'; close.textContent = 'Nanti'; close.addEventListener('click', () => { panel.hidden = true; });
+    panel.append(list, close); panel.hidden = false;
   }
 
   function showNpcDialogue() {

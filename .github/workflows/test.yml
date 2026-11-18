@@ -1,4 +1,4 @@
-name: Career-Verse tests
+name: Career-Verse tests and preview build
 
 on:
   push:
@@ -31,3 +31,11 @@ jobs:
           node-version: 22
       - name: Run game logic tests
         run: npm test
+      - name: Upload tested website preview
+        if: success() && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-verse-preview-${{ github.sha }}
+          path: Career-verse-main/
+          if-no-files-found: error
+          retention-days: 7
