@@ -35,8 +35,10 @@ export async function loadWorldCatalog(){
   }
 }
 export function getCompanyScene(company, metadata = {}, templates = []) {
-  // Keep the resolver arguments aligned with workplaces.js: company, metadata, templates.
-  return resolveCompanyScene(company, metadata, templates);
+  // Normalize both catalog payloads before resolving; this prevents stale/alternate JSON shapes from crashing the 3D screen.
+  const normalizedMetadata = Array.isArray(metadata) ? { companies: metadata } : (metadata || {});
+  const normalizedTemplates = Array.isArray(templates) ? templates : (Array.isArray(templates?.templates) ? templates.templates : []);
+  return resolveCompanyScene(company || {}, normalizedMetadata, normalizedTemplates);
 }
 export async function mountWorldScene(container, options = {}){
 if(!container)throw Error('Area dunia 3D tidak ditemukan.');
