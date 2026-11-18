@@ -19,6 +19,35 @@
     #app :focus-visible{outline:3px solid #5b45c6;outline-offset:3px}
     .footer{color:#514568}
   </style>
+<style>
+  /* Integrated About section */
+  #about-careerverse{--cv-ink:#293946;--cv-muted:#64717a;--cv-paper:#f4f0e8;--cv-card:#fffdf9;--cv-blue:#8297a8;--cv-rust:#b8755e;--cv-gold:#b89a68;margin:42px auto 0;padding:clamp(20px,4vw,42px);color:var(--cv-ink);background:linear-gradient(145deg,#f4f0e8,#e8e3da);border:1px solid #ddd5c9;border-radius:26px;box-shadow:0 18px 48px #29394612}
+  #about-careerverse *{box-sizing:border-box}
+  #about-careerverse .about-kicker{font-size:.76rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:#8b624f}
+  #about-careerverse .about-hero{padding:clamp(22px,4vw,42px);border-radius:20px;background:linear-gradient(120deg,#293946,#405565 68%,#657887);color:#fff;position:relative;overflow:hidden}
+  #about-careerverse .about-hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #ffffff25;border-radius:50%;right:-70px;top:-100px;box-shadow:0 0 0 32px #ffffff0b,0 0 0 64px #ffffff08}
+  #about-careerverse h2{font-size:clamp(1.7rem,4vw,2.8rem);line-height:1.12;margin:10px 0}
+  #about-careerverse p{line-height:1.65}
+  #about-careerverse .about-lead{max-width:760px;color:#e8edf0;font-size:1.05rem}
+  #about-careerverse .about-pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+  #about-careerverse .about-pills span{padding:8px 13px;border:1px solid #ffffff35;background:#ffffff12;border-radius:999px;font-size:.88rem}
+  #about-careerverse .about-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+  #about-careerverse .about-card{padding:20px;background:var(--cv-card);border:1px solid #e5ded3;border-radius:17px;box-shadow:0 8px 22px #2939460a}
+  #about-careerverse .about-card .ico{font-size:1.7rem}
+  #about-careerverse .about-card h3{margin:8px 0 5px;font-size:1.05rem}
+  #about-careerverse .about-card p{margin:0;color:var(--cv-muted);font-size:.94rem}
+  #about-careerverse .about-interactive{margin-top:22px;padding:clamp(18px,3vw,30px);background:#e4e9e9;border:1px solid #cbd5d8;border-radius:19px}
+  #about-careerverse .about-choices{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+  #about-careerverse .about-choice{border:1px solid #9aaab2;background:#fff;color:#293946;border-radius:999px;padding:10px 16px;font:inherit;font-weight:750;cursor:pointer}
+  #about-careerverse .about-choice[aria-pressed=true]{background:#344b5a;color:white;border-color:#344b5a}
+  #about-careerverse .about-result{background:#fffdf9;padding:17px;border-radius:14px;min-height:94px;border:1px solid #e2ddd4}
+  #about-careerverse .about-result p{margin:5px 0 0;color:#64717a}
+  #about-careerverse .about-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:20px}
+  #about-careerverse .about-enter{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;background:#293946;color:#fff;text-decoration:none;font-weight:800}
+  #about-careerverse .about-enter:hover{background:#405565}
+  @media(max-width:760px){#about-careerverse .about-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:520px){#about-careerverse .about-grid{grid-template-columns:1fr}#about-careerverse{padding:14px}}
+</style>
 </head>
 <body>
   <a class="skip-link" href="#app">Lewati ke konten utama</a>
@@ -37,9 +66,61 @@
       <p>Mohon tunggu sebentar.</p>
     </section>
   </main>
+
+  <section id="about-careerverse" aria-labelledby="about-title">
+    <header class="about-hero">
+      <span class="about-kicker">Life & Career Simulator</span>
+      <h2 id="about-title">Bangun karier. Jalani ceritamu.</h2>
+      <p class="about-lead">Career-Verse adalah simulasi karier interaktif. Pilih profesi, kenali dunia kerja, selesaikan tantangan, kelola aktivitas, dan kembangkan kemampuan melalui perjalanan yang kamu tentukan sendiri.</p>
+      <div class="about-pills"><span>🎓 Pilih profesi</span><span>💼 Bangun karier</span><span>🌆 Jelajahi dunia</span><span>⭐ Kembangkan diri</span></div>
+    </header>
+    <div style="margin-top:26px"><span class="about-kicker">Kenali fitur game</span><div class="about-grid">
+      <article class="about-card"><div class="ico">🧭</div><h3>Tentukan jalanmu</h3><p>Pilih profesi dan perusahaan untuk memulai perjalanan karier.</p></article>
+      <article class="about-card"><div class="ico">📝</div><h3>Masuk dunia kerja</h3><p>Jalani proses lamaran, wawancara, tugas, dan evaluasi.</p></article>
+      <article class="about-card"><div class="ico">📅</div><h3>Atur aktivitas</h3><p>Kelola jadwal, target, energi, dan perkembangan diri.</p></article>
+      <article class="about-card"><div class="ico">🏙️</div><h3>Jelajahi lokasi</h3><p>Kenali berbagai tempat dan lingkungan dalam dunia Career-Verse.</p></article>
+      <article class="about-card"><div class="ico">🎮</div><h3>Mode dunia 3D</h3><p>Jelajahi lingkungan 3D dan gunakan kontrol gerak serta interaksi saat tersedia.</p></article>
+      <article class="about-card"><div class="ico">💾</div><h3>Simpan progres</h3><p>Progres game tersimpan di browser dan dapat dicadangkan melalui ekspor save.</p></article>
+    </div></div>
+    <div class="about-interactive">
+      <span class="about-kicker">Pilih minat perjalananmu</span>
+      <h2 style="font-size:clamp(1.35rem,3vw,2rem)">Kamu ingin memulai dari mana?</h2>
+      <p style="color:#64717a;margin-bottom:0">Pilih salah satu untuk melihat contoh fokus aktivitas.</p>
+      <div class="about-choices" role="group" aria-label="Pilih minat karier">
+        <button type="button" class="about-choice" data-about-kind="creative" aria-pressed="true">🎨 Kreatif</button>
+        <button type="button" class="about-choice" data-about-kind="business" aria-pressed="false">📊 Bisnis</button>
+        <button type="button" class="about-choice" data-about-kind="people" aria-pressed="false">🤝 Pelayanan</button>
+      </div>
+      <div class="about-result" id="about-result" aria-live="polite"><strong>Jalur kreatif</strong><p>Susun ide, kerjakan tantangan, terima evaluasi, dan kembangkan skill.</p></div>
+    </div>
+    <div class="about-bottom"><span style="color:#64717a">Satu dunia, satu progres—pilih cara bermainmu.</span><a class="about-enter" href="#app">Mulai bermain <span aria-hidden="true">↗</span></a></div>
+  </section>
+
   <footer class="footer">
     Career-Verse · Simulasi karier interaktif · Progres disimpan secara lokal di browser.
   </footer>
+
+  <script>
+  (() => {
+    const root = document.getElementById('about-careerverse');
+    if (!root) return;
+    const descriptions = {
+      creative: ['Jalur kreatif','Susun ide, kerjakan tantangan, terima evaluasi, dan kembangkan skill.'],
+      business: ['Jalur bisnis','Atur prioritas, kelola target, ikuti aktivitas kerja, dan bangun reputasi profesional.'],
+      people: ['Jalur pelayanan','Berinteraksi dengan karakter, memahami kebutuhan, dan menyelesaikan aktivitas berbasis layanan.']
+    };
+    root.querySelectorAll('[data-about-kind]').forEach(button => button.addEventListener('click', () => {
+      root.querySelectorAll('[data-about-kind]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      const [heading, body] = descriptions[button.dataset.aboutKind];
+      const result = root.querySelector('#about-result');
+      result.replaceChildren();
+      const strong = document.createElement('strong'); strong.textContent = heading;
+      const paragraph = document.createElement('p'); paragraph.textContent = body;
+      result.append(strong, paragraph);
+    }));
+  })();
+  </script>
+
   <script type="module" src="./js/app.js?v=20261117-2"></script>
 </body>
 </html>
