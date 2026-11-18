@@ -35,7 +35,9 @@ export async function loadWorldCatalog(){
   }
 }
 export function getCompanyScene(company, metadata = {}, templates = []) {
-  return resolveCompanyScene(company, templates, metadata);
+  // workplaces.js getCompanyScene expects (company, metadata, templates).
+  // Keep the argument order aligned so the template array is not mistaken for metadata.
+  return resolveCompanyScene(company, metadata, templates);
 }
 export async function mountWorldScene(container, options = {}){
 if(!container)throw Error('Area dunia 3D tidak ditemukan.');
