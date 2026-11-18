@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+import { applyWorldPlaceInteraction, applyWorldNpcConversation } from './gameplay.js';
 const KEY='career-verse-save';
 const places=[
 {id:'home',name:'Rumah',x:-13,z:12,w:9,d:8,h:6,c:'#f2c7a5',desc:'Istirahat dan mandi: energi +25, kebersihan +35.'},
@@ -165,14 +166,30 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e'){
 }
 makeHuman(player,'#e58eb2','#30251e');
 const routes=[[[-5,-5],[-11,-2],[-8,5]],[[6,7],[10,4],[4,0]],[[24,-2],[20,-7],[28,3]]],npcs=[];
-routes.forEach((r,i)=>{const n=new THREE.Group();n.position.set(r[0][0],0,r[0][1]);scene.add(n);makeHuman(n,['#ed8a78','#5f9fda','#e2b34f'][i],['#3a2823','#29251f','#493226'][i]);npcs.push({node:n,route:r,index:1})});
+const npcNames=['Alya · warga kota','Bima · pekerja kreatif','Dimas · mahasiswa'];
+routes.forEach((r,i)=>{const n=new THREE.Group();n.position.set(r[0][0],0,r[0][1]);scene.add(n);makeHuman(n,['#ed8a78','#5f9fda','#e2b34f'][i],['#3a2823','#29251f','#493226'][i]);npcs.push({node:n,route:r,index:1,name:npcNames[i]})});
 const hud=document.createElement('div');hud.className='cv5hud';hud.innerHTML='<div class="top"><b>CAREER-VERSE · STAGE 5</b><strong class="clock">08:00 · HARI 1</strong><div class="needs"></div></div><div class="help">WASD bergerak · Shift berlari · E berinteraksi · Drag mouse untuk kamera</div><div class="prompt">Jelajahi kota. Dekati bangunan dan tekan E.</div>';container.append(hud);
 const style=document.createElement('style');style.textContent='.cv5hud{position:absolute;inset:0;pointer-events:none;color:#403653;font:13px system-ui;text-shadow:none}.cv5hud .top{position:absolute;top:14px;left:16px;right:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:start}.cv5hud .top>b,.cv5hud .clock,.cv5hud .needs span{background:#fffaf2ed;border:1px solid #ffffff;padding:10px 12px;border-radius:12px;box-shadow:0 5px 18px #46315a1c}.cv5hud .top>b{color:#7258bd;grid-column:1;grid-row:1;white-space:normal;overflow-wrap:anywhere;max-width:100%}.cv5hud .needs{grid-column:1/-1;grid-row:2;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start;max-width:100%}.cv5hud .needs span{font-size:11px;color:#55466f;white-space:normal;overflow-wrap:anywhere;line-height:1.35}.cv5hud .help,.cv5hud .prompt{position:absolute;bottom:14px;left:14px;background:#fffaf2ed;border:1px solid #fff;padding:10px 13px;border-radius:12px;box-shadow:0 5px 18px #46315a1c;color:#51446e}.cv5hud .prompt{left:50%;bottom:58px;transform:translateX(-50%);text-align:center;background:#f5eaffed;color:#58417c;width:max-content;max-width:calc(100% - 28px);white-space:normal;line-height:1.45;overflow-wrap:anywhere}.cv5hud .clock{grid-column:2;grid-row:1;font-size:16px;font-weight:bold;color:#5a4b78;white-space:normal;max-width:100%;text-align:center}@media(max-width:760px){.cv5hud .needs{max-width:190px}.cv5hud .help{display:block;max-width:calc(100% - 28px);white-space:normal;line-height:1.45;overflow-wrap:anywhere}}';container.append(style);
 const saved=read(),needs={hunger:clamp(saved.needs?.hunger??82),energy:clamp(saved.needs?.energy??90),hygiene:clamp(saved.needs?.hygiene??88),social:clamp(saved.needs?.social??55),fun:clamp(saved.needs?.fun??72)},names={hunger:'Lapar',energy:'Energi',hygiene:'Bersih',social:'Sosial',fun:'Hiburan'},needsEl=hud.querySelector('.needs');
 function updateNeeds(){needsEl.innerHTML=Object.keys(needs).map(k=>'<span>'+names[k]+': '+Math.round(needs[k])+'%</span>').join('')}updateNeeds();
 let clock=saved.world?.clockMinutes??480,day=saved.world?.calendarDay??saved.day??1,yaw=0,pitch=.58,drag=false,lx=0,ly=0,alive=true,elapsed=0,saveTimer=0;const keys={},prompt=hud.querySelector('.prompt');
 function persist(){const s=read();s.needs={...needs};s.world={...(s.world||{}),clockMinutes:clock,calendarDay:day,position:{x:player.position.x,z:player.position.z}};write(s)}
-function interact(){let p=null,dmin=9;for(const a of places){const d=Math.hypot(player.position.x-a.x,player.position.z-a.z);if(d<dmin){dmin=d;p=a}}if(!p){prompt.textContent='Dekati salah satu bangunan untuk berinteraksi.';return}if(p.id==='home'){needs.energy=clamp(needs.energy+25);needs.hygiene=clamp(needs.hygiene+35)}if(p.id==='cafe'||p.id==='market')needs.hunger=clamp(needs.hunger+28);if(p.id==='park'){needs.fun=clamp(needs.fun+25);needs.social=clamp(needs.social+12)}if(p.id==='school')needs.fun=clamp(needs.fun+8);if(p.id==='work')needs.energy=clamp(needs.energy-8);updateNeeds();prompt.textContent=p.name+' dikunjungi · '+p.desc;persist()}
+function interact(){
+ let nearestNpc=null,npcDistance=3.8;
+ for(const npc of npcs){const d=Math.hypot(player.position.x-npc.node.position.x,player.position.z-npc.node.position.z);if(d<npcDistance){npcDistance=d;nearestNpc=npc}}
+ if(nearestNpc){
+  const save=read();applyWorldNpcConversation(save,nearestNpc.name);Object.assign(needs,save.needs||{});
+  prompt.textContent='Kamu berbincang dengan '+nearestNpc.name+'. Sosial +8, hiburan +3, hubungan +2.';
+  updateNeeds();write(save);persist();return;
+ }
+ let place=null,distance=9;
+ for(const candidate of places){const d=Math.hypot(player.position.x-candidate.x,player.position.z-candidate.z);if(d<distance){distance=d;place=candidate}}
+ if(!place){prompt.textContent='Dekati warga atau salah satu lokasi kota, lalu tekan E.';return}
+ const save=read(),result=applyWorldPlaceInteraction(save,place.id);
+ if(!result.ok){prompt.textContent=result.message;return}
+ Object.assign(needs,save.needs||{});updateNeeds();
+ prompt.textContent=result.message;write(save);persist();
+}
 const down=e=>{if(e.button!==0)return;drag=true;lx=e.clientX;ly=e.clientY},move=e=>{if(!drag)return;yaw-=(e.clientX-lx)*.005;pitch=Math.max(-.1,Math.min(.8,pitch+(e.clientY-ly)*.003));lx=e.clientX;ly=e.clientY},up=()=>drag=false;
 const kd=e=>{keys[e.key.toLowerCase()]=true;if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault();if(e.key.toLowerCase()==='e'&&!e.repeat)interact()},ku=e=>keys[e.key.toLowerCase()]=false;
 renderer.domElement.addEventListener('pointerdown',down);window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('keydown',kd);window.addEventListener('keyup',ku);
