@@ -143,3 +143,51 @@ export function advanceWorldClock(clockMinutes, calendarDay, gameMinutes) {
     daysPassed,
   };
 }
+
+
+/**
+ * Apply a daily-life activity selected at a city destination.
+ * Costs are in Indonesian rupiah and are checked before any state mutation.
+ */
+export function applyDailyActivity(save, activityId) {
+  if (!save) return { ok: false, message: 'Data permainan tidak tersedia.' };
+  const activities = {
+    sleep: { place: 'home', minutes: 480, cost: 0, needs: { energy: 68, hunger: -19.2, hygiene: -7.2, social: -5.6, fun: 12 }, message: 'Kamu tidur selama 8 jam. Energi pulih dan hari berganti.' },
+    shower: { place: 'home', minutes: 20, cost: 0, needs: { hygiene: 55, energy: -2 }, message: 'Kamu mandi dan bersiap menjalani hari.' },
+    meal: { place: 'cafe', minutes: 35, cost: 25000, needs: { hunger: 48, fun: 5 }, message: 'Kamu menikmati makanan di Kafe Senja.' },
+    groceries: { place: 'market', minutes: 45, cost: 75000, needs: { hunger: 25, hygiene: 5 }, message: 'Kamu membeli kebutuhan harian di Pasar Harian.' },
+    study: { place: 'school', minutes: 60, cost: 0, needs: { energy: -8, fun: 4 }, skill: 5, xp: 15, message: 'Sesi belajar selesai. Skill dan XP meningkat.' },
+    relax: { place: 'park', minutes: 45, cost: 0, needs: { fun: 25, social: 8, energy: -3 }, stress: -5, message: 'Kamu bersantai di taman dan mengurangi stres.' },
+  };
+  const activity = activities[activityId];
+  if (!activity) return { ok: false, message: 'Aktivitas tidak tersedia.' };
+  const money = Number(save.money) || 0;
+  if (money < activity.cost) return { ok: false, message: 'Uang tidak cukup untuk aktivitas ini.' };
+  save.needs ||= { hunger: 82, energy: 90, hygiene: 88, social: 55, fun: 72 };
+  save.money = money - activity.cost;
+  for (const [key, value] of Object.entries(activity.needs)) {
+    save.needs[key] = clampWorldNeed((Number(save.needs[key]) || 0) + value);
+  }
+  if (activity.skill) save.skill = clampWorldNeed((Number(save.skill) || 0) + activity.skill);
+  if (activity.xp) save.xp = (Number(save.xp) || 0) + activity.xp;
+  if (activity.stress) save.stress = Math.max(0, Math.min(100, (Number(save.stress) || 0) + activity.stress));
+  if (activityId === 'sleep') {
+    const advanced = advanceWorldClock(save.world?.clockMinutes ?? 22 * 60, save.world?.calendarDay ?? save.day ?? 1, activity.minutes);
+    save.world ||= {};
+    save.world.clockMinutes = advanced.clockMinutes;
+    save.world.calendarDay = advanced.calendarDay;
+    save.day = Math.max(Number(save.day) || 1, advanced.calendarDay);
+  } else {
+    save.world ||= {};
+    const advanced = advanceWorldClock(save.world.clockMinutes ?? 8 * 60, save.world.calendarDay ?? save.day ?? 1, activity.minutes);
+    save.world.clockMinutes = advanced.clockMinutes;
+    save.world.calendarDay = advanced.calendarDay;
+  }
+  save.world ||= {};
+  save.world.currentPlace = activity.place;
+  save.world.lastActivity = activityId;
+  save.world.lastInteraction = activity.message;
+  save.energy = save.needs.energy;
+  if (activity.place && Array.isArray(save.world.visited) && !save.world.visited.includes(activity.place)) save.world.visited.push(activity.place);
+  return { ok: true, message: activity.message, cost: activity.cost, needs: { ...save.needs }, money: save.money, clockMinutes: save.world.clockMinutes, calendarDay: save.world.calendarDay };
+}
