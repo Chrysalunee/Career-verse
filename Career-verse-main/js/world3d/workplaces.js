@@ -19,6 +19,9 @@ export function workplaceTypeFor(company = {}, metadata = {}) {
 }
 
 export function resolveWorkplace(company = {}, templates = [], metadata = {}) {
+  // Accept either the template array or the complete JSON payload; malformed data must not crash the 3D entry screen.
+  templates = Array.isArray(templates) ? templates : (Array.isArray(templates?.templates) ? templates.templates : []);
+  metadata = Array.isArray(metadata) ? { companies: metadata } : (metadata || {});
   const entries = metadata.companies;
   const mapped = (Array.isArray(entries) ? entries.find(item => item.id === company.id) : entries?.[company.id]) || {};
   const workplaceType = workplaceTypeFor({ ...company, workplaceType: company.workplaceType || mapped.workplaceType }, metadata);
