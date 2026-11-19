@@ -25,7 +25,7 @@ const choices = {
   expression: ['Happy','Neutral','Surprised','Confident']
 };
 const labels = {
-  presentation:'Jenis kelamin karakter',body:'Bentuk tubuh',skin:'Warna kulit',face:'Bentuk wajah',eyes:'Warna mata',
+  presentation:'Jenis kelamin',body:'Bentuk tubuh',skin:'Warna kulit',face:'Bentuk wajah',eyes:'Warna mata',
   brows:'Bentuk alis',hair:'Gaya rambut',hairColor:'Warna rambut',outfit:'Gaya pakaian',
   outfitColor:'Warna pakaian',shoes:'Sepatu',glasses:'Kacamata',personality:'Kepribadian',expression:'Ekspresi'
 };
@@ -252,8 +252,9 @@ export async function openCharacterCreator(existing = null) {
   const names={identity:'Identitas karakter',face:'Wajah & detail',hair:'Rambut',fashion:'Fashion & wardrobe',personality:'Kepribadian'};
   function renderOptions(){title.textContent=names[category];optionHost.innerHTML=groups[category].map(field).join('')}
   overlay.querySelectorAll('[data-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.category;overlay.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));renderOptions()}));
-  optionHost.addEventListener('input',event=>{const el=event.target;if(!el.dataset.key)return;current[el.dataset.key]=el.type==='number'?Number(el.value):el.value;rebuild()});
-  optionHost.addEventListener('change',event=>{const el=event.target;if(el.dataset.key){current[el.dataset.key]=el.type==='number'?Number(el.value):el.value;rebuild()}});
+  function applyOption(el){if(!el?.dataset.key)return;const key=el.dataset.key;current[key]=el.type==='number'?Number(el.value):el.value;if(key==='presentation'){current.hair=current.presentation==='Masculine'?'Short crop':'Long layers';}rebuild()}
+  optionHost.addEventListener('input',event=>applyOption(event.target));
+  optionHost.addEventListener('change',event=>applyOption(event.target));
   optionHost.addEventListener('click',event=>{const b=event.target.closest('[data-value]');if(!b)return;current[b.dataset.key]=b.dataset.value;renderOptions();rebuild()});
   overlay.querySelector('[data-action="reset"]').addEventListener('click',()=>{Object.assign(current,defaults);renderOptions();rebuild()});
   overlay.querySelector('[data-action="random"]').addEventListener('click',()=>{for(const [key,values] of Object.entries(choices))current[key]=values[Math.floor(Math.random()*values.length)];current.name=current.name||'Alex';renderOptions();rebuild()});
