@@ -280,6 +280,7 @@
         document.body.classList.add('cv-playing');
         shell.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
         window.setTimeout(() => app?.focus({preventScroll:true}), 250);
+        window.dispatchEvent(new Event('careerverse-enter-game'));
         history.replaceState(null, '', '#play');
       }
       function backHome(event) {
