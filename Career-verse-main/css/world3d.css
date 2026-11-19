@@ -4,6 +4,7 @@
 .world3d-shell{display:flex;flex-direction:column;width:100%;max-width:none;height:100vh;height:100dvh;margin:0;background:linear-gradient(145deg,#fff,#fff5fa);border:0;border-radius:0;overflow:hidden;box-shadow:0 20px 60px #4c3b6326;color:#302b43}
 .world3d-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex:0 0 auto;min-height:58px;padding:.65rem 1rem;background:linear-gradient(90deg,#fff0f6,#f1edff,#eaf8ff);border-bottom:1px solid #e7d9f2}
 .world3d-header h2{margin:.1rem 0 0;font-size:clamp(1.1rem,3vw,1.5rem);color:#4a3d70}.world3d-close{background:linear-gradient(135deg,#f28bb5,#ff927f);color:#fff;border:0;border-radius:12px;padding:.65rem 1rem;cursor:pointer}
+.world3d-edit-character{display:inline-flex;align-items:center;gap:.45rem;margin-top:.55rem;background:#344d5b;color:#fff;border:1px solid #718b99;border-radius:10px;padding:.62rem .9rem;font:700 14px/1.2 system-ui,sans-serif;cursor:pointer}.world3d-edit-character:hover{background:#496879}.world3d-edit-character:focus-visible{outline:3px solid #b8755e;outline-offset:3px}
 .world3d-view{position:relative;flex:1 1 auto;min-height:240px;height:auto;max-height:none;overflow:hidden;background:linear-gradient(180deg,#c9eaff,#f8e4f0 55%,#fff0d8)}
 .world3d-view canvas{display:block;width:100%;height:100%}
 .world3d-label{position:absolute;left:16px;top:14px;background:#ffffffdf;border:1px solid #fff;color:#55466f;padding:.45rem .8rem;border-radius:999px;font-size:.8rem;font-weight:800;pointer-events:none}
