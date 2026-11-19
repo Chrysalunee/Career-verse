@@ -1,4 +1,5 @@
 import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=9';
+import { openCharacterCreator } from './character-creator.js';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation, applyDailyActivity } from './gameplay.js?v=3';
 
 const SAVE_KEY = 'career-verse-save';
@@ -40,7 +41,11 @@ async function openWorld() {
   if (worldIsOpen || worldIsOpening) return;
   worldIsOpening = true;
   try {
-  const save = readSave();
+  let save = readSave();
+  if (!save.character) {
+    await openCharacterCreator();
+    save = readSave();
+  }
   const selectedCompany = await getCompanyMeta(save.companyId);
   const selectedProfession = await getProfessionMeta(save.professionId);
   const catalog = await loadWorldCatalog();
@@ -80,6 +85,7 @@ async function openWorld() {
     startMinutes: save.world?.clockMinutes || 9 * 60,
     totalGameMinutes: save.world?.totalGameMinutes || save.world?.clockMinutes || 9 * 60,
     calendarDay: save.world?.calendarDay || save.day || 1,
+    character: save.character || null,
     onInteract: (target) => {
       if (target.id === 'work-desk') {
         const liveSave = readSave();
