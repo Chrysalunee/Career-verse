@@ -180,24 +180,24 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  const faceScale=config.face==='Round'?[1.04,1.03,.94]:config.face==='Square'?[1.02,1,.96]:config.face==='Heart'?[.94,1.05,.94]:config.face==='Diamond'?[.92,1.05,.94]:[.96,1.08,.94];
  head.scale.set(...faceScale);
  // Jaw/chin volume and cheek planes.
- mesh(new THREE.SphereGeometry(.17,28,20),skin,0,2.005,.035,[.88,.62,.84]);
+ mesh(new THREE.SphereGeometry(.135,28,20),skin,0,2.005,.025,[.88,.56,.78]);
  for(const side of [-1,1]){
-  mesh(new THREE.SphereGeometry(.052,20,16),skin,side*.226,2.11,0,[.72,1.05,.8]);
+  mesh(new THREE.SphereGeometry(.034,20,16),skin,side*.226,2.11,0,[.72,1.05,.7]);
   // Eye socket, eyeball, iris, pupil and eyelid line.
-  mesh(new THREE.SphereGeometry(.061,24,16),skinShade,side*.091,2.145,.194,[1.15,.78,.38]);
-  mesh(new THREE.SphereGeometry(.048,24,18),eyeWhite,side*.091,2.145,.215,[1.12,.88,.55]);
-  mesh(new THREE.SphereGeometry(.027,20,16),iris,side*.091,2.143,.247,[.9,1,.45]);
-  mesh(new THREE.SphereGeometry(.012,16,12),material('#17191c'),side*.091,2.143,.258);
+  mesh(new THREE.SphereGeometry(.049,24,16),skinShade,side*.091,2.145,.19,[1.15,.72,.34]);
+  mesh(new THREE.SphereGeometry(.039,24,18),eyeWhite,side*.091,2.145,.207,[1.12,.82,.48]);
+  mesh(new THREE.SphereGeometry(.022,20,16),iris,side*.091,2.143,.23,[.9,1,.42]);
+  mesh(new THREE.SphereGeometry(.009,16,12),material('#17191c'),side*.091,2.143,.242);
   const brow=mesh(new THREE.TorusGeometry(.055,.009,8,24,Math.PI),hair,side*.09,2.205,.203);brow.rotation.z=side*.1;
   // Hair falls around the temples as separate locks.
   const strand=mesh(new THREE.SphereGeometry(.075,18,14),hair,side*.205,2.13,-.015,[.72,1.45,.8]);
   strand.rotation.z=side*.12;
  }
  // Nose bridge, tip, nostrils and shaped lips.
- mesh(new THREE.SphereGeometry(.033,20,16),skin,0,2.09,.224,[.72,1.4,.72]);
- mesh(new THREE.SphereGeometry(.045,20,16),skin,0,2.045,.25,[.9,.72,.85]);
+ mesh(new THREE.SphereGeometry(.026,20,16),skin,0,2.09,.215,[.72,1.25,.68]);
+ mesh(new THREE.SphereGeometry(.034,20,16),skin,0,2.045,.232,[.9,.65,.78]);
  for(const side of [-1,1])mesh(new THREE.SphereGeometry(.012,12,10),skinShade,side*.025,2.035,.268,[1,.6,.65]);
- mesh(new THREE.SphereGeometry(.047,20,12),lip,0,1.985,.22,[1,.27,.55]);
+ mesh(new THREE.SphereGeometry(.036,20,12),lip,0,1.985,.205,[1,.22,.48]);
  mesh(new THREE.SphereGeometry(.032,20,12),skin,0,1.999,.224,[1,.12,.5]);
  // Scalp cap and individually curved hair locks.
  const cap=mesh(new THREE.SphereGeometry(.255,32,24,0,Math.PI*2,0,Math.PI*.62),hair,0,2.245,-.025,[1.02,1,.98]);
