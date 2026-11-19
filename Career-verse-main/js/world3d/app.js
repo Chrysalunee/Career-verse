@@ -252,8 +252,13 @@ button.className = 'world3d-button';
 button.textContent = '🌍 Dunia 3D';
 button.setAttribute('aria-label', 'Buka dunia 3D');
 button.addEventListener('click', openWorld);
-window.addEventListener('careerverse-app-ready', openWorld, { once: true });
-window.addEventListener('load', () => { if (!worldIsOpen && !worldIsOpening) openWorld(); }, { once: true });
+button.hidden = true;
+// The 3D world must never cover the public landing page on first visit.
+// It becomes available only after the visitor explicitly enters the game.
+window.addEventListener('careerverse-enter-game', () => {
+  button.hidden = false;
+  openWorld();
+});
 window.addEventListener('careerverse-world-task-complete', event => {
   // Keep the main career screen and the 3D interaction on the same save state.
   window.dispatchEvent(new CustomEvent('careerverse-refresh-career-state', { detail: event.detail }));
