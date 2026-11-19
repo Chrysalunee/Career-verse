@@ -89,57 +89,128 @@ export async function openCharacterCreator(existing = null) {
   function part(parent,geometry,color,x,y,z,scale=null){const mesh=new THREE.Mesh(geometry,mat(color));mesh.position.set(x,y,z);if(scale)mesh.scale.set(...scale);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh}
   function rebuild(){
     avatar.clear();
-    const add=(geo,color,x,y,z,scale=null)=>{const m=new THREE.Mesh(geo,mat(color));m.position.set(x,y,z);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;avatar.add(m);return m};
-    const line=(a,b,r1,r2,color)=>{const p=new THREE.Vector3(...a),q=new THREE.Vector3(...b),d=q.clone().sub(p);const m=add(new THREE.CylinderGeometry(r2,r1,d.length(),18,1),color,...p.clone().add(q).multiplyScalar(.5).toArray());m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m};
+    const add=(geo,color,x,y,z,scale=null,roughness=.72)=>{
+      const material=new THREE.MeshStandardMaterial({color,roughness,metalness:0});
+      const mesh=new THREE.Mesh(geo,material);
+      mesh.position.set(x,y,z);
+      if(scale) mesh.scale.set(...scale);
+      mesh.castShadow=true; mesh.receiveShadow=true; avatar.add(mesh); return mesh;
+    };
+    const segment=(a,b,rTop,rBottom,color,radial=24)=>{
+      const p=new THREE.Vector3(...a),q=new THREE.Vector3(...b),d=q.clone().sub(p);
+      const mesh=add(new THREE.CylinderGeometry(rTop,rBottom,d.length(),radial,2),color,...p.clone().add(q).multiplyScalar(.5).toArray());
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());
+      return mesh;
+    };
     const skin=current.skin, hair=current.hairColor, cloth=current.outfitColor;
-    // Tailored torso silhouette instead of a capsule-shaped body.
-    const profile=[new THREE.Vector2(.13,0),new THREE.Vector2(.16,.1),new THREE.Vector2(.19,.27),new THREE.Vector2(.25,.48),new THREE.Vector2(.31,.69),new THREE.Vector2(.3,.82),new THREE.Vector2(.15,.88),new THREE.Vector2(.11,.9)];
-    const torso=add(new THREE.LatheGeometry(profile,40),cloth,0,.91,0);
-    torso.scale.set(current.body==='Athletic'?1.08:current.body==='Curvy'?1.13:current.body==='Slim'?.9:1,1,.78);
-    line([0,1.78,0],[0,1.94,0],.085,.08,skin);
-    // Head, jaw and cheeks.
-    add(new THREE.SphereGeometry(.245,40,32),skin,0,2.12,0,current.face==='Round'?[1,1.08,.94]:current.face==='Square'?[1.04,1,.94]:current.face==='Heart'?[.9,1.1,.92]:[.92,1.12,.92]);
-    add(new THREE.SphereGeometry(.17,28,20),skin,0,2.0,.035,[.88,.62,.84]);
+    const feminine=current.presentation==='Feminine';
+    const slim=current.body==='Slim', athletic=current.body==='Athletic', curvy=current.body==='Curvy';
+    const shoulder=feminine?.285:.34, waist=feminine?.205:.255, hip=feminine?(curvy?.34:.30):(curvy?.31:.285);
+    // Layered tailored torso: shoulders, waist and hips have distinct human proportions.
+    const torsoProfile=[
+      new THREE.Vector2(hip*.78,0),new THREE.Vector2(hip,.08),new THREE.Vector2(hip*.96,.22),
+      new THREE.Vector2(waist,.42),new THREE.Vector2(waist*1.04,.52),
+      new THREE.Vector2(shoulder*.92,.70),new THREE.Vector2(shoulder,.79),
+      new THREE.Vector2(shoulder*.72,.84),new THREE.Vector2(.105,.86)
+    ];
+    const torso=add(new THREE.LatheGeometry(torsoProfile,48),cloth,0,.94,0);
+    torso.scale.set(slim?.92:1,1,.76);
+    // Neck and collar.
+    segment([0,1.72,0],[0,1.91,0],.075,.082,skin);
+    add(new THREE.TorusGeometry(.105,.018,10,36),feminine?'#eee5dc':'#d9dfe1',0,1.77,.006).rotation.x=Math.PI/2;
+    // Head sculpted from a tapered profile, not a sphere.
+    const faceScale=current.face==='Round'?[1.04,1.03,.94]:current.face==='Square'?[1.02,1,.96]:current.face==='Heart'?[.94,1.05,.94]:current.face==='Diamond'?[.92,1.05,.94]:[.96,1.08,.94];
+    const headProfile=[
+      new THREE.Vector2(.035,-.245),new THREE.Vector2(.095,-.225),new THREE.Vector2(.155,-.17),
+      new THREE.Vector2(.205,-.075),new THREE.Vector2(.218,.045),new THREE.Vector2(.202,.155),
+      new THREE.Vector2(.15,.225),new THREE.Vector2(.075,.255),new THREE.Vector2(0,.26)
+    ];
+    const head=add(new THREE.LatheGeometry(headProfile,56),skin,0,2.13,0,faceScale);
+    // Cheek volume and ears.
     for(const side of [-1,1]){
-      add(new THREE.SphereGeometry(.05,20,16),skin,side*.22,2.1,.015,[.8,1,.8]);
-      // Eyes with whites, iris, pupils and brows.
-      add(new THREE.SphereGeometry(.055,24,18),'#795c4b',side*.09,2.145,.194,[1.15,.8,.45]);
-      add(new THREE.SphereGeometry(.044,24,18),'#f7f2e9',side*.09,2.145,.218,[1.1,.9,.55]);
-      add(new THREE.SphereGeometry(.025,20,16),current.eyes,side*.09,2.144,.246,[.9,1,.5]);
-      add(new THREE.SphereGeometry(.011,16,12),'#17191c',side*.09,2.144,.257);
-      const brow=add(new THREE.TorusGeometry(.052,.008,8,24,Math.PI),hair,side*.09,2.205,.2);brow.rotation.z=side*.08;
-      // Nose bridge and tip.
-      add(new THREE.SphereGeometry(.03,18,14),skin,0,2.09,.224,[.72,1.35,.72]);
-      add(new THREE.SphereGeometry(.042,18,14),skin,0,2.045,.25,[.9,.72,.8]);
-      // Ears.
-      add(new THREE.SphereGeometry(.045,18,14),skin,side*.25,2.1,0,[.72,1.15,.8]);
-      // Separate arms, forearms and hands.
-      line([side*.25,1.58,0],[side*.34,1.23,.005],.1,.082,cloth);
-      line([side*.34,1.23,.005],[side*.37,.98,.025],.072,.05,skin);
-      add(new THREE.SphereGeometry(.062,18,14),skin,side*.37,.93,.045,[.8,1,.7]);
-      for(let finger=0;finger<4;finger++)line([side*(.335+finger*.021),.9,.075],[side*(.335+finger*.021),.84,.08],.011,.008,skin);
-      // Legs and shoes.
-      line([side*.105,.94,0],[side*.11,.49,0],.105,.075,'#34414a');
-      line([side*.11,.49,0],[side*.11,.13,.035],.073,.052,'#34414a');
-      add(new THREE.SphereGeometry(.1,20,14),'#25292d',side*.11,.08,.09,[.85,.5,1.5]);
-      add(new THREE.BoxGeometry(.17,.025,.26),'#d4cbbb',side*.11,.035,.08);
+      add(new THREE.SphereGeometry(.071,28,20),skin,side*.145,2.055,.12,[.92,.7,.55]);
+      add(new THREE.SphereGeometry(.043,24,18),skin,side*.214,2.105,0,[.72,1.15,.72]);
+      add(new THREE.SphereGeometry(.021,18,14),'#b97869',side*.226,2.105,.018,[.7,1,.5]);
     }
-    // Mouth and subtle expression.
-    add(new THREE.SphereGeometry(.043,20,12),current.expression==='Happy'?'#b86b68':'#995d5a',0,1.985,.222,[1,.25,.5]);
-    // Hair cap plus curved side locks and back volume.
-    add(new THREE.SphereGeometry(.255,36,28,0,Math.PI*2,0,Math.PI*.64),hair,0,2.245,-.025,[1.02,1,.98]);
-    const hairStyle=current.hair||'Long layers';
+    // Eyes with iris, pupil, catchlight and shaped upper lids.
+    const eyeColor=current.eyes;
     for(const side of [-1,1]){
-      const length=hairStyle==='Short crop'?.17:hairStyle==='Bob'?.38:hairStyle==='Ponytail'?.5:.68;
-      const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(side*.17,2.31,.08),new THREE.Vector3(side*.23,2.19,.07),new THREE.Vector3(side*.245,2.02,.02),new THREE.Vector3(side*.22,1.98-length*.45,-.015),new THREE.Vector3(side*.18,1.92-length*.5,-.04)]);
-      add(new THREE.TubeGeometry(curve,22,.052,10,false),hair,0,0,0);
+      add(new THREE.SphereGeometry(.064,32,24),'#f8f4ed',side*.087,2.157,.188,[1.12,.72,.52]);
+      add(new THREE.SphereGeometry(.034,28,20),eyeColor,side*.087,2.157,.222,[.9,1,.5]);
+      add(new THREE.SphereGeometry(.017,22,16),'#17191b',side*.087,2.157,.239,[.9,1,.5]);
+      add(new THREE.SphereGeometry(.009,16,12),'#ffffff',side*.077,2.17,.247);
+      const lid=add(new THREE.TorusGeometry(.061,.009,8,28,Math.PI),hair,side*.087,2.17,.197);
+      lid.rotation.z=Math.PI;
+      const brow=add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+        new THREE.Vector3(side*.035,2.235,.176),new THREE.Vector3(side*.09,2.25,.184),new THREE.Vector3(side*.145,2.23,.17)
+      ]),16,.009,8,false),current.brows==='Soft'?'#76594b':hair,0,0,0);
+      // Nose bridge, tip and nostril definition.
+      add(new THREE.SphereGeometry(.027,24,18),skin,0,2.095,.205,[.68,1.75,.7]);
+      add(new THREE.SphereGeometry(.039,24,18),skin,0,2.045,.23,[.95,.72,.8]);
+      for(const n of [-1,1]) add(new THREE.SphereGeometry(.009,12,10),'#9b6857',n*.022,2.035,.236);
+      // Arms with shoulder, elbow and wrist transitions.
+      segment([side*.255,1.61,0],[side*.34,1.34,.005],.095,.078,cloth);
+      add(new THREE.SphereGeometry(.078,22,16),cloth,side*.34,1.34,.005,[.9,1,.9]);
+      segment([side*.34,1.31,.005],[side*.375,1.02,.035],.071,.048,skin);
+      add(new THREE.SphereGeometry(.052,20,16),skin,side*.38,.97,.045,[.85,1.2,.65]);
+      for(let finger=0;finger<4;finger++){
+        const fx=side*(.351+finger*.019);
+        segment([fx,.95,.07],[fx,.875,.085],.011,.007,skin,12);
+      }
+      segment([side*.105,.98,0],[side*.112,.53,0],.105,.078,'#343a40');
+      segment([side*.112,.53,0],[side*.115,.14,.015],.075,.052,'#343a40');
+      add(new THREE.SphereGeometry(.095,24,16),'#262b30',side*.115,.085,.095,[.88,.48,1.45]);
+      add(new THREE.BoxGeometry(.18,.022,.25),'#d6cbbc',side*.115,.035,.085);
     }
-    if(['Long layers','Medium waves','Curly','Ponytail'].includes(hairStyle)){
-      const back=new THREE.CatmullRomCurve3([new THREE.Vector3(0,2.25,-.17),new THREE.Vector3(0,1.95,-.2),new THREE.Vector3(.02,1.55,-.19),new THREE.Vector3(.03,1.3,-.16)]);
-      add(new THREE.TubeGeometry(back,24,.085,12,false),hair,0,0,0);
+    // Lips with cupid bow and a soft smile line.
+    const lipColor=feminine?'#a95f65':'#99645d';
+    add(new THREE.SphereGeometry(.039,24,16),lipColor,0,1.985,.205,[1.2,.38,.55]);
+    add(new THREE.SphereGeometry(.032,24,16),feminine?'#bd7778':'#a56c65',0,1.966,.202,[1.05,.28,.5]);
+    // Hair cap and multiple curved locks; silhouette varies by chosen style.
+    add(new THREE.SphereGeometry(.235,48,36,0,Math.PI*2,0,Math.PI*.58),hair,0,2.285,-.035,[1.04,.94,1.02]);
+    const style=current.hair||'Long layers';
+    const long=['Long layers','Medium waves','Curly','Ponytail'].includes(style);
+    const bob=style==='Bob';
+    for(const side of [-1,1]){
+      const fringe=style==='Short crop'?.08:bob?.32:long?.62:.42;
+      const points=[
+        new THREE.Vector3(side*.13,2.40,.045),
+        new THREE.Vector3(side*.205,2.29,.105),
+        new THREE.Vector3(side*.235,2.13,.105),
+        new THREE.Vector3(side*.225,2.00-fringe*.45,.055),
+        new THREE.Vector3(side*.19,1.93-fringe*.45,-.015)
+      ];
+      add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),32,.045,12,false),hair,0,0,0);
+      if(long){
+        for(let strand=0;strand<3;strand++){
+          const x=side*(.16+strand*.035);
+          const curve=new THREE.CatmullRomCurve3([
+            new THREE.Vector3(x,2.29,-.12),new THREE.Vector3(x+side*.025,2.03,-.17),
+            new THREE.Vector3(x+side*.012,1.72,-.16),new THREE.Vector3(x-side*.015,1.38,-.12)
+          ]);
+          add(new THREE.TubeGeometry(curve,28,.018,8,false),hair,0,0,0);
+        }
+      }
     }
-    if(hairStyle==='Bun')add(new THREE.SphereGeometry(.105,20,16),hair,0,2.42,-.16);
-    if(current.glasses!=='None')for(const side of [-1,1]){const ring=add(new THREE.TorusGeometry(.075,.012,8,24),'#343a40',side*.09,2.145,.255);ring.scale.set(1,.85,1)}
+    if(long||bob){
+      const backCurve=new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-.17,2.30,-.13),new THREE.Vector3(-.20,1.98,-.19),
+        new THREE.Vector3(.0,1.76,-.21),new THREE.Vector3(.20,1.98,-.19),new THREE.Vector3(.17,2.30,-.13)
+      ]);
+      add(new THREE.TubeGeometry(backCurve,40,bob?.075:.095,12,false),hair,0,0,0);
+    }
+    if(style==='Bun') add(new THREE.SphereGeometry(.105,28,20),hair,0,2.47,-.15,[1,1,.9]);
+    if(style==='Ponytail'){
+      const tail=new THREE.CatmullRomCurve3([new THREE.Vector3(.12,2.27,-.15),new THREE.Vector3(.22,2.1,-.23),new THREE.Vector3(.25,1.84,-.22),new THREE.Vector3(.19,1.62,-.18)]);
+      add(new THREE.TubeGeometry(tail,32,.055,12,false),hair,0,0,0);
+    }
+    if(current.glasses!=='None'){
+      for(const side of [-1,1]){
+        const frame=add(new THREE.TorusGeometry(.066,.009,8,32), '#343a40',side*.087,2.157,.246);
+        frame.scale.set(1.18,.78,1);
+      }
+      segment([-.02,2.157,.247],[.02,2.157,.247],.008,.008,'#343a40',10);
+    }
     avatar.scale.y=Number(current.height)/168;
     avatar.rotation.y=yaw;
   }
