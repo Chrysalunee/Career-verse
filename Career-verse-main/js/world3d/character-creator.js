@@ -25,7 +25,7 @@ const choices = {
   expression: ['Happy','Neutral','Surprised','Confident']
 };
 const labels = {
-  presentation:'Bentuk karakter',body:'Bentuk tubuh',skin:'Warna kulit',face:'Bentuk wajah',eyes:'Warna mata',
+  presentation:'Jenis kelamin karakter',body:'Bentuk tubuh',skin:'Warna kulit',face:'Bentuk wajah',eyes:'Warna mata',
   brows:'Bentuk alis',hair:'Gaya rambut',hairColor:'Warna rambut',outfit:'Gaya pakaian',
   outfitColor:'Warna pakaian',shoes:'Sepatu',glasses:'Kacamata',personality:'Kepribadian',expression:'Ekspresi'
 };
@@ -109,7 +109,7 @@ export async function openCharacterCreator(existing = null) {
     const skin=current.skin, hair=current.hairColor, cloth=current.outfitColor;
     const feminine=current.presentation==='Feminine';
     const slim=current.body==='Slim', athletic=current.body==='Athletic', curvy=current.body==='Curvy';
-    const shoulder=feminine?.285:.355, waist=feminine?.205:.265, hip=feminine?(curvy?.34:.30):(curvy?.31:.285);
+    const shoulder=feminine?.285:.385, waist=feminine?.205:.285, hip=feminine?(curvy?.35:.315):(curvy?.30:.275);
     // Layered tailored torso: shoulders, waist and hips have distinct human proportions.
     const torsoProfile=[
       new THREE.Vector2(hip*.78,0),new THREE.Vector2(hip,.08),new THREE.Vector2(hip*.96,.22),
@@ -120,7 +120,7 @@ export async function openCharacterCreator(existing = null) {
     const torso=add(new THREE.LatheGeometry(torsoProfile,48),cloth,0,.94,0);
     torso.scale.set(slim?.92:1,1,.76);
     // Neck and collar.
-    segment([0,1.72,0],[0,1.91,0],.075,.082,skin);
+    segment([0,1.72,0],[0,1.91,0],feminine?.075:.09,feminine?.082:.095,skin);
     add(new THREE.TorusGeometry(.105,.018,10,36),feminine?'#eee5dc':'#d9dfe1',0,1.77,.006).rotation.x=Math.PI/2;
     // Head sculpted from a tapered profile, not a sphere.
     const faceScale=current.face==='Round'?[1.04,1.03,.94]:current.face==='Square'?[1.02,1,.96]:current.face==='Heart'?[.94,1.05,.94]:current.face==='Diamond'?[.92,1.05,.94]:[.96,1.08,.94];
@@ -129,17 +129,18 @@ export async function openCharacterCreator(existing = null) {
       new THREE.Vector2(.205,-.075),new THREE.Vector2(.218,.045),new THREE.Vector2(.202,.155),
       new THREE.Vector2(.15,.225),new THREE.Vector2(.075,.255),new THREE.Vector2(0,.26)
     ];
-    const head=add(new THREE.LatheGeometry(headProfile,56),skin,0,2.13,0,faceScale);
+    const genderFaceScale=feminine?faceScale:[faceScale[0]*1.08,faceScale[1]*.98,faceScale[2]*1.02];
+    const head=add(new THREE.LatheGeometry(headProfile,56),skin,0,2.13,0,genderFaceScale);
     // Cheek volume and ears.
     for(const side of [-1,1]){
-      add(new THREE.SphereGeometry(.052,28,20),skin,side*.145,2.055,.105,[.92,.62,.42]);
+      add(new THREE.SphereGeometry(feminine?.052:.045,28,20),skin,side*.145,2.055,.105,[.92,.62,.42]);
       add(new THREE.SphereGeometry(.031,24,18),skin,side*.214,2.105,0,[.72,1.05,.62]);
       add(new THREE.SphereGeometry(.021,18,14),'#b97869',side*.226,2.105,.018,[.7,1,.5]);
     }
     // Eyes with iris, pupil, catchlight and shaped upper lids.
     const eyeColor=current.eyes;
     for(const side of [-1,1]){
-      add(new THREE.SphereGeometry(.051,32,24),'#f8f4ed',side*.087,2.157,.183,[1.12,.72,.46]);
+      add(new THREE.SphereGeometry(feminine?.051:.046,32,24),'#f8f4ed',side*.087,2.157,.183,[1.12,.72,.46]);
       add(new THREE.SphereGeometry(.026,28,20),eyeColor,side*.087,2.157,.211,[.9,1,.44]);
       add(new THREE.SphereGeometry(.012,22,16),'#17191b',side*.087,2.157,.225,[.9,1,.44]);
       add(new THREE.SphereGeometry(.009,16,12),'#ffffff',side*.077,2.17,.247);
@@ -147,9 +148,9 @@ export async function openCharacterCreator(existing = null) {
       lid.rotation.z=Math.PI;
       const brow=add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
         new THREE.Vector3(side*.035,2.235,.176),new THREE.Vector3(side*.09,2.25,.184),new THREE.Vector3(side*.145,2.23,.17)
-      ]),16,.009,8,false),current.brows==='Soft'?'#76594b':hair,0,0,0);
+      ),16,feminine?.009:.014,8,false),current.brows==='Soft'?'#76594b':hair,0,0,0);
       // Nose bridge, tip and nostril definition.
-      add(new THREE.SphereGeometry(.027,24,18),skin,0,2.095,.205,[.68,1.75,.7]);
+      add(new THREE.SphereGeometry(feminine?.027:.031,24,18),skin,0,2.095,.205,[.68,1.75,.7]);
       add(new THREE.SphereGeometry(.031,24,18),skin,0,2.045,.218,[.95,.62,.72]);
       for(const n of [-1,1]) add(new THREE.SphereGeometry(.009,12,10),'#9b6857',n*.022,2.035,.236);
       // Arms with shoulder, elbow and wrist transitions.
@@ -167,9 +168,9 @@ export async function openCharacterCreator(existing = null) {
       add(new THREE.BoxGeometry(.18,.022,.25),'#d6cbbc',side*.115,.035,.085);
     }
     // Lips with cupid bow and a soft smile line.
-    const lipColor=feminine?'#a95f65':'#99645d';
-    add(new THREE.SphereGeometry(.039,24,16),lipColor,0,1.985,.205,[1.2,.38,.55]);
-    add(new THREE.SphereGeometry(.032,24,16),feminine?'#bd7778':'#a56c65',0,1.966,.202,[1.05,.28,.5]);
+    const lipColor=feminine?'#a95f65':'#89564f';
+    add(new THREE.SphereGeometry(feminine?.039:.032,24,16),lipColor,0,1.985,.205,[1.2,.38,.55]);
+    add(new THREE.SphereGeometry(feminine?.032:.026,24,16),feminine?'#bd7778':'#965f58',0,1.966,.202,[1.05,.28,.5]);
     // Hair cap and multiple curved locks; silhouette varies by chosen style.
     add(new THREE.SphereGeometry(.235,48,36,0,Math.PI*2,0,Math.PI*.58),hair,0,2.285,-.035,[1.04,.94,1.02]);
     const style=current.hair||'Long layers';
