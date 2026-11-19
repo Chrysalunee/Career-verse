@@ -9,7 +9,7 @@ const defaults = {
   personality: 'Creative', expression: 'Happy'
 };
 const choices = {
-  presentation: ['Feminine','Masculine','Androgynous'],
+  presentation: ['Feminine','Masculine'],
   body: ['Slim','Average','Athletic','Curvy'],
   skin: ['#f4d6bd','#e8b998','#c98f70','#9b6348','#70452f'],
   face: ['Oval','Round','Heart','Square','Diamond'],
@@ -25,7 +25,7 @@ const choices = {
   expression: ['Happy','Neutral','Surprised','Confident']
 };
 const labels = {
-  presentation:'Gender presentation',body:'Bentuk tubuh',skin:'Warna kulit',face:'Bentuk wajah',eyes:'Warna mata',
+  presentation:'Bentuk karakter',body:'Bentuk tubuh',skin:'Warna kulit',face:'Bentuk wajah',eyes:'Warna mata',
   brows:'Bentuk alis',hair:'Gaya rambut',hairColor:'Warna rambut',outfit:'Gaya pakaian',
   outfitColor:'Warna pakaian',shoes:'Sepatu',glasses:'Kacamata',personality:'Kepribadian',expression:'Ekspresi'
 };
@@ -35,6 +35,7 @@ function writeSave(save){try{localStorage.setItem(KEY,JSON.stringify(save));retu
 
 export async function openCharacterCreator(existing = null) {
   const current = {...defaults,...(existing||{})};
+  if (!['Feminine','Masculine'].includes(current.presentation)) current.presentation = 'Feminine';
   const overlay=document.createElement('section');
   overlay.className='cv-character-creator';
   overlay.innerHTML=`
@@ -108,7 +109,7 @@ export async function openCharacterCreator(existing = null) {
     const skin=current.skin, hair=current.hairColor, cloth=current.outfitColor;
     const feminine=current.presentation==='Feminine';
     const slim=current.body==='Slim', athletic=current.body==='Athletic', curvy=current.body==='Curvy';
-    const shoulder=feminine?.285:.34, waist=feminine?.205:.255, hip=feminine?(curvy?.34:.30):(curvy?.31:.285);
+    const shoulder=feminine?.285:.355, waist=feminine?.205:.265, hip=feminine?(curvy?.34:.30):(curvy?.31:.285);
     // Layered tailored torso: shoulders, waist and hips have distinct human proportions.
     const torsoProfile=[
       new THREE.Vector2(hip*.78,0),new THREE.Vector2(hip,.08),new THREE.Vector2(hip*.96,.22),
@@ -152,9 +153,9 @@ export async function openCharacterCreator(existing = null) {
       add(new THREE.SphereGeometry(.031,24,18),skin,0,2.045,.218,[.95,.62,.72]);
       for(const n of [-1,1]) add(new THREE.SphereGeometry(.009,12,10),'#9b6857',n*.022,2.035,.236);
       // Arms with shoulder, elbow and wrist transitions.
-      segment([side*.255,1.61,0],[side*.34,1.34,.005],.095,.078,cloth);
+      segment([side*(feminine?.255:.29),1.61,0],[side*(feminine?.34:.37),1.34,.005],feminine?.095:.108,feminine?.078:.09,cloth);
       add(new THREE.SphereGeometry(.078,22,16),cloth,side*.34,1.34,.005,[.9,1,.9]);
-      segment([side*.34,1.31,.005],[side*.375,1.02,.035],.071,.048,skin);
+      segment([side*(feminine?.34:.37),1.31,.005],[side*(feminine?.375:.405),1.02,.035],feminine?.071:.078,feminine?.048:.052,skin);
       add(new THREE.SphereGeometry(.052,20,16),skin,side*.38,.97,.045,[.85,1.2,.65]);
       for(let finger=0;finger<4;finger++){
         const fx=side*(.351+finger*.019);
