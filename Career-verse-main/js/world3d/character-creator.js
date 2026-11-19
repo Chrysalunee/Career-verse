@@ -4,7 +4,7 @@ const KEY = 'career-verse-save';
 const defaults = {
   name: 'Alex', presentation: 'Feminine', age: 24, height: 168, body: 'Average',
   skin: '#c98f70', face: 'Oval', eyes: '#594235', brows: 'Natural',
-  hair: 'Long layers', hairColor: '#30251f', outfit: 'Smart casual',
+  hair: 'Long layers', hairColor: '#30251f', outfit: 'Casual',
   outfitColor: '#a86f79', shoes: 'Sneakers', glasses: 'None',
   personality: 'Creative', expression: 'Happy'
 };
@@ -50,6 +50,9 @@ export async function openCharacterCreator(existing = null) {
       .cvcc-preview{position:relative;min-height:480px;border-radius:18px;overflow:hidden;background:radial-gradient(ellipse at 50% 36%,#fffdf8 0,#dce2e2 58%,#aeb9bd 100%);border:1px solid #d9d4ca}
       .cvcc-preview canvas{display:block;width:100%;height:100%;min-height:480px;touch-action:none}
       .cvcc-preview-note{position:absolute;left:16px;bottom:14px;background:#f8f6f1e8;border-radius:9px;padding:8px 11px;font-size:12px;color:#53616a}
+      .cvcc-view-controls{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:70%}
+      .cvcc-view-controls button{border:1px solid #c9c6bf;background:#fffdf8ef;color:#34424a;border-radius:8px;padding:7px 10px;font:600 12px system-ui;cursor:pointer}
+      .cvcc-view-controls button:hover,.cvcc-view-controls button:focus-visible{background:#e6edf0;outline:2px solid #718b99}
       .cvcc-field{display:grid;gap:6px;margin:0 0 13px}.cvcc-field label{font-size:13px;font-weight:700;color:#4c5961}
       .cvcc-field input,.cvcc-field select{width:100%;min-height:42px;border:1px solid #d2ccc2;border-radius:9px;background:#fffefa;color:#28343b;padding:9px 10px;font:500 14px system-ui,sans-serif}
       .cvcc-color-options{display:flex;gap:9px;flex-wrap:wrap}.cvcc-swatch{width:34px;height:34px;border-radius:50%;border:2px solid #fff;outline:1px solid #c6c0b6;cursor:pointer}.cvcc-swatch[aria-pressed=true]{outline:3px solid #516d7b}
@@ -67,7 +70,7 @@ export async function openCharacterCreator(existing = null) {
         <button class="cvcc-tab" data-category="fashion">Fashion</button>
         <button class="cvcc-tab" data-category="personality">Kepribadian</button>
       </div></aside>
-      <section class="cvcc-preview"><canvas aria-label="Preview karakter 3D"></canvas><div class="cvcc-preview-note">Geser untuk memutar · Scroll untuk zoom</div></section>
+      <section class="cvcc-preview"><canvas aria-label="Preview karakter 3D"></canvas><nav class="cvcc-view-controls" aria-label="Sudut pandang karakter"><button type="button" data-view="front">Depan</button><button type="button" data-view="side">Samping</button><button type="button" data-view="back">Belakang</button><button type="button" data-view="zoom-in" aria-label="Perbesar">+</button><button type="button" data-view="zoom-out" aria-label="Perkecil">−</button></nav><div class="cvcc-preview-note">Geser untuk memutar · Scroll untuk zoom</div></section>
       <aside class="cvcc-panel"><h3 class="cvcc-options-title">Identitas karakter</h3><div class="cvcc-options"></div></aside>
     </main>
     <footer class="cvcc-footer"><small>Preview 3D diperbarui langsung saat pilihan diubah.</small><div class="cvcc-actions">
@@ -204,6 +207,18 @@ export async function openCharacterCreator(existing = null) {
       const tail=new THREE.CatmullRomCurve3([new THREE.Vector3(.12,2.27,-.15),new THREE.Vector3(.22,2.1,-.23),new THREE.Vector3(.25,1.84,-.22),new THREE.Vector3(.19,1.62,-.18)]);
       add(new THREE.TubeGeometry(tail,32,.055,12,false),hair,0,0,0);
     }
+    if(['Formal','Office'].includes(current.outfit)){
+      const trim=current.outfit==='Formal'?'#eee8df':'#e7e1d8';
+      add(new THREE.ConeGeometry(.09,.18,4),trim,-.075,1.72,.13,[.72,1,.32]).rotation.z=Math.PI;
+      add(new THREE.ConeGeometry(.09,.18,4),trim,.075,1.72,.13,[.72,1,.32]).rotation.z=Math.PI;
+      if(current.outfit==='Formal')add(new THREE.ConeGeometry(.045,.23,4),'#394b59',0,1.54,.145,[.5,1,.35]);
+    }else if(['Streetwear','Korean minimal'].includes(current.outfit)){
+      for(const side of [-1,1])add(new THREE.BoxGeometry(.075,.54,.035),'#394b59',side*.205,1.43,.19);
+      if(current.outfit==='Streetwear')add(new THREE.SphereGeometry(.075,18,12),cloth,0,1.84,-.12,[1,.65,.45]);
+    }else if(current.outfit==='Sportwear'){
+      for(const side of [-1,1])add(new THREE.BoxGeometry(.035,.58,.025),'#f2eee7',side*.19,1.42,.205);
+    }else if(current.outfit==='Party')add(new THREE.TorusGeometry(.105,.018,8,28),'#eee8df',0,1.72,.12).rotation.x=Math.PI/2;
+    else if(current.outfit==='Sleepwear')for(const side of [-1,1])add(new THREE.BoxGeometry(.025,.42,.02),'#eee5dc',side*.17,1.4,.205);
     if(current.glasses!=='None'){
       for(const side of [-1,1]){
         const frame=add(new THREE.TorusGeometry(.066,.009,8,32), '#343a40',side*.087,2.157,.246);
@@ -241,6 +256,12 @@ export async function openCharacterCreator(existing = null) {
   overlay.querySelector('[data-action="reset"]').addEventListener('click',()=>{Object.assign(current,defaults);renderOptions();rebuild()});
   overlay.querySelector('[data-action="random"]').addEventListener('click',()=>{for(const [key,values] of Object.entries(choices))current[key]=values[Math.floor(Math.random()*values.length)];current.name=current.name||'Alex';renderOptions();rebuild()});
   overlay.querySelector('[data-action="save"]').addEventListener('click',()=>{const name=String(current.name||'').trim();if(!name){const input=overlay.querySelector('[data-key="name"]');input?.focus();return}const save=readSave();save.character={...current,name};if(!writeSave(save)){alert('Penyimpanan browser tidak tersedia. Aktifkan penyimpanan lokal untuk menyimpan karakter.');return}cleanup();resolvePromise(save.character)});
+  overlay.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{
+    const view=button.dataset.view;
+    if(view==='front')yaw=0;else if(view==='side')yaw=Math.PI/2;else if(view==='back')yaw=Math.PI;
+    else if(view==='zoom-in')zoom=Math.max(4,zoom-.45);else if(view==='zoom-out')zoom=Math.min(8,zoom+.45);
+    camera.position.z=zoom;rebuild();
+  }));
   function down(e){drag=true;lastX=e.clientX;canvas.setPointerCapture?.(e.pointerId)}
   function move(e){if(!drag)return;yaw+=(e.clientX-lastX)*.012;lastX=e.clientX;rebuild()}
   function up(){drag=false}
