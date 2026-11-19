@@ -59,6 +59,7 @@ async function openWorld() {
         <div>
           <span class="eyebrow">Careerverse 3D</span>
           <h2>${'Dunia Career-Verse · Stage 5'}</h2>
+          <button type="button" class="world3d-edit-character">✦ Kustomisasi Karakter</button>
         </div>
         <button type="button" class="world3d-close" aria-label="Tutup dunia 3D">Tutup</button>
       </div>
@@ -105,6 +106,23 @@ async function openWorld() {
   }
   worldIsOpening = false;
 
+  const editCharacter = stage.querySelector('.world3d-edit-character');
+  editCharacter?.addEventListener('click', async () => {
+    if (worldIsOpening) return;
+    const latest = readSave();
+    const updatedCharacter = await openCharacterCreator(latest.character || null);
+    if (!updatedCharacter) return;
+    const updatedSave = readSave();
+    updatedSave.character = updatedCharacter;
+    persistWorldSave(updatedSave);
+    if (app?.getGameClock) Object.assign(updatedSave.world ||= {}, app.getGameClock());
+    persistWorldSave(updatedSave);
+    app?.destroy();
+    stage.style.display = 'none';
+    document.body.classList.remove('world3d-active');
+    worldIsOpen = false;
+    openWorld();
+  });
   const close = stage.querySelector('.world3d-close');
   close.addEventListener('click', () => {
     const latest = readSave(); latest.world ||= {};
