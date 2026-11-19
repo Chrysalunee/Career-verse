@@ -3,79 +3,297 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#eee8df">
-  <meta name="description" content="Careerverse — simulasi karier interaktif dalam Bahasa Indonesia.">
-  <title>Careerverse — Simulasi Karier</title>
-  <link rel="stylesheet" href="./css/styles.css?v=7">
-  <link rel="stylesheet" href="./css/world3d.css?v=8">
-<style>
-.game-enter-link{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:0 19px;border-radius:11px;background:linear-gradient(135deg,#40596b,#2e4555);color:#fff;text-decoration:none;font-weight:800;letter-spacing:.01em;white-space:nowrap;box-shadow:0 7px 18px rgba(41,57,70,.15);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
-.game-enter-link:hover{transform:translateY(-2px);background:linear-gradient(135deg,#506d80,#344d60);box-shadow:0 10px 22px rgba(41,57,70,.2)}
-.game-enter-link:focus-visible{outline:3px solid #b89a68;outline-offset:3px}
-@media(max-width:700px){.topbar{gap:10px;flex-wrap:wrap}.game-enter-link{margin-left:auto;min-height:38px;padding:0 14px;font-size:.9rem}.topbar .toolbar{flex-basis:100%;flex-wrap:wrap}}
-</style>
+  <meta name="theme-color" content="#f4f0e8">
+  <meta name="description" content="Career-Verse — Your Life. Your Career. Your Story. Jelajahi dunia simulasi kehidupan dan karier interaktif.">
+  <title>Career-Verse — Your Life. Your Career. Your Story.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css?v=20261120-1">
+  <link rel="stylesheet" href="./css/world3d.css?v=20261120-1">
+  <style>
+    :root{--cv-ink:#263744;--cv-muted:#64727b;--cv-paper:#f4f0e8;--cv-card:#fffdf9;--cv-blue:#8197a7;--cv-rust:#b8755e;--cv-gold:#b89a68}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:90px}
+    body{margin:0;background:#f4f0e8;color:var(--cv-ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.6}
+    a{color:inherit}
+    button{font:inherit}
+    .cv-nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:22px;padding:13px clamp(18px,5vw,76px);background:#f8f5efed;border-bottom:1px solid #dcd6cc;backdrop-filter:blur(16px)}
+    .cv-brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:800 1.08rem Manrope,sans-serif;letter-spacing:-.04em;color:#293c49;white-space:nowrap}
+    .cv-brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#344c5b;color:#fff;font-size:1.15rem}
+    .cv-links{display:flex;align-items:center;gap:clamp(12px,2.2vw,30px)}
+    .cv-links a{font-size:.88rem;font-weight:700;text-decoration:none;color:#5c6970;transition:color .2s}
+    .cv-links a:hover{color:#a56650}
+    .cv-nav-cta,.cv-primary,.cv-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:800;border:1px solid transparent;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+    .cv-nav-cta,.cv-primary{background:#304957;color:#fff;box-shadow:0 8px 20px #293e4a22}
+    .cv-nav-cta:hover,.cv-primary:hover{background:#426172;transform:translateY(-2px);box-shadow:0 12px 24px #293e4a30}
+    .cv-secondary{background:#fffdf9;color:#344b59;border-color:#d8d1c6}
+    .cv-secondary:hover{transform:translateY(-2px);border-color:#aebbc0}
+    .cv-hero{position:relative;isolation:isolate;overflow:hidden;min-height:650px;display:grid;align-items:center;padding:clamp(65px,9vw,120px) clamp(20px,8vw,120px);background:linear-gradient(105deg,#e9e3d9 0%,#e8e6df 46%,#d7e0e2 100%)}
+    .cv-hero:before{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,#eee9e0 0%,#eee9e0ee 38%,#eee9e044 76%,#eee9e000 100%)}
+    .cv-hero-copy{max-width:680px;position:relative;z-index:3}
+    .cv-eyebrow{display:inline-flex;align-items:center;gap:9px;color:#986c56;font-size:.75rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    .cv-eyebrow:before{content:"";width:28px;height:1px;background:#b8755e}
+    .cv-hero h1{font:800 clamp(3rem,7vw,6.4rem)/.99 Manrope,sans-serif;letter-spacing:-.075em;color:#293d4a;margin:22px 0}
+    .cv-hero h1 em{font-style:normal;color:#a66d57}
+    .cv-hero-copy>p{max-width:570px;font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.75;color:#58666e}
+    .cv-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+    .cv-hero-note{display:flex;align-items:center;gap:10px;margin-top:34px;color:#657078;font-size:.83rem}
+    .cv-live-dot{width:8px;height:8px;border-radius:50%;background:#8a9d8c;box-shadow:0 0 0 5px #8a9d8c22}
+    .cv-city-art{position:absolute;z-index:-1;right:0;bottom:0;width:min(61%,900px);height:100%;overflow:hidden;opacity:.98}
+    .cv-sky-glow{position:absolute;width:460px;height:460px;right:10%;top:8%;border-radius:50%;background:radial-gradient(circle,#f9f2dfaa,transparent 68%)}
+    .cv-sun{position:absolute;width:130px;height:130px;right:28%;top:18%;border-radius:50%;background:linear-gradient(145deg,#f5e5c7,#d9c6a7);box-shadow:0 0 70px #f3e3c566}
+    .cv-cityline{position:absolute;bottom:0;left:0;right:0;height:72%;display:flex;align-items:flex-end;gap:8px;transform:skewY(0deg)}
+    .cv-building{position:relative;flex:1;min-width:38px;border:1px solid #71859266;border-bottom:0;background:linear-gradient(100deg,#647b88,#a8b4b4 48%,#526b79);box-shadow:inset 10px 0 22px #263d4b24,8px 0 20px #253c4b13}
+    .cv-building:before{content:"";position:absolute;inset:18px 12px;background:repeating-linear-gradient(90deg,transparent 0 17px,#e9dfc788 18px 24px),repeating-linear-gradient(0deg,transparent 0 25px,#e9dfc766 26px 31px);opacity:.8}
+    .cv-building:after{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:#d9d4c6aa}
+    .cv-building.b1{height:44%;flex:1.1;background:linear-gradient(90deg,#8a9a9c,#d2c8b7)}
+    .cv-building.b2{height:68%;flex:1.25;background:linear-gradient(90deg,#526c7b,#aab9b9)}
+    .cv-building.b3{height:90%;flex:1.3;background:linear-gradient(90deg,#526776,#9eafb0)}
+    .cv-building.b4{height:58%;flex:1;background:linear-gradient(90deg,#8b9998,#d1c9b9)}
+    .cv-building.b5{height:78%;flex:1.15;background:linear-gradient(90deg,#5b7180,#a8b3b0)}
+    .cv-building.b6{height:51%;flex:1;background:linear-gradient(90deg,#a17f70,#d4bba7)}
+    .cv-building.b7{height:64%;flex:1.1;background:linear-gradient(90deg,#617b86,#b2bdb8)}
+    .cv-road{position:absolute;bottom:-30px;left:-5%;width:115%;height:125px;background:linear-gradient(180deg,#53636a,#344750);transform:perspective(220px) rotateX(18deg);border-top:7px solid #d8cdb9}
+    .cv-road:after{content:"";position:absolute;left:0;right:0;top:54%;border-top:3px dashed #e8ddc6}
+    .cv-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#d9d2c7;border-block:1px solid #d9d2c7}
+    .cv-stat{padding:22px 14px;text-align:center;background:#f8f5ef}
+    .cv-stat strong{display:block;font:800 .96rem Manrope,sans-serif;color:#344b58}
+    .cv-stat span{display:block;margin-top:4px;font-size:.76rem;color:#788087}
+    .cv-section{padding:clamp(65px,8vw,105px) clamp(20px,8vw,120px)}
+    .cv-section-inner{max-width:1240px;margin:0 auto}
+    .cv-section-head{max-width:720px;margin-bottom:38px}
+    .cv-section-head h2{font:800 clamp(2rem,4.4vw,3.7rem)/1.08 Manrope,sans-serif;letter-spacing:-.06em;color:#293e4b;margin:14px 0}
+    .cv-section-head p{font-size:1.02rem;color:#68747a;line-height:1.75}
+    .cv-about{background:#fbf9f4}
+    .cv-about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+    .cv-about-quote{padding:clamp(28px,4vw,52px);border-radius:26px;background:#304957;color:#fff;box-shadow:0 22px 55px #30495720}
+    .cv-about-quote .cv-eyebrow{color:#e1b69e}
+    .cv-about-quote h3{font:800 clamp(1.7rem,3vw,2.55rem)/1.18 Manrope,sans-serif;letter-spacing:-.05em;margin:18px 0}
+    .cv-about-quote p{color:#d5dfe1;line-height:1.8}
+    .cv-about-points{display:grid;gap:16px}
+    .cv-point{display:grid;grid-template-columns:44px 1fr;gap:15px;align-items:start;padding:17px 0;border-bottom:1px solid #e4ded4}
+    .cv-point-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#e7e4dc;color:#415866;font-size:1.15rem}
+    .cv-point h3{font:800 1.02rem Manrope,sans-serif;margin:1px 0 4px;color:#344b58}
+    .cv-point p{margin:0;color:#707a7e;font-size:.91rem}
+    .cv-features{background:#e9e6df}
+    .cv-card-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}
+    .cv-feature-card{min-height:190px;padding:22px 18px;border:1px solid #d9d4ca;border-radius:18px;background:#f8f6f0;transition:transform .2s,box-shadow .2s,border-color .2s}
+    .cv-feature-card:hover{transform:translateY(-5px);border-color:#b4a99a;box-shadow:0 14px 30px #33485413}
+    .cv-feature-icon{font-size:1.65rem}
+    .cv-feature-card h3{font:800 .98rem Manrope,sans-serif;color:#354b58;margin:13px 0 7px}
+    .cv-feature-card p{font-size:.84rem;line-height:1.6;color:#707a7e;margin:0}
+    .cv-world{background:#f8f5ef}
+    .cv-world-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+    .cv-world-main{position:relative;min-height:400px;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,#bdc9c7,#718895 56%,#344b59)}
+    .cv-world-main:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#1d3542cc,transparent 70%)}
+    .cv-world-skyline{position:absolute;inset:15% 4% 0;display:flex;align-items:flex-end;gap:9px}
+    .cv-world-tower{flex:1;height:var(--h);background:linear-gradient(90deg,#405c6b,#d2d1c2 50%,#627a84);border:1px solid #ffffff55;box-shadow:inset 9px 0 16px #213b4a44;position:relative}
+    .cv-world-tower:after{content:"";position:absolute;inset:12px 8px;background:repeating-linear-gradient(90deg,transparent 0 13px,#e7dfc477 14px 19px),repeating-linear-gradient(0deg,transparent 0 20px,#e7dfc455 21px 25px)}
+    .cv-world-caption{position:absolute;z-index:2;left:28px;right:28px;bottom:25px;color:#fff}
+    .cv-world-caption span{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:#e8c6a8;font-weight:800}
+    .cv-world-caption h3{font:800 2rem Manrope,sans-serif;color:#fff;margin:7px 0}
+    .cv-world-caption p{color:#e0e8e9;margin:0;max-width:480px}
+    .cv-world-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .cv-world-tile{padding:21px;border-radius:18px;background:#ede9e0;border:1px solid #dfd9cf}
+    .cv-world-tile span{font-size:1.45rem}
+    .cv-world-tile h3{font:800 .98rem Manrope,sans-serif;margin:10px 0 4px;color:#354b58}
+    .cv-world-tile p{font-size:.82rem;color:#707a7e;margin:0}
+    .cv-guide{background:#e6e1d8}
+    .cv-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:step}
+    .cv-step{padding:23px;border-radius:18px;background:#f9f7f1;border:1px solid #d8d2c8;counter-increment:step}
+    .cv-step:before{content:"0" counter(step);display:block;font:800 1.5rem Manrope,sans-serif;color:#ad755d;margin-bottom:22px}
+    .cv-step h3{font:800 1rem Manrope,sans-serif;color:#354b58;margin:0 0 7px}
+    .cv-step p{font-size:.86rem;color:#707a7e;margin:0}
+    .cv-final{padding:clamp(60px,8vw,100px) 20px;text-align:center;background:#304957;color:#fff}
+    .cv-final h2{font:800 clamp(2.5rem,6vw,5rem)/1.05 Manrope,sans-serif;letter-spacing:-.07em;color:#fff;margin:16px 0}
+    .cv-final p{max-width:610px;margin:0 auto 27px;color:#d5dfe1;line-height:1.8}
+    .cv-final .cv-primary{background:#e4b99f;color:#293d49}
+    .cv-final .cv-primary:hover{background:#f0cbb4}
+    .cv-footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:25px clamp(20px,8vw,120px);background:#253a46;color:#bdc9cb;font-size:.82rem}
+    .cv-footer a{color:#e7c2aa;text-decoration:none}
+    #game-shell[hidden]{display:none!important}
+    .game-return{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-size:.85rem;font-weight:800}
+    .game-return:hover{color:#e6c0a8}
+    .game-topbar{background:#293f4c;color:#fff;border-bottom:1px solid #50616a}
+    .game-topbar .brand{color:#fff}
+    .game-topbar .toolbar{color:#d9e0e1}
+    .game-topbar .quiet,.game-topbar .import-button{background:#405966;color:#fff;border-color:#647781}
+    .game-topbar .game-enter-link{background:#b8755e;color:#fff}
+    .game-topbar .game-enter-link:hover{background:#c88770}
+    .game-topbar .toolbar button{min-height:38px}
+    #app{min-height:55vh}
+    #app h1,#app h2,#app h3,#app p,#app li,#app strong,#app span{overflow-wrap:anywhere}
+    #app .card,#app .panel{color:#302b43}
+    #app .card p,#app .panel p{color:#625b73}
+    #app button{white-space:normal;line-height:1.35}
+    #app :focus-visible{outline:3px solid #b89a68;outline-offset:3px}
+    .skip-link{position:absolute;left:10px;top:-100px;z-index:99;padding:10px;background:#fff;color:#293d49}
+    .skip-link:focus{top:10px}
+    @media(max-width:1000px){.cv-card-grid{grid-template-columns:repeat(3,1fr)}.cv-city-art{width:62%;opacity:.72}.cv-about-grid{gap:25px}}
+    @media(max-width:760px){.cv-nav{flex-wrap:wrap;gap:12px}.cv-links{order:3;flex-basis:100%;overflow-x:auto;padding:5px 0}.cv-links a{white-space:nowrap;font-size:.82rem}.cv-nav-cta{margin-left:auto;min-height:40px;padding:0 14px;font-size:.84rem}.cv-hero{min-height:610px;padding-top:65px}.cv-city-art{width:100%;opacity:.34}.cv-hero:before{background:linear-gradient(90deg,#eee9e0ee,#eee9e099)}.cv-stats{grid-template-columns:repeat(2,1fr)}.cv-stat:last-child{grid-column:span 2}.cv-about-grid,.cv-world-grid{grid-template-columns:1fr}.cv-card-grid{grid-template-columns:repeat(2,1fr)}.cv-steps{grid-template-columns:repeat(2,1fr)}.cv-world-main{min-height:320px}}
+    @media(max-width:480px){.cv-card-grid,.cv-world-list,.cv-steps{grid-template-columns:1fr}.cv-hero h1{font-size:3.2rem}.cv-section{padding:58px 18px}.cv-nav{padding:12px 16px}.cv-links{gap:17px}.cv-nav-cta{font-size:.78rem}.cv-stat{padding:16px 8px}.cv-stat strong{font-size:.84rem}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cv-feature-card,.cv-primary,.cv-secondary{transition:none}}
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Lewati ke konten utama</a>
-  <header class="topbar">
-    <a class="brand" href="./" aria-label="Careerverse beranda">🧭 <span>Careerverse</span></a>
-    <a class="game-enter-link" href="#main">Masuk ke game <span aria-hidden="true">↗</span></a>
-    <div class="toolbar">
-      <span id="save-status" aria-live="polite">Progres tersimpan otomatis</span>
-      <button id="export-save" class="quiet" type="button">Ekspor save</button>
-      <label class="import-button quiet">Impor save<input id="import-save" type="file" accept="application/json"></label>
-      <button id="reset-game" class="quiet" type="button">Mulai ulang</button>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+  <nav class="cv-nav" aria-label="Navigasi utama">
+    <a class="cv-brand" href="./" aria-label="Career-Verse beranda"><span class="cv-brand-mark">✦</span> CAREER-VERSE</a>
+    <div class="cv-links">
+      <a href="#home">Beranda</a><a href="#about">Tentang Game</a><a href="#features">Fitur</a><a href="#world">Dunia Game</a><a href="#guide">Panduan</a>
     </div>
-  </header>
-  <main id="main" class="wrap"><div id="app" aria-live="polite"></div></main>
-  
-  <section id="tentang-careerverse" class="about-section" aria-labelledby="about-title">
-    <div class="about-interactive">
-      <div><span class="about-kicker">TEMUKAN MINATMU</span><h2>Gaya perjalanan karier seperti apa yang menarik?</h2><p>Pilih minat untuk melihat gambaran aktivitas yang bisa kamu coba.</p></div>
-      <div class="about-choices" role="group" aria-label="Pilih minat karier">
-        <button type="button" class="about-choice" data-kind="creative" aria-pressed="true">🎨 Kreatif</button>
-        <button type="button" class="about-choice" data-kind="business" aria-pressed="false">📊 Bisnis</button>
-        <button type="button" class="about-choice" data-kind="people" aria-pressed="false">🤝 Pelayanan</button>
+    <button class="cv-nav-cta" type="button" data-enter-game>Masuk ke Game <span aria-hidden="true">↗</span></button>
+  </nav>
+
+  <main id="main-content">
+    <section class="cv-hero" id="home" aria-labelledby="hero-title">
+      <div class="cv-city-art" aria-hidden="true">
+        <div class="cv-sky-glow"></div><div class="cv-sun"></div>
+        <div class="cv-cityline"><div class="cv-building b1"></div><div class="cv-building b2"></div><div class="cv-building b3"></div><div class="cv-building b4"></div><div class="cv-building b5"></div><div class="cv-building b6"></div><div class="cv-building b7"></div></div>
+        <div class="cv-road"></div>
       </div>
-      <div class="about-result" id="about-result" aria-live="polite"><strong>Jalur kreatif</strong><p>Susun ide, kerjakan tugas, terima evaluasi, dan kembangkan skill.</p></div>
+      <div class="cv-hero-copy">
+        <span class="cv-eyebrow">Life & Career Simulator</span>
+        <h1 id="hero-title">Your Life.<br>Your Career.<br><em>Your Story.</em></h1>
+        <p>Bangun kehidupanmu, temukan jalur karier, dan jelajahi dunia yang terus berkembang. Setiap pilihan membentuk cerita yang berbeda—dan semuanya dimulai dari langkah pertamamu.</p>
+        <div class="cv-hero-actions">
+          <button class="cv-primary" type="button" data-enter-game>Mulai Perjalanan <span aria-hidden="true">↗</span></button>
+          <a class="cv-secondary" href="#about">Kenali Career-Verse</a>
+        </div>
+        <div class="cv-hero-note"><span class="cv-live-dot"></span> Sebuah dunia simulasi. Banyak kemungkinan untuk dijelajahi.</div>
+      </div>
+    </section>
+
+    <div class="cv-stats" aria-label="Pilar pengalaman Career-Verse">
+      <div class="cv-stat"><strong>Life Simulation</strong><span>Jalani keseharianmu</span></div>
+      <div class="cv-stat"><strong>Career Development</strong><span>Bangun perjalanan profesi</span></div>
+      <div class="cv-stat"><strong>3D World</strong><span>Jelajahi lingkungan</span></div>
+      <div class="cv-stat"><strong>Interactive NPC</strong><span>Temui karakter dunia</span></div>
+      <div class="cv-stat"><strong>Economy System</strong><span>Kelola sumber daya</span></div>
     </div>
-    <div class="about-hero">
-      <span class="about-eyebrow">LIFE & CAREER SIMULATOR</span>
-      <h1 id="about-title">Bangun karier. Jalani ceritamu.</h1>
-      <p>Career-Verse adalah simulasi karier interaktif berbahasa Indonesia. Pilih profesi, temukan tempat kerja, selesaikan tantangan, dan lihat bagaimana keputusanmu membentuk perjalanan karier.</p>
-      <div class="about-pills"><span>🎓 Pilih profesi</span><span>💼 Bangun karier</span><span>🌆 Jelajahi dunia 3D</span><span>⭐ Kembangkan diri</span></div>
-    </div>
-    <div class="about-heading"><span class="about-kicker">KENALI PERMAINANNYA</span><h2>Satu dunia, banyak kemungkinan.</h2><p>Jelajahi fitur Career-Verse langsung dari halaman game ini.</p></div>
-    <div class="about-grid">
-      <article class="about-card"><span>🧭</span><h3>Tentukan jalanmu</h3><p>Pilih profesi dan perusahaan fiktif untuk memulai perjalanan karier.</p></article>
-      <article class="about-card"><span>📝</span><h3>Masuk dunia kerja</h3><p>Jalani lamaran, wawancara, penawaran kerja, tugas, dan evaluasi.</p></article>
-      <article class="about-card"><span>📅</span><h3>Atur aktivitas</h3><p>Kelola jadwal, rapat, pesan, deadline, dan ringkasan harian.</p></article>
-      <article class="about-card"><span>🏙️</span><h3>Jelajahi lokasi</h3><p>Kenali rumah, tempat kerja, mal, dan tempat belajar melalui dunia game.</p></article>
-      <article class="about-card"><span>🎮</span><h3>Masuk dunia 3D</h3><p>Jelajahi lingkungan 3D, bergerak dengan WASD atau tombol panah, dan berinteraksi saat tersedia.</p></article>
-      <article class="about-card"><span>💾</span><h3>Jaga progresmu</h3><p>Progres tersimpan di browser. Gunakan ekspor dan impor save untuk cadangan.</p></article>
-    </div>
-    <div class="about-footerline"><span>CAREER-VERSE</span><span>Simulasi karier interaktif · Prototipe game</span></div>
+
+    <section class="cv-section cv-about" id="about">
+      <div class="cv-section-inner cv-about-grid">
+        <div class="cv-section-head">
+          <span class="cv-eyebrow">Tentang Career-Verse</span>
+          <h2>Bukan hanya tentang pekerjaan. Ini tentang kehidupan yang kamu bangun.</h2>
+          <p>Career-Verse adalah pengalaman simulasi kehidupan dan karier interaktif. Kamu memulai perjalanan, mengenal dunia kerja, mengambil keputusan, mengelola keseharian, dan bertumbuh melalui pengalaman.</p>
+          <p>Tujuannya bukan mencari satu jalan yang paling benar. Tujuannya adalah memberi ruang untuk mencoba, belajar dari konsekuensi, dan membentuk cerita versimu sendiri.</p>
+        </div>
+        <div class="cv-about-quote">
+          <span class="cv-eyebrow">Your choices matter</span>
+          <h3>Setiap keputusan adalah bagian dari perjalananmu.</h3>
+          <p>Dari hari pertama mencari pekerjaan hingga membangun reputasi, meningkatkan keterampilan, dan menemukan tempatmu di dunia—progres dibentuk oleh pilihan yang kamu ambil.</p>
+        </div>
+      </div>
+      <div class="cv-section-inner cv-about-points" style="margin-top:42px">
+        <article class="cv-point"><span class="cv-point-icon">✦</span><div><h3>Mulai dari dirimu</h3><p>Tentukan profesi, kenali kekuatan, dan susun tujuan yang ingin dicapai.</p></div></article>
+        <article class="cv-point"><span class="cv-point-icon">↗</span><div><h3>Belajar melalui pengalaman</h3><p>Hadapi tantangan, atur prioritas, dan lihat bagaimana keputusan memengaruhi progres.</p></div></article>
+        <article class="cv-point"><span class="cv-point-icon">◎</span><div><h3>Bangun kehidupan yang seimbang</h3><p>Karier, energi, relasi, keuangan, dan pengembangan diri menjadi bagian dari perjalanan.</p></div></article>
+      </div>
+    </section>
+
+    <section class="cv-section cv-features" id="features">
+      <div class="cv-section-inner">
+        <header class="cv-section-head"><span class="cv-eyebrow">Explore the experience</span><h2>Satu dunia. Banyak cara untuk berkembang.</h2><p>Kenali sistem utama yang membentuk pengalaman Career-Verse.</p></header>
+        <div class="cv-card-grid">
+          <article class="cv-feature-card"><span class="cv-feature-icon">🧑‍🎨</span><h3>Character Creation</h3><p>Mulai perjalanan dengan identitas dan tujuan kariermu.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">🧭</span><h3>Career System</h3><p>Jelajahi pilihan profesi dan jalur perkembangan.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">📝</span><h3>Job Application</h3><p>Kenali perusahaan, kirim lamaran, dan jalani wawancara.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">🏢</span><h3>Workplace</h3><p>Selesaikan tugas dan hadapi situasi dunia kerja.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">💳</span><h3>Economy System</h3><p>Kelola uang, penghasilan, dan keputusan finansial.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">📚</span><h3>Skill Development</h3><p>Tingkatkan kemampuan dan buka peluang baru.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">☀️</span><h3>Daily Activities</h3><p>Atur aktivitas, energi, dan ritme keseharian.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">💬</span><h3>NPC Interaction</h3><p>Bangun interaksi dan hubungan dengan karakter.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">🌆</span><h3>3D Exploration</h3><p>Masuki lingkungan dan jelajahi area dalam dunia game.</p></article>
+          <article class="cv-feature-card"><span class="cv-feature-icon">🌱</span><h3>Life Progression</h3><p>Kembangkan perjalanan dan lihat progres dari waktu ke waktu.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-section cv-world" id="world">
+      <div class="cv-section-inner">
+        <header class="cv-section-head"><span class="cv-eyebrow">Discover the world</span><h2>Tempat berbeda. Cerita berbeda.</h2><p>Kenali area yang menjadi bagian dari semesta Career-Verse. Dunia akan berkembang seiring pengembangan gameplay.</p></header>
+        <div class="cv-world-grid">
+          <div class="cv-world-main">
+            <div class="cv-world-skyline"><div class="cv-world-tower" style="--h:43%"></div><div class="cv-world-tower" style="--h:70%"></div><div class="cv-world-tower" style="--h:91%"></div><div class="cv-world-tower" style="--h:62%"></div><div class="cv-world-tower" style="--h:78%"></div><div class="cv-world-tower" style="--h:52%"></div></div>
+            <div class="cv-world-caption"><span>Explore Career-Verse</span><h3>Office District</h3><p>Temukan tempat kerja, peluang, dan kehidupan profesional di tengah kota.</p></div>
+          </div>
+          <div class="cv-world-list">
+            <article class="cv-world-tile"><span>🏡</span><h3>Residential Area</h3><p>Ruang untuk beristirahat dan memulai hari.</p></article>
+            <article class="cv-world-tile"><span>🛍️</span><h3>Shopping Mall</h3><p>Area belanja dan aktivitas kota.</p></article>
+            <article class="cv-world-tile"><span>🎓</span><h3>Educational Area</h3><p>Tempat belajar dan meningkatkan skill.</p></article>
+            <article class="cv-world-tile"><span>🏙️</span><h3>Business District</h3><p>Pusat perusahaan dan aktivitas profesional.</p></article>
+            <article class="cv-world-tile"><span>🌳</span><h3>Public Facilities</h3><p>Ruang publik dan area komunitas.</p></article>
+            <article class="cv-world-tile"><span>☕</span><h3>Social Spots</h3><p>Tempat bertemu dan membangun relasi.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-section cv-guide" id="guide">
+      <div class="cv-section-inner">
+        <header class="cv-section-head"><span class="cv-eyebrow">How to begin</span><h2>Perjalananmu dimulai dari satu langkah.</h2><p>Ikuti alur sederhana ini untuk mulai mengenal Career-Verse.</p></header>
+        <div class="cv-steps">
+          <article class="cv-step"><h3>Masuk ke game</h3><p>Buka area permainan dan periksa progres yang tersimpan.</p></article>
+          <article class="cv-step"><h3>Buat perjalananmu</h3><p>Pilih profesi dan tentukan arah yang ingin kamu coba.</p></article>
+          <article class="cv-step"><h3>Jalani pengalaman</h3><p>Temukan pekerjaan, selesaikan tugas, dan kembangkan skill.</p></article>
+          <article class="cv-step"><h3>Terus berkembang</h3><p>Kelola keseharian dan bangun cerita kariermu sendiri.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-final">
+      <span class="cv-eyebrow" style="color:#e4b99f">Your next chapter</span>
+      <h2>Your Story<br>Starts Here.</h2>
+      <p>Setiap keputusan membuka kemungkinan baru. Temukan pekerjaanmu, bangun kehidupanmu, dan ciptakan perjalananmu sendiri.</p>
+      <button class="cv-primary" type="button" data-enter-game>Masuk ke Career-Verse <span aria-hidden="true">↗</span></button>
+    </section>
+  </main>
+
+  <footer class="cv-footer"><span>© Career-Verse · Life & Career Simulator</span><a href="#home">Kembali ke atas ↑</a></footer>
+
+  <section id="game-shell" hidden aria-label="Area permainan Career-Verse">
+    <header class="topbar game-topbar">
+      <a class="brand" href="./" aria-label="Kembali ke beranda Career-Verse">✦ Career-Verse</a>
+      <a class="game-return" href="#home" data-back-home>← Kembali ke pengenalan</a>
+      <nav class="toolbar" aria-label="Menu penyimpanan">
+        <span id="save-status" role="status" aria-live="polite">Progres tersimpan otomatis di perangkat ini</span>
+        <button class="quiet" id="export-save" type="button">Ekspor save</button>
+        <label class="import-button">Impor save<input id="import-save" type="file" accept="application/json"></label>
+        <button class="quiet" id="reset-game" type="button">Reset game</button>
+      </nav>
+    </header>
+    <main id="app" class="wrap" tabindex="-1">
+      <section class="panel" aria-live="polite"><h1>Memuat Career-Verse…</h1><p>Mohon tunggu sebentar.</p></section>
+    </main>
+    <footer class="footer">Career-Verse · Simulasi karier interaktif · Progres disimpan secara lokal di browser.</footer>
   </section>
-  <footer class="footer">Game edukasi fiktif · Progres tersimpan di perangkat ini · <a href="#tentang-careerverse">Tentang Career-Verse</a></footer>
-  <script type="module" src="./js/app.js?v=15"></script>
 
-<style>
-.about-section{--a-ink:#252b31;--a-muted:#667078;--a-paper:#faf8f3;--a-slate:#405565;--a-clay:#b7654b;max-width:1160px;margin:70px auto 0;padding:28px 22px 10px;color:var(--a-ink)}
-.about-hero{padding:clamp(28px,6vw,62px);border-radius:24px;color:#fffaf2;background:radial-gradient(ellipse at 85% 18%,rgba(191,145,104,.3),transparent 30%),linear-gradient(115deg,#293946,#3d5362 52%,#596a73);box-shadow:0 24px 58px rgba(39,48,55,.18)}
-.about-eyebrow,.about-kicker{font-size:.76rem;font-weight:850;letter-spacing:.14em;color:#c8a77a}
-.about-hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;letter-spacing:-.04em;max-width:780px;margin:18px 0}
-.about-hero p{max-width:720px;color:#e0e5e6;font-size:1.08rem}
-.about-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.about-pills span{padding:10px 14px;border-radius:10px;background:#ffffff18;border:1px solid #ffffff32;font-weight:750}
-.about-heading{margin:42px 0 18px}.about-heading h2,.about-interactive h2{margin:8px 0;color:#293641;font-size:clamp(1.6rem,3vw,2.2rem)}.about-heading p,.about-interactive p{color:var(--a-muted)}
-.about-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.about-card{padding:22px;border:1px solid #ded6ca;border-radius:16px;background:linear-gradient(145deg,#fffdf9,#f2eee7);box-shadow:0 10px 28px #36302a0d}.about-card>span{font-size:2rem}.about-card h3{margin:8px 0;color:#344654}.about-card p{margin:0;color:#68737a;line-height:1.6}
-.about-interactive{margin-top:34px;padding:clamp(20px,4vw,34px);border-radius:20px;background:linear-gradient(135deg,#e4e0d8,#dce3e5);border:1px solid #cbd3d5}
-.about-choices{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.about-choice{padding:11px 17px;border-radius:9px;border:1px solid #c9cfcf;background:#faf8f3;color:#394c59;font-weight:750;cursor:pointer}.about-choice[aria-pressed=true]{background:linear-gradient(135deg,#40596b,#2f4555);color:white;border-color:#40596b}.about-result{padding:18px;border-radius:13px;background:#fbf9f4;border:1px solid #d9d2c7}.about-result p{margin:5px 0 0}.about-footerline{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:35px 0 10px;padding-top:18px;border-top:1px solid #d7d0c6;color:#6c7478;font-size:.8rem;font-weight:700;letter-spacing:.06em}
-@media(max-width:760px){.about-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about-section{padding-inline:14px}}
-@media(max-width:480px){.about-grid{grid-template-columns:1fr}.about-hero{border-radius:17px}.about-pills span{font-size:.86rem}}
-</style>
-<script>
-(()=>{const data={creative:['Jalur kreatif','Susun ide, kerjakan tugas, terima evaluasi, dan kembangkan skill.'],business:['Jalur bisnis','Atur prioritas, ikuti rapat, selesaikan target, dan bangun reputasi profesional.'],people:['Jalur pelayanan','Berinteraksi dengan karakter, memahami kebutuhan, dan menyelesaikan aktivitas layanan.']};document.querySelectorAll('.about-choice').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.about-choice').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));const [h,p]=data[b.dataset.kind];document.querySelector('#about-result').innerHTML='<strong>'+h+'</strong><p>'+p+'</p>'}))})();
-</script>
-
+  <script>
+    (() => {
+      const shell = document.getElementById('game-shell');
+      const app = document.getElementById('app');
+      function enterGame() {
+        shell.hidden = false;
+        document.body.classList.add('cv-playing');
+        shell.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
+        window.setTimeout(() => app?.focus({preventScroll:true}), 250);
+        history.replaceState(null, '', '#play');
+      }
+      function backHome(event) {
+        event?.preventDefault();
+        shell.hidden = true;
+        document.body.classList.remove('cv-playing');
+        history.replaceState(null, '', '#home');
+        document.getElementById('home')?.scrollIntoView({behavior:'smooth'});
+      }
+      document.querySelectorAll('[data-enter-game]').forEach(button => button.addEventListener('click', enterGame));
+      document.querySelector('[data-back-home]')?.addEventListener('click', backHome);
+      if (location.hash === '#play') enterGame();
+    })();
+  </script>
+  <script type="module" src="./js/app.js?v=20261120-1"></script>
 </body>
 </html>
