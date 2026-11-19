@@ -89,30 +89,57 @@ export async function openCharacterCreator(existing = null) {
   function part(parent,geometry,color,x,y,z,scale=null){const mesh=new THREE.Mesh(geometry,mat(color));mesh.position.set(x,y,z);if(scale)mesh.scale.set(...scale);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh}
   function rebuild(){
     avatar.clear();
-    const skin=part(avatar,new THREE.SphereGeometry(.28,32,24),current.skin,0,1.88,0,current.face==='Round'?[1,1,.95]:current.face==='Square'?[1.08,.95,.95]:current.face==='Heart'?[.9,1.08,.92]:[.92,1.1,.92]);
-    part(avatar,new THREE.CapsuleGeometry(.105,.18,6,12),current.skin,0,1.57,0);
-    const shirt=part(avatar,new THREE.CapsuleGeometry(.31,.62,6,16),current.outfitColor,0,1.05,0,current.body==='Athletic'?[1.15,1,.8]:current.body==='Curvy'?[1.18,1,.85]:current.body==='Slim'?[.85,1,.75]:[1,1,.78]);
-    part(avatar,new THREE.CapsuleGeometry(.13,.46,6,12),'#3f4b55',-.15,.42,0);
-    part(avatar,new THREE.CapsuleGeometry(.13,.46,6,12),'#3f4b55',.15,.42,0);
+    const add=(geo,color,x,y,z,scale=null)=>{const m=new THREE.Mesh(geo,mat(color));m.position.set(x,y,z);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;avatar.add(m);return m};
+    const line=(a,b,r1,r2,color)=>{const p=new THREE.Vector3(...a),q=new THREE.Vector3(...b),d=q.clone().sub(p);const m=add(new THREE.CylinderGeometry(r2,r1,d.length(),18,1),color,...p.clone().add(q).multiplyScalar(.5).toArray());m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m};
+    const skin=current.skin, hair=current.hairColor, cloth=current.outfitColor;
+    // Tailored torso silhouette instead of a capsule-shaped body.
+    const profile=[new THREE.Vector2(.13,0),new THREE.Vector2(.16,.1),new THREE.Vector2(.19,.27),new THREE.Vector2(.25,.48),new THREE.Vector2(.31,.69),new THREE.Vector2(.3,.82),new THREE.Vector2(.15,.88),new THREE.Vector2(.11,.9)];
+    const torso=add(new THREE.LatheGeometry(profile,40),cloth,0,.91,0);
+    torso.scale.set(current.body==='Athletic'?1.08:current.body==='Curvy'?1.13:current.body==='Slim'?.9:1,1,.78);
+    line([0,1.78,0],[0,1.94,0],.085,.08,skin);
+    // Head, jaw and cheeks.
+    add(new THREE.SphereGeometry(.245,40,32),skin,0,2.12,0,current.face==='Round'?[1,1.08,.94]:current.face==='Square'?[1.04,1,.94]:current.face==='Heart'?[.9,1.1,.92]:[.92,1.12,.92]);
+    add(new THREE.SphereGeometry(.17,28,20),skin,0,2.0,.035,[.88,.62,.84]);
     for(const side of [-1,1]){
-      part(avatar,new THREE.CapsuleGeometry(.09,.43,6,10),current.skin,side*.39,1.03,0);
-      part(avatar,new THREE.SphereGeometry(.075,12,10),current.skin,side*.4,.77,.02);
-      part(avatar,new THREE.SphereGeometry(.048,12,10),current.skin,side*.25,1.9,.235);
-      part(avatar,new THREE.SphereGeometry(.045,16,12),'#f9f4eb',side*.09,1.91,.24);
-      part(avatar,new THREE.SphereGeometry(.023,12,10),current.eyes,side*.09,1.91,.278);
-      part(avatar,new THREE.SphereGeometry(.027,12,10),current.hairColor,side*.09,2.0,.235);
-      part(avatar,new THREE.BoxGeometry(.11,.025,.045),current.hairColor,side*.09,2.015,.24);
+      add(new THREE.SphereGeometry(.05,20,16),skin,side*.22,2.1,.015,[.8,1,.8]);
+      // Eyes with whites, iris, pupils and brows.
+      add(new THREE.SphereGeometry(.055,24,18),'#795c4b',side*.09,2.145,.194,[1.15,.8,.45]);
+      add(new THREE.SphereGeometry(.044,24,18),'#f7f2e9',side*.09,2.145,.218,[1.1,.9,.55]);
+      add(new THREE.SphereGeometry(.025,20,16),current.eyes,side*.09,2.144,.246,[.9,1,.5]);
+      add(new THREE.SphereGeometry(.011,16,12),'#17191c',side*.09,2.144,.257);
+      const brow=add(new THREE.TorusGeometry(.052,.008,8,24,Math.PI),hair,side*.09,2.205,.2);brow.rotation.z=side*.08;
+      // Nose bridge and tip.
+      add(new THREE.SphereGeometry(.03,18,14),skin,0,2.09,.224,[.72,1.35,.72]);
+      add(new THREE.SphereGeometry(.042,18,14),skin,0,2.045,.25,[.9,.72,.8]);
+      // Ears.
+      add(new THREE.SphereGeometry(.045,18,14),skin,side*.25,2.1,0,[.72,1.15,.8]);
+      // Separate arms, forearms and hands.
+      line([side*.25,1.58,0],[side*.34,1.23,.005],.1,.082,cloth);
+      line([side*.34,1.23,.005],[side*.37,.98,.025],.072,.05,skin);
+      add(new THREE.SphereGeometry(.062,18,14),skin,side*.37,.93,.045,[.8,1,.7]);
+      for(let finger=0;finger<4;finger++)line([side*(.335+finger*.021),.9,.075],[side*(.335+finger*.021),.84,.08],.011,.008,skin);
+      // Legs and shoes.
+      line([side*.105,.94,0],[side*.11,.49,0],.105,.075,'#34414a');
+      line([side*.11,.49,0],[side*.11,.13,.035],.073,.052,'#34414a');
+      add(new THREE.SphereGeometry(.1,20,14),'#25292d',side*.11,.08,.09,[.85,.5,1.5]);
+      add(new THREE.BoxGeometry(.17,.025,.26),'#d4cbbb',side*.11,.035,.08);
     }
-    part(avatar,new THREE.SphereGeometry(.045,12,10),current.skin,0,1.84,.27,[.7,1,.7]);
-    part(avatar,new THREE.SphereGeometry(.04,12,10),current.expression==='Happy'?'#a85d5a':'#79504a',0,1.75,.26,[1,.3,.5]);
-    const cap=part(avatar,new THREE.SphereGeometry(.29,28,18,0,Math.PI*2,0,Math.PI*.7),current.hairColor,0,2.0,-.025);
-    if(current.hair==='Long layers'||current.hair==='Medium waves'||current.hair==='Curly'||current.hair==='Ponytail'){
-      for(const side of [-1,1])part(avatar,new THREE.CapsuleGeometry(.075,current.hair==='Long layers'?.72:.42,6,10),current.hairColor,side*.24,1.67,-.015);
+    // Mouth and subtle expression.
+    add(new THREE.SphereGeometry(.043,20,12),current.expression==='Happy'?'#b86b68':'#995d5a',0,1.985,.222,[1,.25,.5]);
+    // Hair cap plus curved side locks and back volume.
+    add(new THREE.SphereGeometry(.255,36,28,0,Math.PI*2,0,Math.PI*.64),hair,0,2.245,-.025,[1.02,1,.98]);
+    const hairStyle=current.hair||'Long layers';
+    for(const side of [-1,1]){
+      const length=hairStyle==='Short crop'?.17:hairStyle==='Bob'?.38:hairStyle==='Ponytail'?.5:.68;
+      const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(side*.17,2.31,.08),new THREE.Vector3(side*.23,2.19,.07),new THREE.Vector3(side*.245,2.02,.02),new THREE.Vector3(side*.22,1.98-length*.45,-.015),new THREE.Vector3(side*.18,1.92-length*.5,-.04)]);
+      add(new THREE.TubeGeometry(curve,22,.052,10,false),hair,0,0,0);
     }
-    if(current.hair==='Bob')for(const side of [-1,1])part(avatar,new THREE.SphereGeometry(.14,14,12),current.hairColor,side*.22,1.72,.02,[.8,1.5,.8]);
-    if(current.hair==='Ponytail')part(avatar,new THREE.CapsuleGeometry(.07,.48,6,10),current.hairColor,0,1.7,-.27);
-    if(current.hair==='Bun')part(avatar,new THREE.SphereGeometry(.13,14,12),current.hairColor,0,2.25,-.15);
-    if(current.glasses!=='None')for(const side of [-1,1]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.075,.012,8,24),mat('#343a40'));ring.position.set(side*.09,1.91,.27);avatar.add(ring)}
+    if(['Long layers','Medium waves','Curly','Ponytail'].includes(hairStyle)){
+      const back=new THREE.CatmullRomCurve3([new THREE.Vector3(0,2.25,-.17),new THREE.Vector3(0,1.95,-.2),new THREE.Vector3(.02,1.55,-.19),new THREE.Vector3(.03,1.3,-.16)]);
+      add(new THREE.TubeGeometry(back,24,.085,12,false),hair,0,0,0);
+    }
+    if(hairStyle==='Bun')add(new THREE.SphereGeometry(.105,20,16),hair,0,2.42,-.16);
+    if(current.glasses!=='None')for(const side of [-1,1]){const ring=add(new THREE.TorusGeometry(.075,.012,8,24),'#343a40',side*.09,2.145,.255);ring.scale.set(1,.85,1)}
     avatar.scale.y=Number(current.height)/168;
     avatar.rotation.y=yaw;
   }
