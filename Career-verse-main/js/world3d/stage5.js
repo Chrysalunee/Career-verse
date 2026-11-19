@@ -171,8 +171,14 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  const body=mesh(bodyShape,cloth,0,.91,0);body.scale.set(config.body==='Athletic'?1.08:config.body==='Curvy'?1.12:config.body==='Slim'?.9:1,1,.76);
  // Neck and naturally tapered head with a narrower jaw.
  limb([0,1.77,0],[0,1.94,0],.09,.085,skin);
- const head=mesh(new THREE.SphereGeometry(.245,40,32),skin,0,2.12,0);
- head.scale.set(config.face==='Round'?.99:config.face==='Square'?1.02:.91,1.12,.91);
+ const headProfile=[
+  new THREE.Vector2(.035,-.245),new THREE.Vector2(.095,-.225),new THREE.Vector2(.155,-.17),
+  new THREE.Vector2(.205,-.075),new THREE.Vector2(.218,.045),new THREE.Vector2(.202,.155),
+  new THREE.Vector2(.15,.225),new THREE.Vector2(.075,.255),new THREE.Vector2(0,.26)
+ ];
+ const head=mesh(new THREE.LatheGeometry(headProfile,56),skin,0,2.13,0);
+ const faceScale=config.face==='Round'?[1.04,1.03,.94]:config.face==='Square'?[1.02,1,.96]:config.face==='Heart'?[.94,1.05,.94]:config.face==='Diamond'?[.92,1.05,.94]:[.96,1.08,.94];
+ head.scale.set(...faceScale);
  // Jaw/chin volume and cheek planes.
  mesh(new THREE.SphereGeometry(.17,28,20),skin,0,2.005,.035,[.88,.62,.84]);
  for(const side of [-1,1]){
@@ -220,10 +226,28 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
   mesh(new THREE.SphereGeometry(.105,20,14),material('#292a2d'),side*.11,.085,.09,[.85,.52,1.55]);
   mesh(new THREE.BoxGeometry(.17,.025,.27),material('#b9b4aa'),side*.11,.035,.085);
  }
- // Collar and a clean front placket give the outfit its own silhouette.
- mesh(new THREE.ConeGeometry(.095,.16,4),material('#f0e8dc'),-.075,1.72,.12,[.7,1,.3]).rotation.z=Math.PI;
- mesh(new THREE.ConeGeometry(.095,.16,4),material('#f0e8dc'),.075,1.72,.12,[.7,1,.3]).rotation.z=Math.PI;
- box(parent,0,1.36,.235,.018,.48,.018,'#e9dfd1');
+ // Garment-specific detailing makes wardrobe choices visually distinct.
+ const outfit=config.outfit||'Smart casual';
+ const trim=material('#eee8df'),accent=material('#394b59');
+ if(['Formal','Office'].includes(outfit)){
+  mesh(new THREE.ConeGeometry(.09,.18,4),trim,-.075,1.72,.13,[.72,1,.32]).rotation.z=Math.PI;
+  mesh(new THREE.ConeGeometry(.09,.18,4),trim,.075,1.72,.13,[.72,1,.32]).rotation.z=Math.PI;
+  if(outfit==='Formal')mesh(new THREE.ConeGeometry(.045,.23,4),accent,0,1.54,.145,[.5,1,.35]);
+  box(parent,0,1.36,.235,.018,.48,.018,'#e9dfd1');
+ }else if(outfit==='Streetwear'||outfit==='Korean minimal'){
+  for(const side of [-1,1])mesh(new THREE.BoxGeometry(.075,.54,.035),accent,side*.205,1.43,.19);
+  if(outfit==='Streetwear')mesh(new THREE.SphereGeometry(.075,18,12),cloth,0,1.84,-.12,[1,.65,.45]);
+ }else if(outfit==='Sportwear'){
+  for(const side of [-1,1])box(parent,side*.19,1.42,.205,.035,.58,.025,'#f2eee7');
+ }else if(outfit==='Party'){
+  mesh(new THREE.TorusGeometry(.105,.018,8,28),trim,0,1.72,.12).rotation.x=Math.PI/2;
+ }else if(outfit==='Sleepwear'){
+  for(const side of [-1,1])box(parent,side*.17,1.4,.205,.025,.42,.02,'#eee5dc');
+ }else{
+  mesh(new THREE.ConeGeometry(.095,.16,4),trim,-.075,1.72,.12,[.7,1,.3]).rotation.z=Math.PI;
+  mesh(new THREE.ConeGeometry(.095,.16,4),trim,.075,1.72,.12,[.7,1,.3]).rotation.z=Math.PI;
+  box(parent,0,1.36,.235,.018,.48,.018,'#e9dfd1');
+ }
 }
 const playerCharacter=options.character||{};
 makeHuman(player,playerCharacter.outfitColor||'#e58eb2',playerCharacter.hairColor||'#30251e',playerCharacter);
