@@ -45,13 +45,13 @@ export async function openCharacterCreator(existing = null) {
       .cvcc-main{min-height:0;display:grid;grid-template-columns:minmax(210px,260px) minmax(280px,1fr) minmax(220px,280px);gap:16px;padding:16px;overflow:auto}
       .cvcc-panel{background:#f8f6f1;border:1px solid #d9d4ca;border-radius:16px;padding:16px;overflow:auto}
       .cvcc-panel h3{font-size:16px;margin:0 0 12px}.cvcc-tabs{display:grid;gap:7px}
-      .cvcc-tab,.cvcc-option,.cvcc-action{border:1px solid #d8d2c8;background:#fffefa;color:#34424a;border-radius:10px;padding:11px 12px;text-align:left;font:600 14px/1.3 inherit;cursor:pointer}
+      .cvcc-tab,.cvcc-option,.cvcc-action{border:1px solid #d8d2c8;background:#fffefa;color:#34424a;border-radius:10px;padding:11px 12px;text-align:left;font:600 14px/1.3 system-ui,sans-serif;cursor:pointer}
       .cvcc-tab[aria-selected=true],.cvcc-option[aria-pressed=true]{background:#e6edf0;border-color:#718b99;color:#263c49}
       .cvcc-preview{position:relative;min-height:480px;border-radius:18px;overflow:hidden;background:radial-gradient(ellipse at 50% 36%,#fffdf8 0,#dce2e2 58%,#aeb9bd 100%);border:1px solid #d9d4ca}
       .cvcc-preview canvas{display:block;width:100%;height:100%;min-height:480px;touch-action:none}
       .cvcc-preview-note{position:absolute;left:16px;bottom:14px;background:#f8f6f1e8;border-radius:9px;padding:8px 11px;font-size:12px;color:#53616a}
       .cvcc-field{display:grid;gap:6px;margin:0 0 13px}.cvcc-field label{font-size:13px;font-weight:700;color:#4c5961}
-      .cvcc-field input,.cvcc-field select{width:100%;min-height:42px;border:1px solid #d2ccc2;border-radius:9px;background:#fffefa;color:#28343b;padding:9px 10px;font:500 14px inherit}
+      .cvcc-field input,.cvcc-field select{width:100%;min-height:42px;border:1px solid #d2ccc2;border-radius:9px;background:#fffefa;color:#28343b;padding:9px 10px;font:500 14px system-ui,sans-serif}
       .cvcc-color-options{display:flex;gap:9px;flex-wrap:wrap}.cvcc-swatch{width:34px;height:34px;border-radius:50%;border:2px solid #fff;outline:1px solid #c6c0b6;cursor:pointer}.cvcc-swatch[aria-pressed=true]{outline:3px solid #516d7b}
       .cvcc-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:#f8f6f1;border-top:1px solid #d8d2c8}
       .cvcc-footer small{color:#66727a}.cvcc-actions{display:flex;gap:9px;flex-wrap:wrap}.cvcc-action{padding:12px 18px;text-align:center}.cvcc-action.primary{background:#344d5b;color:white;border-color:#344d5b}
