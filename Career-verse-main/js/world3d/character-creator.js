@@ -131,16 +131,16 @@ export async function openCharacterCreator(existing = null) {
     const head=add(new THREE.LatheGeometry(headProfile,56),skin,0,2.13,0,faceScale);
     // Cheek volume and ears.
     for(const side of [-1,1]){
-      add(new THREE.SphereGeometry(.071,28,20),skin,side*.145,2.055,.12,[.92,.7,.55]);
-      add(new THREE.SphereGeometry(.043,24,18),skin,side*.214,2.105,0,[.72,1.15,.72]);
+      add(new THREE.SphereGeometry(.052,28,20),skin,side*.145,2.055,.105,[.92,.62,.42]);
+      add(new THREE.SphereGeometry(.031,24,18),skin,side*.214,2.105,0,[.72,1.05,.62]);
       add(new THREE.SphereGeometry(.021,18,14),'#b97869',side*.226,2.105,.018,[.7,1,.5]);
     }
     // Eyes with iris, pupil, catchlight and shaped upper lids.
     const eyeColor=current.eyes;
     for(const side of [-1,1]){
-      add(new THREE.SphereGeometry(.064,32,24),'#f8f4ed',side*.087,2.157,.188,[1.12,.72,.52]);
-      add(new THREE.SphereGeometry(.034,28,20),eyeColor,side*.087,2.157,.222,[.9,1,.5]);
-      add(new THREE.SphereGeometry(.017,22,16),'#17191b',side*.087,2.157,.239,[.9,1,.5]);
+      add(new THREE.SphereGeometry(.051,32,24),'#f8f4ed',side*.087,2.157,.183,[1.12,.72,.46]);
+      add(new THREE.SphereGeometry(.026,28,20),eyeColor,side*.087,2.157,.211,[.9,1,.44]);
+      add(new THREE.SphereGeometry(.012,22,16),'#17191b',side*.087,2.157,.225,[.9,1,.44]);
       add(new THREE.SphereGeometry(.009,16,12),'#ffffff',side*.077,2.17,.247);
       const lid=add(new THREE.TorusGeometry(.061,.009,8,28,Math.PI),hair,side*.087,2.17,.197);
       lid.rotation.z=Math.PI;
@@ -149,7 +149,7 @@ export async function openCharacterCreator(existing = null) {
       ]),16,.009,8,false),current.brows==='Soft'?'#76594b':hair,0,0,0);
       // Nose bridge, tip and nostril definition.
       add(new THREE.SphereGeometry(.027,24,18),skin,0,2.095,.205,[.68,1.75,.7]);
-      add(new THREE.SphereGeometry(.039,24,18),skin,0,2.045,.23,[.95,.72,.8]);
+      add(new THREE.SphereGeometry(.031,24,18),skin,0,2.045,.218,[.95,.62,.72]);
       for(const n of [-1,1]) add(new THREE.SphereGeometry(.009,12,10),'#9b6857',n*.022,2.035,.236);
       // Arms with shoulder, elbow and wrist transitions.
       segment([side*.255,1.61,0],[side*.34,1.34,.005],.095,.078,cloth);
