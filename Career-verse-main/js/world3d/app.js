@@ -1,5 +1,5 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=14';
-import { openCharacterCreator } from './character-creator.js?v=6';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=15';
+import { openCharacterCreator } from './character-creator.js?v=7';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation, applyDailyActivity } from './gameplay.js?v=3';
 
 const SAVE_KEY = 'career-verse-save';
