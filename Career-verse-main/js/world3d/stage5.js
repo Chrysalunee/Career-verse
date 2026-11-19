@@ -166,8 +166,10 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  const skinColor=config.skin||'#d7a27f',skin=material(skinColor),skinShade=material('#a96f55'),hair=material(config.hairColor||hairColor),cloth=material(config.outfitColor||shirt),darkCloth=material('#303a45'),eyeWhite=material('#f4eee6'),iris=material(config.eyes||'#49352d'),lip=material('#985c59');
  const mesh=(geometry,mat,x,y,z,scale=null)=>{const m=new THREE.Mesh(geometry,mat);m.position.set(x,y,z);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m};
  const limb=(a,b,r1,r2,mat)=>{const p=new THREE.Vector3(...a),q=new THREE.Vector3(...b),d=q.clone().sub(p);const m=mesh(new THREE.CylinderGeometry(r2,r1,d.length(),16,1),mat,...p.clone().add(q).multiplyScalar(.5).toArray());m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m};
- const torsoProfile=[new THREE.Vector2(.16,0),new THREE.Vector2(.19,.12),new THREE.Vector2(.22,.34),new THREE.Vector2(.29,.58),new THREE.Vector2(.34,.78),new THREE.Vector2(.31,.91),new THREE.Vector2(.16,.96),new THREE.Vector2(.13,.98)];
- const bodyShape=new THREE.LatheGeometry(torsoProfile,32);bodyShape.computeVertexNormals();
+ const feminine=config.presentation ? config.presentation==='Feminine' : false;
+ const shoulder=feminine?.285:.355, waist=feminine?.205:.265, hip=feminine?(config.body==='Curvy'?.34:.30):(config.body==='Curvy'?.31:.285);
+ const torsoProfile=[new THREE.Vector2(hip*.78,0),new THREE.Vector2(hip,.08),new THREE.Vector2(hip*.96,.22),new THREE.Vector2(waist,.42),new THREE.Vector2(waist*1.04,.52),new THREE.Vector2(shoulder*.92,.70),new THREE.Vector2(shoulder,.79),new THREE.Vector2(shoulder*.72,.84),new THREE.Vector2(.105,.86)];
+ const bodyShape=new THREE.LatheGeometry(torsoProfile,40);bodyShape.computeVertexNormals();
  const body=mesh(bodyShape,cloth,0,.91,0);body.scale.set(config.body==='Athletic'?1.08:config.body==='Curvy'?1.12:config.body==='Slim'?.9:1,1,.76);
  // Neck and naturally tapered head with a narrower jaw.
  limb([0,1.77,0],[0,1.94,0],.09,.085,skin);
