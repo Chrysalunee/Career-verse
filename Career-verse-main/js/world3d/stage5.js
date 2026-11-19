@@ -167,12 +167,12 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  const mesh=(geometry,mat,x,y,z,scale=null)=>{const m=new THREE.Mesh(geometry,mat);m.position.set(x,y,z);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m};
  const limb=(a,b,r1,r2,mat)=>{const p=new THREE.Vector3(...a),q=new THREE.Vector3(...b),d=q.clone().sub(p);const m=mesh(new THREE.CylinderGeometry(r2,r1,d.length(),16,1),mat,...p.clone().add(q).multiplyScalar(.5).toArray());m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m};
  const feminine=config.presentation ? config.presentation==='Feminine' : false;
- const shoulder=feminine?.285:.355, waist=feminine?.205:.265, hip=feminine?(config.body==='Curvy'?.34:.30):(config.body==='Curvy'?.31:.285);
+ const shoulder=feminine?.285:.385, waist=feminine?.205:.285, hip=feminine?(config.body==='Curvy'?.35:.315):(config.body==='Curvy'?.30:.275);
  const torsoProfile=[new THREE.Vector2(hip*.78,0),new THREE.Vector2(hip,.08),new THREE.Vector2(hip*.96,.22),new THREE.Vector2(waist,.42),new THREE.Vector2(waist*1.04,.52),new THREE.Vector2(shoulder*.92,.70),new THREE.Vector2(shoulder,.79),new THREE.Vector2(shoulder*.72,.84),new THREE.Vector2(.105,.86)];
  const bodyShape=new THREE.LatheGeometry(torsoProfile,40);bodyShape.computeVertexNormals();
  const body=mesh(bodyShape,cloth,0,.91,0);body.scale.set(config.body==='Athletic'?1.08:config.body==='Curvy'?1.12:config.body==='Slim'?.9:1,1,.76);
  // Neck and naturally tapered head with a narrower jaw.
- limb([0,1.77,0],[0,1.94,0],.09,.085,skin);
+ limb([0,1.77,0],[0,1.94,0],feminine?.09:.105,feminine?.085:.1,skin);
  const headProfile=[
   new THREE.Vector2(.035,-.245),new THREE.Vector2(.095,-.225),new THREE.Vector2(.155,-.17),
   new THREE.Vector2(.205,-.075),new THREE.Vector2(.218,.045),new THREE.Vector2(.202,.155),
@@ -180,26 +180,26 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  ];
  const head=mesh(new THREE.LatheGeometry(headProfile,56),skin,0,2.13,0);
  const faceScale=config.face==='Round'?[1.04,1.03,.94]:config.face==='Square'?[1.02,1,.96]:config.face==='Heart'?[.94,1.05,.94]:config.face==='Diamond'?[.92,1.05,.94]:[.96,1.08,.94];
- head.scale.set(...faceScale);
+ head.scale.set(...(feminine?faceScale:[faceScale[0]*1.08,faceScale[1]*.98,faceScale[2]*1.02]));
  // Jaw/chin volume and cheek planes.
  mesh(new THREE.SphereGeometry(.135,28,20),skin,0,2.005,.025,[.88,.56,.78]);
  for(const side of [-1,1]){
   mesh(new THREE.SphereGeometry(.034,20,16),skin,side*.226,2.11,0,[.72,1.05,.7]);
   // Eye socket, eyeball, iris, pupil and eyelid line.
-  mesh(new THREE.SphereGeometry(.049,24,16),skinShade,side*.091,2.145,.19,[1.15,.72,.34]);
-  mesh(new THREE.SphereGeometry(.039,24,18),eyeWhite,side*.091,2.145,.207,[1.12,.82,.48]);
+  mesh(new THREE.SphereGeometry(feminine?.049:.045,24,16),skinShade,side*.091,2.145,.19,[1.15,.72,.34]);
+  mesh(new THREE.SphereGeometry(feminine?.039:.036,24,18),eyeWhite,side*.091,2.145,.207,[1.12,.82,.48]);
   mesh(new THREE.SphereGeometry(.022,20,16),iris,side*.091,2.143,.23,[.9,1,.42]);
   mesh(new THREE.SphereGeometry(.009,16,12),material('#17191c'),side*.091,2.143,.242);
-  const brow=mesh(new THREE.TorusGeometry(.055,.009,8,24,Math.PI),hair,side*.09,2.205,.203);brow.rotation.z=side*.1;
+  const brow=mesh(new THREE.TorusGeometry(.055,feminine?.009:.014,8,24,Math.PI),hair,side*.09,2.205,.203);brow.rotation.z=side*.1;
   // Hair falls around the temples as separate locks.
   const strand=mesh(new THREE.SphereGeometry(.075,18,14),hair,side*.205,2.13,-.015,[.72,1.45,.8]);
   strand.rotation.z=side*.12;
  }
  // Nose bridge, tip, nostrils and shaped lips.
- mesh(new THREE.SphereGeometry(.026,20,16),skin,0,2.09,.215,[.72,1.25,.68]);
+ mesh(new THREE.SphereGeometry(feminine?.026:.03,20,16),skin,0,2.09,.215,[.72,1.25,.68]);
  mesh(new THREE.SphereGeometry(.034,20,16),skin,0,2.045,.232,[.9,.65,.78]);
  for(const side of [-1,1])mesh(new THREE.SphereGeometry(.012,12,10),skinShade,side*.025,2.035,.268,[1,.6,.65]);
- mesh(new THREE.SphereGeometry(.036,20,12),lip,0,1.985,.205,[1,.22,.48]);
+ mesh(new THREE.SphereGeometry(feminine?.036:.03,20,12),lip,0,1.985,.205,[1,.22,.48]);
  mesh(new THREE.SphereGeometry(.032,20,12),skin,0,1.999,.224,[1,.12,.5]);
  // Scalp cap and individually curved hair locks.
  const cap=mesh(new THREE.SphereGeometry(.255,32,24,0,Math.PI*2,0,Math.PI*.62),hair,0,2.245,-.025,[1.02,1,.98]);
@@ -217,8 +217,8 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  // Separate sleeves, forearms, palms and five-finger silhouettes.
  parent.userData.legs=[];
  for(const side of [-1,1]){
-  limb([side*.25,1.58,0],[side*.34,1.24,.005],.105,.085,cloth);
-  limb([side*.34,1.24,.005],[side*.37,.98,.025],.075,.052,skin);
+  limb([side*(feminine?.25:.31),1.58,0],[side*(feminine?.34:.40),1.24,.005],feminine?.105:.12,feminine?.085:.10,cloth);
+  limb([side*(feminine?.34:.40),1.24,.005],[side*(feminine?.37:.43),.98,.025],feminine?.075:.085,feminine?.052:.06,skin);
   mesh(new THREE.SphereGeometry(.066,18,14),skin,side*.37,.925,.04,[.78,1.05,.62]);
   for(let f=0;f<4;f++)limb([side*(.335+f*.022),.91,.07],[side*(.335+f*.022),.85,.075],.012,.009,skin);
   const upper=limb([side*.105,.94,0],[side*.11,.48,0],.105,.075,darkCloth);
