@@ -1,4 +1,4 @@
-import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=10';
+import { mountWorldScene, loadWorldCatalog, getCompanyScene } from './stage5.js?v=11';
 import { openCharacterCreator } from './character-creator.js';
 import { applyWorldTask, applyCoffeeBreak, applySupervisorConversation, applyDailyActivity } from './gameplay.js?v=3';
 
