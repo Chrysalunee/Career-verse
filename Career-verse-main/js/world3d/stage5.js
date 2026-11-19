@@ -165,11 +165,13 @@ function capsule(parent,r,len,c,x,y,z){const m=new THREE.Mesh(new THREE.CapsuleG
 function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  const skinColor=config.skin||'#e0ad89',skin=material(skinColor),skinShadow=material('#b9785d'),hair=material(config.hairColor||hairColor),shirtMaterial=config.outfitColor||shirt;
  shirt=shirtMaterial;
- const torso=capsule(parent,.31,.62,shirt,0,1.22,0);torso.scale.set(1.05,1,.72);
- capsule(parent,.105,.16,'#e0ad89',0,1.72,0);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.275,28,20),skin);head.position.set(0,1.99,0);head.scale.set(.88,1.12,.9);head.castShadow=true;parent.add(head);
+ const torso=capsule(parent,.31,.62,shirt,0,1.22,0);
+ const bodyScale=config.body==='Athletic'?[1.15,1,.82]:config.body==='Curvy'?[1.2,1,.9]:config.body==='Slim'?[.86,1,.72]:[1.05,1,.78];
+ torso.scale.set(...bodyScale);
+ capsule(parent,.105,.16,skinColor,0,1.72,0);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.275,28,20),skin);head.position.set(0,1.99,0);head.scale.set(...(config.face==='Round'?[1,1,.98]:config.face==='Square'?[1.02,1,.92]:config.face==='Heart'?[.88,1.12,.9]:config.face==='Diamond'?[.84,1.12,.88]:[.9,1.12,.9]));head.castShadow=true;parent.add(head);
  const cap=new THREE.Mesh(new THREE.SphereGeometry(.286,24,18,0,Math.PI*2,0,Math.PI*.66),hair);cap.position.set(0,2.105,-.025);cap.castShadow=true;parent.add(cap);
- for(const side of [-1,1]){const lock=new THREE.Mesh(new THREE.SphereGeometry(.105,12,10),hair);lock.position.set(side*.235,2.0,-.005);lock.scale.set(.75,1.3,.8);parent.add(lock)}
+ for(const side of [-1,1]){const lock=new THREE.Mesh(new THREE.SphereGeometry(.105,12,10),hair);lock.position.set(side*.235,2.0,-.005);lock.scale.set(.75,config.hair==='Short crop'?.85:config.hair==='Bob'?1.8:config.hair==='Ponytail'?2.3:2.8,.8);parent.add(lock)}
  const fringe=new THREE.Mesh(new THREE.SphereGeometry(.19,18,10),hair);fringe.position.set(0,2.13,.17);fringe.scale.set(1,.38,.55);parent.add(fringe);
  for(const side of [-1,1]){
   const ear=new THREE.Mesh(new THREE.SphereGeometry(.055,10,10),skin);ear.position.set(side*.25,1.98,0);parent.add(ear);
@@ -182,7 +184,7 @@ function makeHuman(parent,shirt='#e58eb2',hairColor='#30251e',config={}){
  parent.userData.legs=[];
  for(const side of [-1,1]){
   const sleeve=capsule(parent,.115,.32,shirt,side*.37,1.4,0);sleeve.rotation.z=side*-.18;
-  const forearm=capsule(parent,.075,.28,'#e0ad89',side*.405,1.12,.015);forearm.rotation.z=side*.05;
+  const forearm=capsule(parent,.075,.28,skinColor,side*.405,1.12,.015);forearm.rotation.z=side*.05;
   const hand=new THREE.Mesh(new THREE.SphereGeometry(.085,12,10),skin);hand.position.set(side*.41,.94,.035);parent.add(hand);
   const leg=capsule(parent,.125,.5,'#40536a',side*.16,.48,0);parent.userData.legs.push(leg);
   box(parent,side*.16,.14,.14,.24,.17,.4,'#302c2b');
