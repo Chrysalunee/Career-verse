@@ -3,15 +3,25 @@ name: Career-Verse tests and preview build
 on:
   push:
     branches:
+      - main
       - "launch/**"
     paths:
       - "Career-verse-main/**"
+      - "index.html"
+      - "css/**"
+      - "js/**"
+      - "data/**"
       - ".github/workflows/test.yml"
   pull_request:
     branches: [main]
     paths:
       - "Career-verse-main/**"
+      - "index.html"
+      - "css/**"
+      - "js/**"
+      - "data/**"
       - ".github/workflows/test.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read
