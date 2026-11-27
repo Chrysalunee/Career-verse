@@ -278,14 +278,20 @@ document.querySelector('#reset-game')?.addEventListener('click', () => {
     state = createState(); screen = 'home'; task = null; persist(); start();
   }
 });
-// Load the 3D layer independently so a 3D/CDN error cannot prevent the career UI from starting.
-import('./world3d/app.js?v=3')
-  .then(() => window.dispatchEvent(new Event('careerverse-app-ready')))
+// Load the 3D layer exactly once. If the player entered before this import
+// finished, replay the entry event so the world still opens reliably.
+import('./world3d/app.js?v=20261127-1')
+  .then(() => {
+    window.dispatchEvent(new Event('careerverse-app-ready'));
+    if (document.body.classList.contains('cv-playing')) {
+      window.dispatchEvent(new Event('careerverse-enter-game'));
+    }
+  })
   .catch(error => {
     console.error('Career-Verse 3D failed to initialize:', error);
     const fallback = document.createElement('button');
     fallback.type = 'button';
-    fallback.textContent = 'Dunia 3D gagal dimuat — lihat Console';
+    fallback.textContent = 'Dunia 3D belum tersedia — coba muat ulang';
     fallback.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:9999;padding:12px 16px;background:#7b302c;color:white;border:0;border-radius:10px';
     fallback.title = String(error?.message || error);
     document.body.appendChild(fallback);
